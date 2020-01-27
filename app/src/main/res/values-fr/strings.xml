@@ -20,7 +20,7 @@
     <string name="departure_optional">Départ (optionel)</string>
     <string name="destination">Destination</string>
     <string name="disttrajet">Kilomètre parcourue</string>
-    <string name="done">Trajet effectué</string>
+    <string name="done">Enregistrer son trajet</string>
     <string name="email_sent">Email envoyé</string>
     <string name="euroeco">Votre économie d\'argent</string>
     <string name="eurosub">Comparé à l\'utilisation d\'un voiture</string>

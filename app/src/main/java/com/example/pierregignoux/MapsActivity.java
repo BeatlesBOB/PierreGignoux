@@ -408,7 +408,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             public void onClick(View v) {
 
 
-                if (searchLocation != null || click != 0 ){
+                TextView distance = ((TextView) findViewById(R.id.tvDistance));
+                String comparedist = distance.getText().toString();
+                if (searchLocation != null || click != 0 || !comparedist.equals("0.0 Km")){
 
                     if (user != null){
 
@@ -1051,7 +1053,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
     @Override
     public void onTextChanged(String text) {
-        ((TextView) findViewById(R.id.tvDistance)).setText(text+" Km");
+        if (text.equals("")){
+            ((TextView) findViewById(R.id.tvDistance)).setText(1+" Km");
+        }else {
+            ((TextView) findViewById(R.id.tvDistance)).setText(text+" Km");
+
+        }
+
         TextView distance = ((TextView) findViewById(R.id.tvDistance));
         final Intent intentv = getIntent();
         final String vehicule_titre = intentv.getStringExtra("Vehicule titre");

@@ -174,7 +174,7 @@
     <string name="current_location_null">Current location is null. Permission Denied.</string>
     <string name="destination">Destination</string>
     <string name="departure_optional">Departure (optional)</string>
-    <string name="done">Route taken</string>
+    <string name="done">Record your route</string>
     <string name="nodest">Launch tracking</string>
     <string name="service_not_available">Service not available</string>
     <string name="invalid_lat_long_used">invalid lat long used</string>
