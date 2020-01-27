@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PierreGignoux</string>
+    <string name="Angleterre">Angleterre</string>
+    <string name="Chine">Chine</string>
+    <string name="France">France</string>
+    <string name="US">Etats Unies</string>
+    <string name="address_found">Adresse trouvée</string>
+    <string name="auth_failed">L\'authentification a échoué</string>
+    <string name="auth_sucess">L\'authentification a réussie</string>
+    <string name="btn_continue">Continuer</string>
+    <string name="btn_quizz_done">Quizz terminer</string>
+    <string name="confirm">Confirmer</string>
+    <string name="conso">Votre consommation de CO2</string>
+    <string name="consommation">Votre consommation</string>
+    <string name="consosub">Votre consommation vis a vis de vos objectifs</string>
+    <string name="consotrajet">Consommation :</string>
+    <string name="current_location_null">Votre position est null, permission refusée</string>
+    <string name="date_history">Fait le :</string>
+    <string name="departure_optional">Départ (optionel)</string>
+    <string name="destination">Destination</string>
+    <string name="disttrajet">Kilomètre parcourue</string>
+    <string name="done">Trajet effectué</string>
+    <string name="email_sent">Email envoyé</string>
+    <string name="euroeco">Votre économie d\'argent</string>
+    <string name="eurosub">Comparé à l\'utilisation d\'un voiture</string>
+    <string name="img_failed">Votre image de profil n\'a pas été sauvgardée</string>
+    <string name="img_sucess">Votre image de profil à été sauvgardée</string>
+    <string name="invalid_lat_long_used">Latitude et longitude invalide</string>
+    <string name="invalid_password_confirm">Les mot de passes doivent etre similaire</string>
+    <string name="label_fragment_home">Nouveau trajet</string>
+    <string name="label_fragment_profil">Votre profile</string>
+    <string name="label_fragment_test">Se tester</string>
+    <string name="label_fragment_trajet">Vos trajets</string>
+    <string name="login">S\'identifier</string>
+    <string name="mdp1">Votre mot de passe</string>
+    <string name="mdp2">Votre mot de passe de confirmation</string>
+    <string name="nav_header_subtitle">Application</string>
+    <string name="nav_header_title">Pierre Gignoux</string>
+    <string name="nav_home">Nouveaux trajets</string>
+    <string name="nav_label_account">Compte</string>
+    <string name="nav_label_sign_in">Se connecter ou s\'enregistrer</string>
+    <string name="nav_profil">Profile</string>
+    <string name="nav_routes">Mes trajets</string>
+    <string name="nav_sign_in">Se connecter</string>
+    <string name="nav_test">Se tester</string>
+    <string name="near_location_search">Nous cherchons l\'adresse la plus proche</string>
+    <string name="new_email">Votre nouvelle adresse mail</string>
+    <string name="new_name">Votre nouveau nom / pseudonyme</string>
+    <string name="new_password">Votre nouveau mot de passe</string>
+    <string name="no_account">Vous avez besoin d\'un compte</string>
+    <string name="no_destination">Vous avez besoin d\'enregistrer une destination</string>
+    <string name="no_geocoder_available">Pas de geocoder disponible</string>
+    <string name="no_location_data_provided">Pas de localisation fournit</string>
+    <string name="no_location_detected">Pas de localisation fournit</string>
+    <string name="no_trajet">Vous devez avoir un trajet en cours</string>
+    <string name="nodest">Démarrer le tracking</string>
+    <string name="nom">Votre nom</string>
+    <string name="not_update_email">Votre email n\'a pas changé</string>
+    <string name="not_update_mdp">Votre mot de passe n\'a pas changé</string>
+    <string name="not_update_name">Votre nom / pseudonyme n\'a pas chang\"</string>
+    <string name="objectif">Votre objectif</string>
+    <string name="passforgot">Vous avez oublié votre mot de passe ?</string>
+    <string name="permission_rationale">permission rational</string>
+    <string name="prenom">Votre prénom</string>
+    <string name="profil_update">Modifier mon profile</string>
+    <string name="quizz_complete">Le quizz est complet</string>
+    <string name="quizz_done">Votre résultat a été mise a jour</string>
+    <string name="quizz_history">Historique</string>
+    <string name="quizz_not_done">Il semble que nous rencontront un problème</string>
+    <string name="register">S\'enregistrer</string>
+    <string name="score">Votre résultat :</string>
+    <string name="score_history">Votre résultat était :</string>
+    <string name="send_email">Envoyé un email</string>
+    <string name="service_not_available">Service non disponible</string>
+    <string name="sigin_mail">Votre email</string>
+    <string name="sigin_mdp">Votre mot de passe</string>
+    <string name="summary">Résumer</string>
+    <string name="title_activity_main2">Centre</string>
+    <string name="title_activity_login">Se connecter</string>
+    <string name="title_activity_maps">Carte</string>
+    <string name="trajet_not_save">Le trajet n\'a pas été enregistrer correctement</string>
+    <string name="trajet_save">Trajet enregistré</string>
+    <string name="update_email">Votre email à été mise a jour</string>
+    <string name="update_mdp">Votre mot de passe à été mise à jour</string>
+    <string name="update_name">Votre nom / pseudonyme à été mise à jour</string>
+    <string name="viewpage1">Quid? qui se etiam nunc subsidiis patrimonii aut amicorum liberalitate sustentant, hos perire patiemur? An, si qui frui publico non potuit per hostem, hic tegitur ipsa lege censoria;</string>
+    <string name="viewpage2">Constituendi autem sunt qui sint in amicitia fines et quasi termini diligendi. De quibus tres video sententias ferri, quarum nullam probo, unam, ut eodem modo erga amicum adfecti simus, quo erga nosmet ipsos, alteram, ut nostra in amicos benevolentia illorum erga nos benevolentiae pariter aequaliterque respondeat, tertiam, ut, quanti quisque se ipse facit, tanti fiat ab amicis.</string>
+    <string name="viewpage3">Martinus agens illas provincias pro praefectis aerumnas innocentium graviter gemens saepeque obsecrans, ut ab omni culpa inmunibus parceretur, cum non inpetraret, minabatur se discessurum: ut saltem id metuens perquisitor malivolus tandem desineret quieti coalitos homines in aperta pericula proiectare.</string>
+    <string name="wait">Attendez …</string>
+
+
+    <string-array name="question_array">
+        <item>A quelle fréquence mangez vous de la viande ?</item>
+        <item>Combien de temps dure en moyenne votre douche ?</item>
+        <item>A quelle fréquence recyclez vous ?</item>
+        <item>Votre production d\'ordures par rapport à celle de votre voisin ?</item>
+        <item>Combien de fois par jour allumez vous le chauffage dans votre maison ?</item>
+        <item>Faites-vous toujours attention à éteindre les lumières ?</item>
+    </string-array>
+
+    <string-array name="choice01">
+        <item>Zéro fois par semaine</item>
+        <item>Une fois par semaine</item>
+        <item>Entre deux et trois fois par semaine</item>
+        <item>Quatre fois par semaine ou plus</item>
+    </string-array>
+
+    <string-array name="choice02">
+        <item>Moins de 6 minutes</item>
+        <item>Entre 6 et 10 minutes</item>
+        <item>Entre 10 et 15 minutes</item>
+        <item>Plus de 15 minutes</item>
+    </string-array>
+
+    <string-array name="choice03">
+        <item>Jamais</item>
+        <item>Presque jamais</item>
+        <item>Parfois</item>
+        <item>Toujours</item>
+    </string-array>
+
+    <string-array name="choice04">
+        <item>Moins que mon voisin</item>
+        <item>Équivalent à mon voisin</item>
+        <item>Un peu plus que mon voisin.</item>
+        <item>Beaucoup plus que mon voisin</item>
+    </string-array>
+
+    <string-array name="choice05">
+        <item>Il n\'a jamais été allumé</item>
+        <item>Entre une et deux heures</item>
+        <item>Entre trois et quatre heures</item>
+        <item>Quatre heures et plus</item>
+    </string-array>
+
+    <string-array name="choice06">
+        <item>Jamais</item>
+        <item>Presque jamais</item>
+        <item>Parfois</item>
+        <item>Toujours</item>
+    </string-array>
+
+    <string-array name="correctAnswers_array">
+        <item>Zéro fois par semaine</item>
+        <item>Moins de 6 minutes</item>
+        <item>Jamais</item>
+        <item>Moins que mon voisin</item>
+        <item>Il n\'a jamais été allumé</item>
+        <item>Jamais</item>
+    </string-array>
+</resources>

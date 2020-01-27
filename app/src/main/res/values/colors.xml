@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#B5EAD7</color>
+    <color name="colorPrimaryDark">#84B5A3</color>
+    <color name="colorAccent">#FF9AA2</color>
+    <color name="colorBlue">#71C2CC</color>
+    <color name="colorRed">#FF9AA2</color>
+    <color name="colorOrange">#FFDAC1</color>
+    <color name="colorGreen">#B5EAD7</color>
+    <color name="colorGray">#7F7F7F</color>
+
+    <array name="colorPagesViewPager">
+        <item>#FFFFFF</item>
+        <item>#FFFFFF</item>
+        <item>#FFFFFF</item>
+        <item>#FFFFFF</item>
+        <item>#FFFFFF</item>
+    </array>
+</resources>

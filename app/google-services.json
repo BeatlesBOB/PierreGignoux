@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "108349343968",
+    "firebase_url": "https://pierregignoux-94b72.firebaseio.com",
+    "project_id": "pierregignoux-94b72",
+    "storage_bucket": "pierregignoux-94b72.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108349343968:android:f65e3b428b05ddd887a885",
+        "android_client_info": {
+          "package_name": "com.example.pierregignoux"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDo0ByrBgf9aA6mW2OUu8iZxmT7eCV8SyA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

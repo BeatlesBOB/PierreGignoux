@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ModifProfil"
+    android:gravity="center">
+
+
+    <EditText
+        android:layout_margin="30dp"
+        android:id="@+id/nnom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/new_name"/>
+
+    <EditText
+        android:layout_margin="30dp"
+        android:id="@+id/nadress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/new_email"/>
+
+    <EditText
+        android:layout_margin="30dp"
+        android:id="@+id/npass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/new_password"/>
+
+    <Button
+        android:text="@string/profil_update"
+        android:id="@+id/sendupdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

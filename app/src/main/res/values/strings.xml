@@ -1,0 +1,188 @@
+<resources>
+    <string name="app_name">PierreGignoux</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_main2">HUB</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <string name="nav_header_title">Pierre Gignoux</string>
+    <string name="nav_header_subtitle">Application</string>
+
+    //Navigation
+    <string name="nav_home">New Routes</string>
+    <string name="nav_profil">Profil</string>
+    <string name="nav_routes">My routes</string>
+    <string name="nav_test">Test yourself</string>
+    <string name="nav_sign_in">Sign in</string>
+
+    <string name="nav_label_account">Account</string>
+    <string name="nav_label_sign_in">Sign in or register</string>
+
+    //1st page
+    <string name="viewpage1">Quid? qui se etiam nunc subsidiis patrimonii aut amicorum liberalitate sustentant, hos perire patiemur? An, si qui frui publico non potuit per hostem, hic tegitur ipsa lege censoria;</string>
+    <string name="viewpage2">Constituendi autem sunt qui sint in amicitia fines et quasi termini diligendi. De quibus tres video sententias ferri, quarum nullam probo, unam, ut eodem modo erga amicum adfecti simus, quo erga nosmet ipsos, alteram, ut nostra in amicos benevolentia illorum erga nos benevolentiae pariter aequaliterque respondeat, tertiam, ut, quanti quisque se ipse facit, tanti fiat ab amicis.</string>
+    <string name="viewpage3">Martinus agens illas provincias pro praefectis aerumnas innocentium graviter gemens saepeque obsecrans, ut ab omni culpa inmunibus parceretur, cum non inpetraret, minabatur se discessurum: ut saltem id metuens perquisitor malivolus tandem desineret quieti coalitos homines in aperta pericula proiectare.</string>
+    <string name="btn_continue">Continue</string>
+
+    //Home Fragment
+    <string name="label_fragment_home">New routes</string>
+
+    //Test Fragment
+    <string name="label_fragment_test">Test yourself</string>
+    <string-array name="question_array">
+        <item>How often do you eat meat ?</item>
+        <item>How long does your shower last on average ?</item>
+        <item>How often do you recycle ?</item>
+        <item>Your garbage production compared to your neighbor ?</item>
+        <item>How many times a day do you turn on the heat in your home ?</item>
+        <item>Are you always careful to turn off the lights ?</item>
+    </string-array>
+
+    <string-array name="choice01">
+        <item>Zero times a week</item>
+        <item>Once a week</item>
+        <item>Between two and three times a week</item>
+        <item>Four or more times a week</item>
+    </string-array>
+
+    <string-array name="choice02">
+        <item>Less than 6 minutes</item>
+        <item>Between 6 and 10 minutes</item>
+        <item>Between 10 and 15 minutes</item>
+        <item>More than 15 minutes</item>
+    </string-array>
+
+    <string-array name="choice03">
+        <item>Never</item>
+        <item>Almost never</item>
+        <item>Sometimes</item>
+        <item>Always</item>
+    </string-array>
+
+    <string-array name="choice04">
+        <item>Less than my neighbor</item>
+        <item>Equivalent to my neighbor</item>
+        <item>Slightly more than my neighbor.</item>
+        <item>Considerably more than my neighbor</item>
+    </string-array>
+
+    <string-array name="choice05">
+        <item>It\'s never turned on</item>
+        <item>Between one and two hours</item>
+        <item>Between three and four hours</item>
+        <item>Four hours and more</item>
+    </string-array>
+
+    <string-array name="choice06">
+        <item>Never</item>
+        <item>Almost never</item>
+        <item>Sometimes</item>
+        <item>Always</item>
+    </string-array>
+
+    <string-array name="correctAnswers_array">
+        <item>Zero times a week</item>
+        <item>Less than 6 minutes</item>
+        <item>Never</item>
+        <item>Less than my neighbor</item>
+        <item>It\'s never turned on</item>
+        <item>Never</item>
+    </string-array>
+
+    <string name="quizz_done">Your result has been saved</string>
+    <string name="quizz_not_done">It s seems we are facing a problem</string>
+
+    <string name="quizz_complete">The quizz is complete</string>
+    <string name="score">Your result :</string>
+    <string name="btn_quizz_done">Quizz done</string>
+    <string name="quizz_history">History</string>
+    <string name="score_history">Your score was :</string>
+    <string name="date_history">Done on</string>
+
+    //Profil Fragment
+    <string name="label_fragment_profil">Your profil</string>
+
+    <string name="objectif">Your objectif</string>
+    <string name="consommation">Your consumption</string>
+    <string name="France">France</string>
+    <string name="Chine">China</string>
+    <string name="US">United States</string>
+    <string name="Angleterre">England</string>
+    <string name="no_account">Account needed</string>
+
+    <string name="img_sucess">Your profile image has been saved</string>
+    <string name="img_failed">Your profile image hasn\'t be saved</string>
+
+    <string name="profil_update">Update profil</string>
+    <string name="summary">Summary</string>
+
+    <string name="conso">Your CO2 consumption</string>
+    <string name="euroeco">Your Money saved</string>
+    <string name="consosub">Your consumption in relation to your objective</string>
+    <string name="eurosub">Compared to using a car alone</string>
+
+    //Trajet Fragment
+    <string name="label_fragment_trajet">Your routes</string>
+
+    <string name="consotrajet">Consumption :</string>
+    <string name="disttrajet">Kilometre travelled :</string>
+
+    //Modif profil
+    <string name="update_email">User email address updated.</string>
+    <string name="not_update_email">User Email doesn\'t change.</string>
+
+    <string name="update_name">User name updated.</string>
+    <string name="not_update_name">User name / pseudo doesn\'t change.</string>
+
+    <string name="update_mdp">User password updated.</string>
+    <string name="not_update_mdp">User password doesn\'t change.</string>
+
+    <string name="new_email">Your new email</string>
+    <string name="new_password">Your new password</string>
+    <string name="new_name">Your new name / pseudo</string>
+
+    //Sign in
+    <string name="sigin_mail">Your Email</string>
+    <string name="sigin_mdp">Your password</string>
+    <string name="passforgot">Your forgot your password ?</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="auth_sucess">Authentication succeess</string>
+    <string name="auth_failed">Authentication failed</string>
+
+    //Forgot password
+    <string name="email_sent">Email sent</string>
+    <string name="send_email">Send email</string>
+
+    //Register
+    <string name="invalid_password_confirm">Password n°1 and n°2 must be similar</string>
+    <string name="prenom">Your first name</string>
+    <string name="nom">Your last name</string>
+    <string name="mdp1">Your password n°1</string>
+    <string name="mdp2">Your password confirm</string>
+    <string name="confirm">Confirm</string>
+
+
+    //Map Activity
+    <string name="trajet_save">Route recorded</string>
+    <string name="trajet_not_save">Route not recorded properly</string>
+    <string name="no_trajet">You need to have a route set up</string>
+    <string name="no_destination">You need to set up a destination</string>
+    <string name="wait">Wait …</string>
+    <string name="near_location_search">We are looking for the nearest location</string>
+    <string name="current_location_null">Current location is null. Permission Denied.</string>
+    <string name="destination">Destination</string>
+    <string name="departure_optional">Departure (optional)</string>
+    <string name="done">Route taken</string>
+    <string name="nodest">Launch tracking</string>
+    <string name="service_not_available">Service not available</string>
+    <string name="invalid_lat_long_used">invalid lat long used</string>
+    <string name="no_location_data_provided">no location data provided</string>
+    <string name="address_found">address found</string>
+    <string name="no_geocoder_available">no geocoder available</string>
+    <string name="no_location_detected">no location detected</string>
+    <string name="permission_rationale">permission rationale</string>
+
+
+</resources>

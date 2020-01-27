@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_near_me_black_24dp"
+            android:title="@string/nav_home"/>
+
+        <item
+            android:id="@+id/nav_test"
+            android:icon="@drawable/ic_assignment_turned_in_black_24dp"
+            android:title="@string/nav_test" />
+
+        <item android:title="@string/nav_label_account">
+            <menu>
+
+                <item
+                    android:id="@+id/nav_profil"
+                    android:icon="@drawable/ic_account_circle_black_24dp"
+                    android:title="@string/nav_profil" />
+
+                <item
+                    android:id="@+id/nav_trajet"
+                    android:icon="@drawable/ic_trajet"
+                    android:title="@string/nav_routes" />
+
+            </menu>
+        </item>
+
+        <item android:title="@string/nav_label_sign_in">
+            <menu>
+
+                <item
+                    android:id="@+id/nav_login"
+                    android:icon="@drawable/ic_person_outline_black_24dp"
+                    android:title="@string/nav_sign_in" />
+            </menu>
+        </item>
+
+    </group>
+
+
+
+
+
+
+</menu>
