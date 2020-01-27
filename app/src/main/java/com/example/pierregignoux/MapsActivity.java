@@ -59,6 +59,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -76,6 +77,7 @@ import com.google.android.gms.tasks.Task;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldPath;
@@ -104,7 +106,7 @@ import static java.lang.Integer.parseInt;
  * Created by kodetr on 09/05/19.
  * */
 
-public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, OnMapReadyCallback, DirectionFinderListener {
+public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, OnMapReadyCallback, DirectionFinderListener, BottomSheetDialog.BottomSheetListener {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
     private LatLng LocationA = new LatLng(46.227638,2.213749);
@@ -145,6 +147,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
     long starttime = 0;
     long endtime = 0;
 
+    ListView listView;
     int click = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,11 +189,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
         Picasso.get().load(vehicule_image).into(vehiculeimage);
         final String vehicule_methode = intent.getStringExtra("Vehicule methode");
+        String vehicule_calc = intent.getStringExtra("Vehicule calcule");
 
-        Log.d("Covoiturage",vehicule_titre);
 
 
-        if (vehicule_titre.equals("Covoiturage")){
+        if (vehicule_calc.contains("Y")){
 
             Log.d("Covoiturage","Covoiturage2");
             linearLayout = findViewById(R.id.layoutmap);
@@ -204,6 +207,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
             linearLayout.addView(nbpersonne);
             nbpersonne.setHint("Entrez le nombre de personne dans la voiture");
+            nbpersonne.setInputType(0x00000002);
         }
     }
 
@@ -392,7 +396,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             @Override
             public void onClick(View v) {
 
-
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+                bottomSheetDialog.show(getSupportFragmentManager(),"bottomSheetDialog");
             }
         });
 
@@ -415,9 +420,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                         String km = ((TextView) findViewById(R.id.tvDistance)).getText().toString();
                         String finalkm = km.split(" ")[0];
 
-                        Date   now = new Date();
-                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/YYYY HH:mm");
-                        String DateData = formatter.format(now);
+//                        Date   now = new Date();
+//                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/YYYY HH:mm");
+//                        String DateData = formatter.format(now);
 
                         final Intent intent = getIntent();
                         final String vehicule_titre = intent.getStringExtra("Vehicule titre");
@@ -425,7 +430,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
                         Map<String, Object> Trajet = new HashMap<>();
                         Trajet.put("consoTrajet", finalConso);
-                        Trajet.put("dateTrajet", DateData);
+                        Trajet.put("dateTrajet", new Timestamp(new Date()));
                         Trajet.put("auteurTrajet", uid);
                         Trajet.put("vehiculeTrajet", vehicule_titre);
                         Trajet.put("distanceTrajet", finalkm);
@@ -622,6 +627,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                     Toast.makeText(MapsActivity.this, getString(R.string.no_trajet), Toast.LENGTH_SHORT).show();
                 }
 
+
+                listView = findViewById(R.id.listpref);
 
 
 
@@ -1039,6 +1046,98 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
     public void finish() {
         super.finish();
         CustomIntent.customType(this,"right-to-left");
+
+    }
+
+    @Override
+    public void onTextChanged(String text) {
+        ((TextView) findViewById(R.id.tvDistance)).setText(text+" Km");
+        TextView distance = ((TextView) findViewById(R.id.tvDistance));
+        final Intent intentv = getIntent();
+        final String vehicule_titre = intentv.getStringExtra("Vehicule titre");
+
+        db.collection("vehicules")
+                .whereEqualTo("titreVehicule",vehicule_titre)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                Log.d("aprefini","pouete pouete poti rigolo");
+
+                                String conso = document.getString("ConsoCalculeVehicule");
+                                String routedist = distance.getText().toString();
+                                String finalRouteDist = routedist.split(" ")[0];
+                                Log.d("dist",finalRouteDist);
+                                String conso2 = conso.replace("X",""+finalRouteDist+"");
+
+
+                                if (nbpersonne!= null)
+                                {
+                                    final String[] conso3 = {""};
+
+                                    final String aspassenger = nbpersonne.getText().toString();
+                                    if (!aspassenger.equals("")){
+                                        conso3[0] = conso2.replace("Y",""+ aspassenger +"");
+                                        Expression e = new Expression(conso3[0]);
+                                        String result = String.valueOf(e.calculate());
+                                        ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                    }else {
+                                        conso3[0] = conso2.replace("Y",""+1+"");
+                                        Log.d("conso3", conso3[0]);
+                                        Expression e = new Expression(conso3[0]);
+                                        String result = String.valueOf(e.calculate());
+                                        ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                    }
+                                    Expression e = new Expression(conso3[0]);
+                                    String result = String.valueOf(e.calculate());
+                                    ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+
+                                    nbpersonne.addTextChangedListener(new TextWatcher() {
+
+                                        public void afterTextChanged(Editable s) {}
+
+                                        public void beforeTextChanged(CharSequence s, int start,
+                                                                      int count, int after) {
+
+                                        }
+
+                                        public void onTextChanged(CharSequence s, int start,
+                                                                  int before, int count) {
+                                            final String aspassenger = nbpersonne.getText().toString();
+                                            if (!aspassenger.equals("")){
+                                                conso3[0] = conso2.replace("Y",""+ aspassenger +"");
+                                                Expression e = new Expression(conso3[0]);
+                                                String result = String.valueOf(e.calculate());
+                                                ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                            }else {
+                                                conso3[0] = conso2.replace("Y",""+1+"");
+                                                Log.d("conso3", conso3[0]);
+                                                Expression e = new Expression(conso3[0]);
+                                                String result = String.valueOf(e.calculate());
+                                                ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                            }
+                                        }
+                                    });
+
+                                }else {
+
+                                    Expression e = new Expression(conso2);
+                                    String result = String.valueOf(e.calculate());
+                                    ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                }
+
+                                Log.d("dist",conso2);
+
+                            }
+                        } else {
+                            Log.d("TEST", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
 
     }
 }

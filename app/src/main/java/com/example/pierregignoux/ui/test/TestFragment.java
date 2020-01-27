@@ -51,6 +51,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -401,13 +402,14 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
 
             db.collection("quizz")
                     .whereEqualTo("auteurQuizz" , uid)
+                    .orderBy("dateQuizz", Query.Direction.DESCENDING)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Quizz nQuizz = new Quizz(document.getId(),document.getString("scoreQuizz"),document.getString("auteurQuizz"),document.getString("dateQuizz") );
+                                    Quizz nQuizz = new Quizz(document.getId(),document.getString("scoreQuizz"),document.getString("auteurQuizz"),document.getTimestamp("dateQuizz") );
 
                                     items.add(nQuizz);
 

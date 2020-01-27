@@ -1,18 +1,22 @@
 package com.example.pierregignoux;
 
 
+import com.google.firebase.Timestamp;
+
+import java.text.SimpleDateFormat;
+
 public class Quizz {
 
     private String id;
     private String score;
     private String auteur;
-    private String date;
+    private Timestamp date;
 
 
 
 
 
-    public Quizz(String id, String score, String auteur,String date)
+    public Quizz(String id, String score, String auteur,Timestamp date)
     {
         this.id = id;
         this.score = score;
@@ -33,6 +37,11 @@ public class Quizz {
         return auteur;
     }
     public String getDate() {
-        return date;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss");
+        String DateData = formatter.format(date.toDate());
+
+        return DateData;
+
     }
 }

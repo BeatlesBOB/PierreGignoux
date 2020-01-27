@@ -1,10 +1,14 @@
 package com.example.pierregignoux.models.direction;
 
+import com.google.firebase.Timestamp;
+
+import java.text.SimpleDateFormat;
+
 public class Trajet {
 
     private String id;
     private String auteurId;
-    private String date;
+    private Timestamp date;
     private String consommation;
     private String vehicule;
     private String kilometre;
@@ -13,7 +17,7 @@ public class Trajet {
 
 
 
-    public Trajet(String id, String auteurId,String date, String consommation,String vehicule,String kilometre,String image)
+    public Trajet(String id, String auteurId, Timestamp date, String consommation, String vehicule, String kilometre, String image)
     {
         this.id = id;
         this.auteurId = auteurId;
@@ -26,6 +30,8 @@ public class Trajet {
 
     }
 
+
+
     public String getId() {
         return id;
     }
@@ -35,7 +41,12 @@ public class Trajet {
     }
 
     public String getDate() {
-        return date;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss");
+        String DateData = formatter.format(date.toDate());
+
+        return DateData;
+
     }
 
     public String getVehicule() {

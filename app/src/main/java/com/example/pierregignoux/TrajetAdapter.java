@@ -51,7 +51,7 @@ public class TrajetAdapter extends RecyclerView.Adapter<TrajetAdapter.ViewHolder
         String disttrajet = context.getResources().getString(R.string.disttrajet);
 
         String vehicule = mont.getVehicule();
-        String date = donedate+" "+mont.getDate().split(" ")[0];
+        String date = donedate+" "+mont.getDate();
         String consommation = consotrajet+" "+mont.getConsommation()+" g/CO2";
         String kilometre = disttrajet+" "+mont.getKilometre();
         String imageurl = mont.getImage();

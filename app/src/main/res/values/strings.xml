@@ -183,6 +183,7 @@
     <string name="no_geocoder_available">no geocoder available</string>
     <string name="no_location_detected">no location detected</string>
     <string name="permission_rationale">permission rationale</string>
+    <string name="update_km">Your Kilometers Travelled</string>
 
 
 </resources>

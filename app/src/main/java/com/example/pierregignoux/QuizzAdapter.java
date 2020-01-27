@@ -51,7 +51,7 @@ public class QuizzAdapter extends RecyclerView.Adapter<QuizzAdapter.ViewHolder> 
         String score = mont.getScore();
         String donedate = context.getResources().getString(R.string.date_history);
 
-        String date = donedate+" "+mont.getDate().split(" ")[0];
+        String date = donedate+" "+mont.getDate();
 
 
         int finalscore = Integer.parseInt(score);

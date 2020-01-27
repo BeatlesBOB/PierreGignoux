@@ -202,7 +202,7 @@ public class ProfilFragment extends Fragment {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
 
 
-                                    Trajet nTrajet = new Trajet(document.getId(), document.getString("auteurTrajet"), document.getString("dateTrajet"), document.getString("consoTrajet"), document.getString("vehiculeTrajet"), document.getString("kilometreTrajet"),document.getString("kilometreTrajet"));
+                                    Trajet nTrajet = new Trajet(document.getId(), document.getString("auteurTrajet"), document.getTimestamp("dateTrajet"), document.getString("consoTrajet"), document.getString("vehiculeTrajet"), document.getString("kilometreTrajet"),document.getString("imageTrajet"));
 
                                     items.add(nTrajet);
 
