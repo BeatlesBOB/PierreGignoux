@@ -1,6 +1,7 @@
 package com.example.pierregignoux;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -16,9 +17,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
@@ -53,7 +57,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.ResultReceiver;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -85,10 +93,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import org.mariuszgromada.math.mxparser.*;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -102,11 +113,8 @@ import static java.lang.Integer.parseInt;
 
 
 
-/**
- * Created by kodetr on 09/05/19.
- * */
 
-public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, OnMapReadyCallback, DirectionFinderListener, BottomSheetDialog.BottomSheetListener {
+public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, OnMapReadyCallback, DirectionFinderListener, BottomSheetDialog.BottomSheetListener,BottomSheetDialog2.BottomSheetListener {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
     private LatLng LocationA = new LatLng(46.227638,2.213749);
@@ -149,11 +157,15 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
     ListView listView;
     int click = 0;
+    ArrayList<String> mTitle = new ArrayList<>();
+    ArrayList<String> mKilometre = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        loadData();
 
         db = FirebaseFirestore.getInstance();
 
@@ -209,6 +221,50 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             nbpersonne.setHint("Entrez le nombre de personne dans la voiture");
             nbpersonne.setInputType(0x00000002);
         }
+
+        listView = findViewById(R.id.listpref);
+
+        ListAdapter listAdapter = new ListAdapter(this,mTitle,mKilometre);
+        listView.setAdapter(listAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.d("Itemclick",mTitle.get(position));
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.d("Itemclick",mTitle.get(position));
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final int which_item = position;
+                new AlertDialog.Builder(MapsActivity.this)
+                        .setIcon(R.drawable.ic_delete_black_24dp)
+                        .setTitle("Are you sure ?")
+                        .setMessage("Do you want to delete this item ")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mTitle.remove(which_item);
+                                mKilometre.remove(which_item);
+                                listAdapter.notifyDataSetChanged();
+                                savedata();
+                            }
+                        })
+                        .setNegativeButton("No",null)
+                        .show();
+                return true;
+            }
+        });
     }
 
 
@@ -398,6 +454,16 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
                 bottomSheetDialog.show(getSupportFragmentManager(),"bottomSheetDialog");
+            }
+        });
+
+        ImageButton btnaddpreftraj = findViewById(R.id.addPrefTrajet);
+        btnaddpreftraj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                BottomSheetDialog2 bottomSheetDialog2 = new BottomSheetDialog2();
+                bottomSheetDialog2.show(getSupportFragmentManager(),"bottomSheetDialog2");
             }
         });
 
@@ -630,7 +696,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                 }
 
 
-                listView = findViewById(R.id.listpref);
+
+
+
 
 
 
@@ -1146,6 +1214,81 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                         }
                     }
                 });
+
+    }
+
+    @Override
+    public void addPrefTraj(String title, String distance) {
+        Log.d("pref",title+" "+distance);
+       mTitle.add(title);
+       mKilometre.add(distance);
+       savedata();
+    }
+
+    private void savedata(){
+
+        Log.d("Savedate","save");
+        SharedPreferences sharedPreferences = getSharedPreferences("Trajet favorie",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(mTitle);
+        String json2 = gson.toJson(mKilometre);
+        editor.putString("titre pref traj",json);
+        editor.putString("kilometre pref traj",json2);
+        editor.apply();
+    }
+
+    private void loadData(){
+        Log.d("Savedate","load");
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Trajet favorie",MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("titre pref traj",null);
+        String json2 = sharedPreferences.getString("kilometre pref traj",null);
+        Type type = new TypeToken<ArrayList<String>>(){}.getType();
+        mTitle = gson.fromJson(json, type);
+        mKilometre = gson.fromJson(json2, type);
+
+        if(mTitle == null){
+            mTitle = new ArrayList<>();
+        }
+        if(mKilometre == null){
+            mKilometre = new ArrayList<>();
+        }
+
+    }
+
+
+    class ListAdapter extends ArrayAdapter<String>{
+
+        Context context;
+        ArrayList<String> rTitle = new ArrayList<>();
+        ArrayList<String> rKilometre = new ArrayList<>();
+
+
+
+        ListAdapter(Context c,  ArrayList<String> title,  ArrayList<String> kilo){
+            super(c,R.layout.layout_row,R.id.preftitle,title);
+            this.context =c;
+            this.rTitle = title;
+            this.rKilometre = kilo;
+        }
+
+
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            LayoutInflater layoutInflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View row = layoutInflater.inflate(R.layout.layout_row, parent,false);
+            TextView myTitle = row.findViewById(R.id.preftitle);
+            TextView myKilo = row.findViewById(R.id.prefkilo);
+
+            myTitle.setText(rTitle.get(position));
+            myKilo.setText(rKilometre.get(position));
+
+            return row;
+        }
 
     }
 }
