@@ -89,6 +89,13 @@
     <string name="viewpage3">Martinus agens illas provincias pro praefectis aerumnas innocentium graviter gemens saepeque obsecrans, ut ab omni culpa inmunibus parceretur, cum non inpetraret, minabatur se discessurum: ut saltem id metuens perquisitor malivolus tandem desineret quieti coalitos homines in aperta pericula proiectare.</string>
     <string name="wait">Attendez …</string>
     <string name="update_km">Vos kilomètres parcourus</string>
+    <string name="newfavroute">Nouveau trajet régulier / favorie</string>
+    <string name="nbpersonne">Entrez le nombre de personne dans la voiture</string>
+    <string name="sure">Etes vous sure ?</string>
+    <string name="deleteitem">Voulez vous supprimer cette item</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+
 
 
     <string-array name="question_array">

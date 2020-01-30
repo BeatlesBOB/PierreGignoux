@@ -218,7 +218,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             ));
 
             linearLayout.addView(nbpersonne);
-            nbpersonne.setHint("Entrez le nombre de personne dans la voiture");
+            nbpersonne.setHint(getString(R.string.nbpersonne));
             nbpersonne.setInputType(0x00000002);
         }
 
@@ -240,6 +240,98 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Log.d("Itemclick",mTitle.get(position));
+                if (mKilometre.get(position).equals("")){
+                    ((TextView) findViewById(R.id.tvDistance)).setText(1+" Km");
+                }else {
+                    ((TextView) findViewById(R.id.tvDistance)).setText(mKilometre.get(position)+" Km");
+                }
+
+                TextView distance = ((TextView) findViewById(R.id.tvDistance));
+                final Intent intentv = getIntent();
+                final String vehicule_titre = intentv.getStringExtra("Vehicule titre");
+
+                db.collection("vehicules")
+                        .whereEqualTo("titreVehicule",vehicule_titre)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                        Log.d("aprefini","pouete pouete poti rigolo");
+
+                                        String conso = document.getString("ConsoCalculeVehicule");
+                                        String routedist = distance.getText().toString();
+                                        String finalRouteDist = routedist.split(" ")[0];
+                                        Log.d("dist",finalRouteDist);
+                                        String conso2 = conso.replace("X",""+finalRouteDist+"");
+
+
+                                        if (nbpersonne!= null)
+                                        {
+                                            final String[] conso3 = {""};
+
+                                            final String aspassenger = nbpersonne.getText().toString();
+                                            if (!aspassenger.equals("")){
+                                                conso3[0] = conso2.replace("Y",""+ aspassenger +"");
+                                                Expression e = new Expression(conso3[0]);
+                                                String result = String.valueOf(e.calculate());
+                                                ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                            }else {
+                                                conso3[0] = conso2.replace("Y",""+1+"");
+                                                Log.d("conso3", conso3[0]);
+                                                Expression e = new Expression(conso3[0]);
+                                                String result = String.valueOf(e.calculate());
+                                                ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                            }
+                                            Expression e = new Expression(conso3[0]);
+                                            String result = String.valueOf(e.calculate());
+                                            ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+
+                                            nbpersonne.addTextChangedListener(new TextWatcher() {
+
+                                                public void afterTextChanged(Editable s) {}
+
+                                                public void beforeTextChanged(CharSequence s, int start,
+                                                                              int count, int after) {
+
+                                                }
+
+                                                public void onTextChanged(CharSequence s, int start,
+                                                                          int before, int count) {
+                                                    final String aspassenger = nbpersonne.getText().toString();
+                                                    if (!aspassenger.equals("")){
+                                                        conso3[0] = conso2.replace("Y",""+ aspassenger +"");
+                                                        Expression e = new Expression(conso3[0]);
+                                                        String result = String.valueOf(e.calculate());
+                                                        ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                                    }else {
+                                                        conso3[0] = conso2.replace("Y",""+1+"");
+                                                        Log.d("conso3", conso3[0]);
+                                                        Expression e = new Expression(conso3[0]);
+                                                        String result = String.valueOf(e.calculate());
+                                                        ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                                    }
+                                                }
+                                            });
+
+                                        }else {
+
+                                            Expression e = new Expression(conso2);
+                                            String result = String.valueOf(e.calculate());
+                                            ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                        }
+
+                                        Log.d("dist",conso2);
+
+                                    }
+                                } else {
+                                    Log.d("TEST", "Error getting documents: ", task.getException());
+                                }
+                            }
+                        });
             }
         });
 
@@ -249,9 +341,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                 final int which_item = position;
                 new AlertDialog.Builder(MapsActivity.this)
                         .setIcon(R.drawable.ic_delete_black_24dp)
-                        .setTitle("Are you sure ?")
-                        .setMessage("Do you want to delete this item ")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setTitle(getString(R.string.sure))
+                        .setMessage(getString(R.string.deleteitem))
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mTitle.remove(which_item);
@@ -260,7 +352,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                 savedata();
                             }
                         })
-                        .setNegativeButton("No",null)
+                        .setNegativeButton(getString(R.string.no),null)
                         .show();
                 return true;
             }

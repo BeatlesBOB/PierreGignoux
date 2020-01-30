@@ -8,7 +8,7 @@
 
     <TextView
         style="@style/TextAppearance.AppCompat.Title"
-        android:text="Nouveau trajet régulier / favorie"
+        android:text="@string/newfavroute"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center" />
@@ -20,6 +20,7 @@
         android:layout_height="wrap_content" />
 
     <EditText
+        android:inputType="number"
         android:id="@+id/nprefDistance"
         android:textAlignment="center"
         android:layout_width="match_parent"
