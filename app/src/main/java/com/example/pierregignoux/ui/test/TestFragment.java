@@ -45,6 +45,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -141,14 +142,10 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
 
                         String uid = user.getUid();
 
-                        Date now = new Date();
-                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/YYYY HH:mm");
-                        String DateData = formatter.format(now);
-
                         Map<String, Object> Quizz = new HashMap<>();
                         Quizz.put("scoreQuizz", ""+mScore);
                         Quizz.put("auteurQuizz", uid);
-                        Quizz.put("dateQuizz", DateData);
+                        Quizz.put("dateQuizz", new Timestamp(new Date()));
 
 
                         db.collection("quizz").document().set(Quizz).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -175,37 +172,31 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
             @Override
             public void onClick(View v) {
                 r++;
-
-
                 String select = (String) radio1.getText();
                 if (select.equals(mAnswer)){
 
                     Log.d("score", String.valueOf(mScore));
 
+                    if (r+1 == 7){
+                        mScore += 10;
+                        gprog.setProgress(mScore);
+                    }
                     if (r+1>=7)
                     {
                         Log.d("index","oui");
                         Toast.makeText(context, getString(R.string.quizz_complete), Toast.LENGTH_LONG).show();
                     } else {
-                        if (r+1 == 6 ){
-                            r++;
-                            Log.d("index",""+r);
-                            mScore += 10;
-                            gprog.setProgress(mScore);
-
-                        }else {
-
-                            mScore += 10;
-                            gprog.setProgress(mScore);
-                            updateQuestion(r);
-                        }
+                        mScore += 10;
+                        gprog.setProgress(mScore);
+                        updateQuestion(r);
 
                     }
 
 
+
                 }else {
 
-                    if (r+1>6)
+                    if (r+1>7 )
                     {
                         Toast.makeText(context, getString(R.string.quizz_complete), Toast.LENGTH_LONG).show();
                     } else {
@@ -229,42 +220,35 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
             @Override
             public void onClick(View v) {
                 r++;
+                String select = (String) radio2.getText();
+                if (select.equals(mAnswer)){
 
-                if (radio2.getText() == mAnswer){
+                    Log.d("score", String.valueOf(mScore));
 
-
-
-                    if (r+1>6)
+                    if (r+1 == 7){
+                        mScore += 10;
+                        gprog.setProgress(mScore);
+                    }
+                    if (r+1>=7)
                     {
                         Log.d("index","oui");
                         Toast.makeText(context, getString(R.string.quizz_complete), Toast.LENGTH_LONG).show();
                     } else {
-                        if (r+1 == 6 ){
-                            r++;
-                            Log.d("index",""+r);
-                            mScore += 10;
-                            gprog.setProgress(mScore);
-
-                        }else {
-
-                            mScore += 10;
-                            gprog.setProgress(mScore);
-                            updateQuestion(r);
-                        }
+                        mScore += 10;
+                        gprog.setProgress(mScore);
+                        updateQuestion(r);
 
                     }
 
-
                 }else {
 
-                    if (r+1>6)
+                    if (r+1>7)
                     {
                         Toast.makeText(context, getString(R.string.quizz_complete), Toast.LENGTH_LONG).show();
                     } else {
 
                         if (r+1 == 6 ){
                             r++;
-
                         }else {
                             updateQuestion(r);
                         }
@@ -281,36 +265,29 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
             @Override
             public void onClick(View v) {
                 r++;
+                String select = (String) radio3.getText();
+                if (select.equals(mAnswer)){
 
-                if (radio3.getText() == mAnswer){
+                    Log.d("score", String.valueOf(mScore));
 
-
-                    if (r+1>6)
+                    if (r+1 == 7){
+                        mScore += 10;
+                        gprog.setProgress(mScore);
+                    }
+                    if (r+1>=7)
                     {
+                        Log.d("index","oui");
                         Toast.makeText(context, getString(R.string.quizz_complete), Toast.LENGTH_LONG).show();
                     } else {
-
-                        if (r+1 == 6 ){
-                            r++;
-                            Log.d("index",""+r);
-                            mScore += 10;
-                            gprog.setProgress(mScore);
-
-                        }else{
-
-                            mScore += 10;
-                            gprog.setProgress(mScore);
-                            updateQuestion(r);
-
-                        }
+                        mScore += 10;
+                        gprog.setProgress(mScore);
+                        updateQuestion(r);
 
                     }
 
-
-
                 }else {
 
-                    if (r+1>6)
+                    if (r+1>7)
                     {
                         Toast.makeText(context, getString(R.string.quizz_complete), Toast.LENGTH_LONG).show();
                     } else {
@@ -333,31 +310,29 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
             @Override
             public void onClick(View v) {
                 r++;
+                String select = (String) radio4.getText();
+                if (select.equals(mAnswer)){
 
-                if (radio4.getText() == mAnswer){
+                    Log.d("score", String.valueOf(mScore));
 
-                    if (r+1>6)
+                    if (r+1 == 7){
+                        mScore += 10;
+                        gprog.setProgress(mScore);
+                    }
+                    if (r+1>=7)
                     {
+                        Log.d("index","oui");
                         Toast.makeText(context, getString(R.string.quizz_complete), Toast.LENGTH_LONG).show();
                     } else {
-
-                        if (r+1 == 6 ){
-                            r++;
-                            Log.d("index",""+r);
-                            mScore += 10;
-                            gprog.setProgress(mScore);
-
-                        }else{
-                            mScore += 10;
-                            gprog.setProgress(mScore);
-                            updateQuestion(r);
-                        }
+                        mScore += 10;
+                        gprog.setProgress(mScore);
+                        updateQuestion(r);
 
                     }
 
                 }else {
 
-                    if (r+1>6)
+                    if (r+1>7)
                     {
                         Toast.makeText(context, getString(R.string.quizz_complete), Toast.LENGTH_LONG).show();
                     } else {

@@ -95,7 +95,9 @@
     <string name="deleteitem">Voulez vous supprimer cette item</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
-
+    <string name="titre">Titre</string>
+    <string name="nbkilometre">Nombre de kilomètre</string>
+    <string name="save">Sauvegarder</string>
 
 
     <string-array name="question_array">
