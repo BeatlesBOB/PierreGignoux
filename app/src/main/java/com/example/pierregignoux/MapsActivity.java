@@ -157,13 +157,18 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
     ListView listView;
     int click = 0;
+    int btn = 0;
     ArrayList<String> mTitle = new ArrayList<>();
     ArrayList<String> mKilometre = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Service",MODE_PRIVATE);
+        btn = sharedPreferences.getInt("statue btn ",0);
 
         loadData();
 
@@ -393,8 +398,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
 
 
-        final int[] btn = new int[1];
-        btn[0]= 0;
+
+
 
 
         Button nodestination = findViewById(R.id.btnnodest);
@@ -402,10 +407,14 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             @Override
             public void onClick(View v) {
 
-                btn[0]++;
+
+
+                btn++;
                 click = 1;
 
-                if (btn[0] == 1) {
+
+
+                if (btn == 1) {
 
                     starttime = System.currentTimeMillis();
 
@@ -419,7 +428,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                     endtime = System.currentTimeMillis();
                     Log.d("Time", "endtime :"+endtime);
 
-                    btn[0] = btn[0] - 2;
+                    btn = btn - 2;
                     Intent intent = new Intent(MapsActivity.this, GPSService.class);
                     stopService(intent);
                     nodestination.setText("START");
@@ -1143,6 +1152,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         if (broadcastReceiver != null){
             unregisterReceiver(broadcastReceiver);
         }
+        SharedPreferences sharedPreferences = getSharedPreferences("Service",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("statue btn",btn);
+        editor.apply();
     }
 
     @Override
