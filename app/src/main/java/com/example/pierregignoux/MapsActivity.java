@@ -168,7 +168,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         setContentView(R.layout.activity_maps);
 
         SharedPreferences sharedPreferences = getSharedPreferences("Service",MODE_PRIVATE);
-        btn = sharedPreferences.getInt("statue btn ",0);
+        btn = sharedPreferences.getInt("statue btn",0);
+        Log.d("btn", String.valueOf(btn));
 
         loadData();
 
@@ -407,31 +408,37 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             @Override
             public void onClick(View v) {
 
-
-
                 btn++;
                 click = 1;
-
 
 
                 if (btn == 1) {
 
                     starttime = System.currentTimeMillis();
 
+
+                    SharedPreferences sharedPreferences = getSharedPreferences("Start time",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putLong("starttime",starttime);
+                    editor.apply();
+
                     Log.d("Time", "starttime :"+starttime);
                     Intent intent = new Intent(MapsActivity.this, GPSService.class);
                     startService(intent);
-                    nodestination.setText("STOP");
 
                 } else {
 
                     endtime = System.currentTimeMillis();
                     Log.d("Time", "endtime :"+endtime);
 
+                    SharedPreferences sharedPreferences = getSharedPreferences("End time",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putLong("endtime",endtime);
+                    editor.apply();
+
                     btn = btn - 2;
                     Intent intent = new Intent(MapsActivity.this, GPSService.class);
                     stopService(intent);
-                    nodestination.setText("START");
 
                     int j = 0;
                     float distancetracking = 0;
@@ -442,6 +449,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                         j++;
 
                     }
+
+                    SharedPreferences sharedPreferencesstart = getSharedPreferences("Start time",MODE_PRIVATE);
+                    starttime = sharedPreferencesstart.getLong("starttime",0);
+
+                    SharedPreferences sharedPreferencesend = getSharedPreferences("End time",MODE_PRIVATE);
+                    endtime = sharedPreferencesend.getLong("endtime",0);
+
                     Long time = endtime-starttime;
                     Long intertime = time/1000;
                     Long finaltime = intertime/60;
@@ -543,6 +557,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
 
                 }
+                Log.d("btn", String.valueOf(btn));
+
+                SharedPreferences sharedPreferences = getSharedPreferences("Service",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("statue btn",btn);
+                editor.apply();
 
 
             }
@@ -1152,10 +1172,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         if (broadcastReceiver != null){
             unregisterReceiver(broadcastReceiver);
         }
-        SharedPreferences sharedPreferences = getSharedPreferences("Service",MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("statue btn",btn);
-        editor.apply();
     }
 
     @Override
