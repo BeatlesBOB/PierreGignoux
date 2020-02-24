@@ -166,10 +166,17 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        Button nodestination = findViewById(R.id.btnnodest);
 
         SharedPreferences sharedPreferences = getSharedPreferences("Service",MODE_PRIVATE);
         btn = sharedPreferences.getInt("statue btn",0);
         Log.d("btn", String.valueOf(btn));
+
+        if(btn == 0){
+            nodestination.setText("START");
+        }else{
+            nodestination.setText("STOP");
+        }
 
         loadData();
 
@@ -401,8 +408,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
 
 
-
-
         Button nodestination = findViewById(R.id.btnnodest);
         nodestination.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -415,6 +420,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                 if (btn == 1) {
 
                     starttime = System.currentTimeMillis();
+                    nodestination.setText("STOP");
 
 
                     SharedPreferences sharedPreferences = getSharedPreferences("Start time",MODE_PRIVATE);
@@ -427,7 +433,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                     startService(intent);
 
                 } else {
-
+                    nodestination.setText("START");
                     endtime = System.currentTimeMillis();
                     Log.d("Time", "endtime :"+endtime);
 
