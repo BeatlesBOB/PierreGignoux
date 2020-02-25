@@ -60,6 +60,7 @@ import android.os.ResultReceiver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -160,7 +161,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
     int btn = 0;
     ArrayList<String> mTitle = new ArrayList<>();
     ArrayList<String> mKilometre = new ArrayList<>();
-
+    ListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,7 +171,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
         SharedPreferences sharedPreferences = getSharedPreferences("Service",MODE_PRIVATE);
         btn = sharedPreferences.getInt("statue btn",0);
-        Log.d("btn", String.valueOf(btn));
 
         if(btn == 0){
             nodestination.setText("START");
@@ -222,7 +222,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
         if (vehicule_calc.contains("Y")){
 
-            Log.d("Covoiturage","Covoiturage2");
             linearLayout = findViewById(R.id.layoutmap);
 
             nbpersonne = new EditText(MapsActivity.this);
@@ -239,14 +238,14 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
         listView = findViewById(R.id.listpref);
 
-        ListAdapter listAdapter = new ListAdapter(this,mTitle,mKilometre);
+        listAdapter = new ListAdapter(this,mTitle,mKilometre);
+        listAdapter.notifyDataSetChanged();
         listView.setAdapter(listAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Log.d("Itemclick",mTitle.get(position));
             }
         });
 
@@ -254,7 +253,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Log.d("Itemclick",mTitle.get(position));
                 if (mKilometre.get(position).equals("")){
                     ((TextView) findViewById(R.id.tvDistance)).setText(1+" Km");
                 }else {
@@ -275,12 +273,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
                                     for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                        Log.d("aprefini","pouete pouete poti rigolo");
 
                                         String conso = document.getString("ConsoCalculeVehicule");
                                         String routedist = distance.getText().toString();
                                         String finalRouteDist = routedist.split(" ")[0];
-                                        Log.d("dist",finalRouteDist);
                                         String conso2 = conso.replace("X",""+finalRouteDist+"");
 
 
@@ -296,7 +292,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                                 ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
                                             }else {
                                                 conso3[0] = conso2.replace("Y",""+1+"");
-                                                Log.d("conso3", conso3[0]);
                                                 Expression e = new Expression(conso3[0]);
                                                 String result = String.valueOf(e.calculate());
                                                 ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
@@ -324,7 +319,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                                         ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
                                                     }else {
                                                         conso3[0] = conso2.replace("Y",""+1+"");
-                                                        Log.d("conso3", conso3[0]);
                                                         Expression e = new Expression(conso3[0]);
                                                         String result = String.valueOf(e.calculate());
                                                         ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
@@ -339,11 +333,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                             ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
                                         }
 
-                                        Log.d("dist",conso2);
 
                                     }
                                 } else {
-                                    Log.d("TEST", "Error getting documents: ", task.getException());
                                 }
                             }
                         });
@@ -430,14 +422,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                     editor.putLong("starttime",starttime);
                     editor.apply();
 
-                    Log.d("Time", "starttime :"+starttime);
                     Intent intent = new Intent(MapsActivity.this, GPSService.class);
                     startService(intent);
 
                 } else {
                     nodestination.setText("START");
                     endtime = System.currentTimeMillis();
-                    Log.d("Time", "endtime :"+endtime);
 
                     SharedPreferences sharedPreferences = getSharedPreferences("End time",MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -451,7 +441,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                     int j = 0;
                     float distancetracking = 0;
 
-                    Log.d("oskeour", ""+locationArrayList);
 
                     while (j < locationArrayList.size() - 1) {
                         Location loc1 = locationArrayList.get(j);
@@ -482,7 +471,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                     final Intent intentv = getIntent();
                     final String vehicule_titre = intentv.getStringExtra("Vehicule titre");
 
-                    Log.d("aprefini",vehicule_titre);
                     db.collection("vehicules")
                             .whereEqualTo("titreVehicule",vehicule_titre)
                             .get()
@@ -493,12 +481,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
                                         for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                            Log.d("aprefinix","pouete pouete poti rigolo");
 
                                             String conso = document.getString("ConsoCalculeVehicule");
                                             String routedist = distance.getText().toString();
                                             String finalRouteDist = routedist.split(" ")[0];
-                                            Log.d("dist",finalRouteDist);
                                             String conso2 = conso.replace("X",""+finalRouteDist+"");
 
 
@@ -514,7 +500,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                                     ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
                                                 }else {
                                                     conso3[0] = conso2.replace("Y",""+1+"");
-                                                    Log.d("conso3", conso3[0]);
                                                     Expression e = new Expression(conso3[0]);
                                                     String result = String.valueOf(e.calculate());
                                                     ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
@@ -542,7 +527,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                                             ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
                                                         }else {
                                                             conso3[0] = conso2.replace("Y",""+1+"");
-                                                            Log.d("conso3", conso3[0]);
                                                             Expression e = new Expression(conso3[0]);
                                                             String result = String.valueOf(e.calculate());
                                                             ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
@@ -557,18 +541,15 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                                 ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
                                             }
 
-                                            Log.d("dist",conso2);
 
                                         }
                                     } else {
-                                        Log.d("TEST", "Error getting documents: ", task.getException());
                                     }
                                 }
                             });
 
 
                 }
-                Log.d("btn", String.valueOf(btn));
 
                 SharedPreferences sharedPreferences = getSharedPreferences("Service",MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -677,10 +658,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                                 String currentConsoUser = conso.split(" ")[0];
 
                                                 String finalConsoUser = currentConsoUser+"+"+consoUser;
-                                                Log.d("conso", finalConsoUser);
                                                 Expression e = new Expression(finalConsoUser);
                                                 String result = String.valueOf(e.calculate());
-                                                Log.d("conso", result);
 
 
                                                 Map<String, Object> Conso = new HashMap<>();
@@ -708,7 +687,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                                                         String result4 = String.valueOf(g.calculate());
 
                                                                         String co2Eco = result4+"-"+currentConsoUser;
-                                                                        Log.d("eco", co2Eco);
                                                                         String finalCo2Eco = ecoconsoUser+"+"+co2Eco;
 
                                                                         Expression h = new Expression(finalCo2Eco);
@@ -725,7 +703,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
                                                                     }
                                                                 } else {
-                                                                    Log.d("TEST", "Error getting documents: ", task.getException());
                                                                 }
                                                             }
                                                         });
@@ -1190,6 +1167,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         }
     }
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.i(TAG, "onRequestPermissionResult");
@@ -1356,10 +1334,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
     @Override
     public void addPrefTraj(String title, String distance) {
-        Log.d("pref",title+" "+distance);
        mTitle.add(title);
        mKilometre.add(distance);
        savedata();
+       listAdapter.notifyDataSetChanged();
     }
 
 
@@ -1367,7 +1345,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
     private void savedata(){
 
-        Log.d("Savedate","save");
         SharedPreferences sharedPreferences = getSharedPreferences("Trajet favorie",MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
@@ -1379,7 +1356,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
     }
 
     private void loadData(){
-        Log.d("Savedate","load");
 
         SharedPreferences sharedPreferences = getSharedPreferences("Trajet favorie",MODE_PRIVATE);
         Gson gson = new Gson();
