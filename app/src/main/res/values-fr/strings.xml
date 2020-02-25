@@ -55,6 +55,8 @@
     <string name="no_location_detected">Pas de localisation fournit</string>
     <string name="no_trajet">Vous devez avoir un trajet en cours</string>
     <string name="nodest">Démarrer le tracking</string>
+    <string name="nodest2">Terminer le tracking</string>
+
     <string name="nom">Votre nom</string>
     <string name="not_update_email">Votre email n\'a pas changé</string>
     <string name="not_update_mdp">Votre mot de passe n\'a pas changé</string>

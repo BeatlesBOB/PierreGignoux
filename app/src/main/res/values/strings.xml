@@ -176,6 +176,8 @@
     <string name="departure_optional">Departure (optional)</string>
     <string name="done">Record your route</string>
     <string name="nodest">Launch tracking</string>
+    <string name="nodest2">Stop tracking</string>
+
     <string name="service_not_available">Service not available</string>
     <string name="invalid_lat_long_used">invalid lat long used</string>
     <string name="no_location_data_provided">no location data provided</string>

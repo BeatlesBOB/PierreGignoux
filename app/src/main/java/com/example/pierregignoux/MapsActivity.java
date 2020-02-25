@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -69,6 +70,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -117,24 +119,27 @@ import static java.lang.Integer.parseInt;
 
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, OnMapReadyCallback, DirectionFinderListener, BottomSheetDialog.BottomSheetListener,BottomSheetDialog2.BottomSheetListener {
 
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final String TAG = MapsActivity.class.getSimpleName();
-    private LatLng LocationA = new LatLng(46.227638,2.213749);
-
-    private FirebaseFirestore db;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-    ImageView vehiculeimage;
-
-    List<Location> locationArrayList = new ArrayList<>();
-
-    LinearLayout linearLayout;
     private static final float DEFAULT_ZOOM = 5f;
-
     private static final long UPDATE_INTERVAL = 500;
     private static final long FASTEST_UPDATE_INTERVAL = UPDATE_INTERVAL / 5;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static boolean gpsFirstOn = true;
-
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    ImageView vehiculeimage;
+    List<Location> locationArrayList;
+    LinearLayout linearLayout;
+    EditText nbpersonne;
+    long starttime = 0;
+    long endtime = 0;
+    ListView listView;
+    int click = 0;
+    ArrayList<String> mTitle = new ArrayList<>();
+    ArrayList<String> mKilometre = new ArrayList<>();
+    ListAdapter listAdapter;
+    private LatLng LocationA = new LatLng(46.227638,2.213749);
+    private FirebaseFirestore db;
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationProvider;
     private LocationRequest locationRequest;
@@ -144,46 +149,20 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
     private Marker selectedMarker;
     private LatLng searchLocation;
     private LatLng searchLocation2;
-
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarker = new ArrayList<>();
     private List<Polyline> polyLinePaths = new ArrayList<>();
-
     private ProgressDialog progressDialog;
-
     private BroadcastReceiver broadcastReceiver;
-    EditText nbpersonne;
-    long starttime = 0;
-    long endtime = 0;
-
-    ListView listView;
-    int click = 0;
-    int btn = 0;
-    ArrayList<String> mTitle = new ArrayList<>();
-    ArrayList<String> mKilometre = new ArrayList<>();
-    ListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        Button nodestination = findViewById(R.id.btnnodest);
-
-        SharedPreferences sharedPreferences = getSharedPreferences("Service",MODE_PRIVATE);
-        btn = sharedPreferences.getInt("statue btn",0);
-
-        if(btn == 0){
-            nodestination.setText("START");
-        }else{
-            nodestination.setText("STOP");
-        }
 
         loadData();
 
-
-
         db = FirebaseFirestore.getInstance();
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -366,7 +345,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         });
     }
 
-
     @SuppressLint("SetTextI18n")
     private void init() {
 
@@ -407,157 +385,28 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             @Override
             public void onClick(View v) {
 
-                btn++;
-                click = 1;
+                starttime = System.currentTimeMillis();
 
+                Intent intent = new Intent(MapsActivity.this, GPSService.class);
+                startService(intent);
 
-                if (btn == 1) {
+                nodestination.setEnabled(false);
+                nodestination.setBackgroundResource(R.color.colorGray);
 
-                    starttime = System.currentTimeMillis();
-                    nodestination.setText("STOP");
+                LinearLayout layouttrak = findViewById(R.id.tracklayout);
 
+                ProgressBar load = new ProgressBar(MapsActivity.this);
+                TextView txtload = new TextView(MapsActivity.this);
+                layouttrak.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                ));
 
-                    SharedPreferences sharedPreferences = getSharedPreferences("Start time",MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putLong("starttime",starttime);
-                    editor.apply();
-
-                    Intent intent = new Intent(MapsActivity.this, GPSService.class);
-                    startService(intent);
-
-                } else {
-                    nodestination.setText("START");
-                    endtime = System.currentTimeMillis();
-
-                    SharedPreferences sharedPreferences = getSharedPreferences("End time",MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putLong("endtime",endtime);
-                    editor.apply();
-
-                    btn = btn - 2;
-                    Intent intent = new Intent(MapsActivity.this, GPSService.class);
-                    stopService(intent);
-
-                    int j = 0;
-                    float distancetracking = 0;
-
-
-                    while (j < locationArrayList.size() - 1) {
-                        Location loc1 = locationArrayList.get(j);
-                        Location loc2 = locationArrayList.get(j + 1);
-                        distancetracking += loc1.distanceTo(loc2);
-                        j++;
-
-                    }
-
-                    SharedPreferences sharedPreferencesstart = getSharedPreferences("Start time",MODE_PRIVATE);
-                    starttime = sharedPreferencesstart.getLong("starttime",0);
-
-                    SharedPreferences sharedPreferencesend = getSharedPreferences("End time",MODE_PRIVATE);
-                    endtime = sharedPreferencesend.getLong("endtime",0);
-
-                    Long time = endtime-starttime;
-                    Long intertime = time/1000;
-                    Long finaltime = intertime/60;
-
-
-
-                    TextView distance = ((TextView) findViewById(R.id.tvDistance));
-                    distance.setText("" + distancetracking / 1000 + " Km");
-
-                    TextView textViewtime = ((TextView) findViewById(R.id.tvTime));
-                    textViewtime.setText(""+finaltime+" minutes");
-
-                    final Intent intentv = getIntent();
-                    final String vehicule_titre = intentv.getStringExtra("Vehicule titre");
-
-                    db.collection("vehicules")
-                            .whereEqualTo("titreVehicule",vehicule_titre)
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-
-
-                                            String conso = document.getString("ConsoCalculeVehicule");
-                                            String routedist = distance.getText().toString();
-                                            String finalRouteDist = routedist.split(" ")[0];
-                                            String conso2 = conso.replace("X",""+finalRouteDist+"");
-
-
-                                            if (nbpersonne!= null)
-                                            {
-                                                final String[] conso3 = {""};
-
-                                                final String aspassenger = nbpersonne.getText().toString();
-                                                if (!aspassenger.equals("")){
-                                                    conso3[0] = conso2.replace("Y",""+ aspassenger +"");
-                                                    Expression e = new Expression(conso3[0]);
-                                                    String result = String.valueOf(e.calculate());
-                                                    ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
-                                                }else {
-                                                    conso3[0] = conso2.replace("Y",""+1+"");
-                                                    Expression e = new Expression(conso3[0]);
-                                                    String result = String.valueOf(e.calculate());
-                                                    ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
-                                                }
-                                                Expression e = new Expression(conso3[0]);
-                                                String result = String.valueOf(e.calculate());
-                                                ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
-
-                                                nbpersonne.addTextChangedListener(new TextWatcher() {
-
-                                                    public void afterTextChanged(Editable s) {}
-
-                                                    public void beforeTextChanged(CharSequence s, int start,
-                                                                                  int count, int after) {
-
-                                                    }
-
-                                                    public void onTextChanged(CharSequence s, int start,
-                                                                              int before, int count) {
-                                                        final String aspassenger = nbpersonne.getText().toString();
-                                                        if (!aspassenger.equals("")){
-                                                            conso3[0] = conso2.replace("Y",""+ aspassenger +"");
-                                                            Expression e = new Expression(conso3[0]);
-                                                            String result = String.valueOf(e.calculate());
-                                                            ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
-                                                        }else {
-                                                            conso3[0] = conso2.replace("Y",""+1+"");
-                                                            Expression e = new Expression(conso3[0]);
-                                                            String result = String.valueOf(e.calculate());
-                                                            ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
-                                                        }
-                                                    }
-                                                });
-
-                                            }else {
-
-                                                Expression e = new Expression(conso2);
-                                                String result = String.valueOf(e.calculate());
-                                                ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
-                                            }
-
-
-                                        }
-                                    } else {
-                                    }
-                                }
-                            });
-
-
-                }
-
-                SharedPreferences sharedPreferences = getSharedPreferences("Service",MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("statue btn",btn);
-                editor.apply();
-
-
-
+                layouttrak.addView(load);
+                layouttrak.addView(txtload);
+                txtload.setText("Enregistrement des données");
+                txtload.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                load.setIndeterminate(true);
 
 
 
@@ -565,6 +414,127 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             }
         });
 
+        Button nodestination2 = findViewById(R.id.btnnodest2);
+        nodestination2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                endtime = System.currentTimeMillis();
+
+                Intent intent = new Intent(MapsActivity.this, GPSService.class);
+                stopService(intent);
+
+                int j = 0;
+                float distancetracking = 0;
+
+
+                while (j < locationArrayList.size() - 1) {
+                    Location loc1 = locationArrayList.get(j);
+                    Location loc2 = locationArrayList.get(j + 1);
+                    distancetracking += loc1.distanceTo(loc2);
+                    j++;
+
+                }
+
+
+                Long time = endtime-starttime;
+                Long intertime = time/1000;
+                Long finaltime = intertime/60;
+
+
+
+                TextView distance = ((TextView) findViewById(R.id.tvDistance));
+                distance.setText("" + distancetracking / 1000 + " Km");
+
+                TextView textViewtime = ((TextView) findViewById(R.id.tvTime));
+                textViewtime.setText(""+finaltime+" minutes");
+
+                final Intent intentv = getIntent();
+                final String vehicule_titre = intentv.getStringExtra("Vehicule titre");
+
+                db.collection("vehicules")
+                        .whereEqualTo("titreVehicule",vehicule_titre)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+
+
+                                        String conso = document.getString("ConsoCalculeVehicule");
+                                        String routedist = distance.getText().toString();
+                                        String finalRouteDist = routedist.split(" ")[0];
+                                        String conso2 = conso.replace("X",""+finalRouteDist+"");
+
+
+                                        if (nbpersonne!= null)
+                                        {
+                                            final String[] conso3 = {""};
+
+                                            final String aspassenger = nbpersonne.getText().toString();
+                                            if (!aspassenger.equals("")){
+                                                conso3[0] = conso2.replace("Y",""+ aspassenger +"");
+                                                Expression e = new Expression(conso3[0]);
+                                                String result = String.valueOf(e.calculate());
+                                                ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                            }else {
+                                                conso3[0] = conso2.replace("Y",""+1+"");
+                                                Expression e = new Expression(conso3[0]);
+                                                String result = String.valueOf(e.calculate());
+                                                ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                            }
+                                            Expression e = new Expression(conso3[0]);
+                                            String result = String.valueOf(e.calculate());
+                                            ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+
+                                            nbpersonne.addTextChangedListener(new TextWatcher() {
+
+                                                public void afterTextChanged(Editable s) {}
+
+                                                public void beforeTextChanged(CharSequence s, int start,
+                                                                              int count, int after) {
+
+                                                }
+
+                                                public void onTextChanged(CharSequence s, int start,
+                                                                          int before, int count) {
+                                                    final String aspassenger = nbpersonne.getText().toString();
+                                                    if (!aspassenger.equals("")){
+                                                        conso3[0] = conso2.replace("Y",""+ aspassenger +"");
+                                                        Expression e = new Expression(conso3[0]);
+                                                        String result = String.valueOf(e.calculate());
+                                                        ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                                    }else {
+                                                        conso3[0] = conso2.replace("Y",""+1+"");
+                                                        Expression e = new Expression(conso3[0]);
+                                                        String result = String.valueOf(e.calculate());
+                                                        ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                                    }
+                                                }
+                                            });
+
+                                        }else {
+
+                                            Expression e = new Expression(conso2);
+                                            String result = String.valueOf(e.calculate());
+                                            ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
+                                        }
+                                        deletetracking();
+
+                                    }
+                                } else {
+                                }
+                            }
+                        });
+
+
+
+
+
+            }
+        });
         ImageView kmedit = findViewById(R.id.editkilometre);
         kmedit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -871,7 +841,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                         Toast.makeText(MapsActivity.this, getString(R.string.no_destination), Toast.LENGTH_SHORT).show();
 
                     }
-                       } catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 Log.d("mtn", "search");
@@ -1078,8 +1048,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
     }
 
-
-
     private void getDeviceLocation(final boolean MyLocation) {
         if (!MyLocation)
 
@@ -1118,8 +1086,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         selectedMarker = marker;
         return false;
     }
-
-
 
     @Override
     protected void onStart() {
@@ -1167,7 +1133,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         }
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.i(TAG, "onRequestPermissionResult");
@@ -1200,8 +1165,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
     private boolean checkPermission() {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
-
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
@@ -1334,28 +1297,18 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
     @Override
     public void addPrefTraj(String title, String distance) {
-       mTitle.add(title);
-       mKilometre.add(distance);
-       savedata();
-       listAdapter.notifyDataSetChanged();
+        mTitle.add(title);
+        mKilometre.add(distance);
+        savedata();
+        listAdapter.notifyDataSetChanged();
     }
 
 
 
 
-    private void savedata(){
-
-        SharedPreferences sharedPreferences = getSharedPreferences("Trajet favorie",MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(mTitle);
-        String json2 = gson.toJson(mKilometre);
-        editor.putString("titre pref traj",json);
-        editor.putString("kilometre pref traj",json2);
-        editor.apply();
-    }
 
     private void loadData(){
+        Log.d("track","Load");
 
         SharedPreferences sharedPreferences = getSharedPreferences("Trajet favorie",MODE_PRIVATE);
         Gson gson = new Gson();
@@ -1373,6 +1326,89 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         }
 
 
+        SharedPreferences sharedlocation = getSharedPreferences("Tracking",MODE_PRIVATE);
+        String track = sharedlocation.getString("tracking tab",null);
+        Log.d("track","osekour :"+track);
+        Type typetracking = new TypeToken<List<Location>>(){}.getType();
+        locationArrayList = gson.fromJson(track, typetracking);
+
+        if(locationArrayList == null){
+            locationArrayList = new ArrayList<>();
+            Button nodestination = findViewById(R.id.btnnodest);
+            nodestination.setEnabled(false);
+            nodestination.setBackgroundResource(R.color.colorGray);
+
+
+            LinearLayout layouttrak = findViewById(R.id.tracklayout);
+
+            ProgressBar load = new ProgressBar(MapsActivity.this);
+            TextView txtload = new TextView(MapsActivity.this);
+            layouttrak.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ));
+
+            layouttrak.addView(load);
+            layouttrak.addView(txtload);
+            txtload.setText("Enregistrement des données");
+            txtload.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            load.setIndeterminate(true);
+
+
+            Log.d("track", "Load1"+locationArrayList);
+
+        }else{
+            Log.d("track", "Load"+locationArrayList);
+        }
+    }
+
+    private void savedata(){
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Trajet favorie",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(mTitle);
+        String json2 = gson.toJson(mKilometre);
+        editor.putString("titre pref traj",json);
+        editor.putString("kilometre pref traj",json2);
+        editor.apply();
+    }
+
+    public void savetracking(){
+
+        SharedPreferences sharedlocation = getSharedPreferences("Tracking",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedlocation.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(locationArrayList);
+        editor.putString("tracking tab",json);
+        editor.apply();
+
+    }
+
+    public void deletetracking(){
+        Log.d("track","delete");
+        Button nodestination = findViewById(R.id.btnnodest);
+        nodestination.setEnabled(true);
+        nodestination.setBackgroundResource(R.color.colorAccent);
+        LinearLayout layouttrak = findViewById(R.id.tracklayout);
+        layouttrak.removeAllViews();
+
+
+        SharedPreferences sharedlocation = getSharedPreferences("Tracking",MODE_PRIVATE);
+        Log.d("track","delete : "+sharedlocation.getString("tracking tab", null));
+        SharedPreferences.Editor editor = sharedlocation.edit();
+        editor.clear();
+        editor.apply();
+        Log.d("track","delete : "+locationArrayList);
+        Log.d("track","delete : "+sharedlocation.getString("tracking tab", null));
+
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        Log.d("track","Pause");
+        savetracking();
 
     }
 
