@@ -180,6 +180,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
         loadData();
 
+
+
         db = FirebaseFirestore.getInstance();
 
 
@@ -448,6 +450,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
                     int j = 0;
                     float distancetracking = 0;
+
+                    Log.d("oskeour", ""+locationArrayList);
+
                     while (j < locationArrayList.size() - 1) {
                         Location loc1 = locationArrayList.get(j);
                         Location loc2 = locationArrayList.get(j + 1);
@@ -488,7 +493,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
                                         for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                            Log.d("aprefini","pouete pouete poti rigolo");
+                                            Log.d("aprefinix","pouete pouete poti rigolo");
 
                                             String conso = document.getString("ConsoCalculeVehicule");
                                             String routedist = distance.getText().toString();
@@ -569,6 +574,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("statue btn",btn);
                 editor.apply();
+
+
+
+
+
 
 
             }
@@ -1163,11 +1173,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             broadcastReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
+                    Log.d("petard","stp");
                     locationArrayList.add((Location) intent.getExtras().get("coordinates"));
 
                 }
             };
-
         }
         registerReceiver(broadcastReceiver,new IntentFilter("location_update"));
     }
@@ -1352,6 +1362,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
        savedata();
     }
 
+
+
+
     private void savedata(){
 
         Log.d("Savedate","save");
@@ -1382,6 +1395,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         if(mKilometre == null){
             mKilometre = new ArrayList<>();
         }
+
+
 
     }
 
