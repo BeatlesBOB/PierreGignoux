@@ -104,11 +104,11 @@ public class Register extends AppCompatActivity {
                                         Log.d("uid",uid);
 
                                         Map<String, Object> User = new HashMap<>();
-                                        User.put("obj_euro","0");
                                         User.put("obj_co2","0");
-                                        User.put("eco_euro","0");
                                         User.put("eco_co2","0");
                                         User.put("conso_co2","0");
+                                        User.put("kilometre","0");
+
 
 
                                         db.collection("users").document(uid)

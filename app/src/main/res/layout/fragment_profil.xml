@@ -3,14 +3,15 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:tag="profil">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="20dp"
         android:orientation="vertical"
         android:gravity="center">
 
@@ -40,10 +41,103 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:text="@string/profil_update"
-            android:layout_margin="20dp"
             android:textAlignment="center"
             android:clickable="true"
             android:focusable="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_margin="20dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:textAlignment="center"
+
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_kilometre"/>
+
+                <TextView
+                    android:textAlignment="center"
+
+                    android:id="@+id/totKilometre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total kilometre" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="wrap_content">
+
+            </View>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:textAlignment="center"
+
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_co2"/>
+
+                <TextView
+                    android:textAlignment="center"
+
+                    android:id="@+id/totCO2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_co2" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="wrap_content">
+
+            </View>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+
+
+                <TextView
+                    android:textAlignment="center"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_eco_co2"/>
+
+                <TextView
+                    android:textAlignment="center"
+                    android:id="@+id/totecoCO2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_eco_co2" />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
 
 
         <androidx.cardview.widget.CardView
@@ -67,138 +161,239 @@
                 android:id="@+id/consoCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/CardView.Light"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/consoLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.github.mikephil.charting.charts.BarChart
-                        android:id="@+id/consoChart"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        app:layout_constraintDimensionRatio="H,16:9"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-
-
-                    <TextView
-                        android:id="@+id/consoTitle"
-                        android:layout_width="0dp"
-                        android:text="@string/conso"
-                        android:layout_height="wrap_content"
-                        style="@style/TextAppearance.AppCompat.Title"
-                        android:layout_marginStart="12dp"
-                        app:layout_constraintStart_toStartOf="@+id/consoChart"
-                        app:layout_constraintTop_toBottomOf="@+id/consoChart" />
-
-                    <TextView
-                        android:id="@+id/consoDesc"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/consosub"
-                        style="@style/TextAppearance.AppCompat.Body1"
-                        app:layout_constraintStart_toStartOf="@+id/consoTitle"
-                        app:layout_constraintTop_toBottomOf="@+id/consoTitle"
-                        />
-
-                    <Button
-                        android:id="@+id/consoArrowButton"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_marginEnd="12dp"
-                        android:background="@drawable/ic_keyboard_arrow_down_black_24dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/consoTitle" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/consoExpandableView"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@+id/consoDesc"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
-
-                        <com.github.mikephil.charting.charts.PieChart
-                            android:id="@+id/consotypeChart"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            app:layout_constraintDimensionRatio="H,16:9"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"/>
-
-                        <com.github.mikephil.charting.charts.CombinedChart
-                            android:id="@+id/consocompareChart"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            app:layout_constraintDimensionRatio="H,16:9"
-                            app:layout_constraintTop_toBottomOf="@+id/consotypeChart"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"/>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/euroCardView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-
-            style="@style/CardView.Light"
-            app:layout_constraintTop_toBottomOf="@+id/consoCardView"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp">
+                style="@style/CardView.Light">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/euroLayout"
+                android:id="@+id/consoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/euroChart"
+                    android:id="@+id/consoChart"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_constraintDimensionRatio="H,16:9"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <TextView
-                    android:id="@+id/euroTitle"
-                    android:layout_width="0dp"
-                    android:text="@string/euroeco"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/consoTitle"
                     style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_marginStart="12dp"
-                    app:layout_constraintStart_toStartOf="@+id/euroChart"
-                    app:layout_constraintTop_toBottomOf="@+id/euroChart" />
-
-                <TextView
-                    android:id="@+id/euroDesc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/eurosub"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/conso"
+                    app:layout_constraintStart_toStartOf="@+id/consoChart"
+                    app:layout_constraintTop_toBottomOf="@+id/consoChart" />
+
+                <TextView
+                    android:id="@+id/consoDesc"
                     style="@style/TextAppearance.AppCompat.Body1"
-                    app:layout_constraintStart_toStartOf="@+id/euroTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/euroTitle" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/consosub"
+                    app:layout_constraintStart_toStartOf="@+id/consoTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/consoTitle" />
+
+                <Button
+                    android:id="@+id/consoArrowButton"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/ic_keyboard_arrow_down_black_24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/consoTitle" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/consoExpandableView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/consoDesc">
+
+                    <TextView
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:textAlignment="center"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:text="@string/use_of_different_means_of_transport"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/consotypeChart"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="30dp"
+                        app:layout_constraintDimensionRatio="H,16:9"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <TextView
+                        android:layout_marginTop="20dp"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/your_consumption_compared_to_other_country"
+                        android:textAlignment="center"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/consotypeChart" />
+
+                    <com.github.mikephil.charting.charts.CombinedChart
+                        android:id="@+id/consocompareChart"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="50dp"
+                        app:layout_constraintDimensionRatio="H,16:9"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/consotypeChart" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
+
+<LinearLayout
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:layout_marginTop="30dp"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="@string/objco2"
+        android:textAllCaps="true" />
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/txtobjco2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <SeekBar
+        android:layout_marginTop="10dp"
+        android:id="@+id/seekco2"
+        android:max="20000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+
+        <Button
+            android:textColor="@android:color/white"
+            android:background="@color/colorRed"
+            android:text="@string/resetuserdata"
+            android:layout_margin="20dp"
+            android:id="@+id/resetuserdata"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:textColor="@android:color/white"
+            android:background="@color/colorRed"
+            android:text="@string/resetotherdata"
+            android:layout_margin="20dp"
+            android:id="@+id/resetotherdata"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+
+</LinearLayout>
+
+
+<!--        <androidx.cardview.widget.CardView-->
+
+<!--            android:id="@+id/euroCardView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="20dp"-->
+
+<!--            style="@style/CardView.Light"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/consoCardView"-->
+<!--            android:layout_marginTop="40dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:layout_marginStart="8dp">-->
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:id="@+id/euroLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
+
+<!--                <com.github.mikephil.charting.charts.BarChart-->
+<!--                    android:id="@+id/euroChart"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    app:layout_constraintDimensionRatio="H,16:9"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"/>-->
+
+
+<!--                <TextView-->
+<!--                    android:id="@+id/euroTitle"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:text="@string/euroeco"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    style="@style/TextAppearance.AppCompat.Title"-->
+<!--                    android:layout_marginStart="12dp"-->
+<!--                    app:layout_constraintStart_toStartOf="@+id/euroChart"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/euroChart" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/euroDesc"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/eurosub"-->
+<!--                    style="@style/TextAppearance.AppCompat.Body1"-->
+<!--                    app:layout_constraintStart_toStartOf="@+id/euroTitle"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/euroTitle" />-->
+
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--        </androidx.cardview.widget.CardView>-->
+
+<!--        <TextView-->
+<!--            android:layout_marginTop="30dp"-->
+
+<!--            style="@style/TextAppearance.AppCompat.Body1"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/objeuro"-->
+<!--            android:textAllCaps="true" />-->
+
+<!--        <TextView-->
+<!--            android:layout_marginTop="10dp"-->
+
+<!--            android:id="@+id/txtobjeuro"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
+<!--        <SeekBar-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:id="@+id/seekeuro"-->
+<!--            android:max="20000"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="50dp">
+
+        </View>
 
     </LinearLayout>
 

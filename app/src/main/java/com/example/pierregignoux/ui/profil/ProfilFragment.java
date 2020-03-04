@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.transition.AutoTransition;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
@@ -63,12 +66,15 @@ import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -123,7 +129,7 @@ public class ProfilFragment extends Fragment {
         consoCardView = root.findViewById(R.id.consoCardView);
 
         consoLayout = root.findViewById(R.id.consoLayout);
-        euroLayout = root.findViewById(R.id.euroLayout);
+//        euroLayout = root.findViewById(R.id.euroLayout);
 
         String objectif = getString(R.string.objectif);
         String consommation = getString(R.string.consommation);
@@ -139,8 +145,8 @@ public class ProfilFragment extends Fragment {
 
 
 
-        euroCardView = root.findViewById(R.id.euroCardView);
-
+//        euroCardView = root.findViewById(R.id.euroCardView);
+//
         consoArrowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,6 +163,10 @@ public class ProfilFragment extends Fragment {
         });
 
 
+
+
+
+
         proimg = root.findViewById(R.id.imageprofil);
 
 
@@ -171,6 +181,152 @@ public class ProfilFragment extends Fragment {
 
                     Intent intent = new Intent(getContext(), ModifProfil.class);
                     startActivity(intent);
+                }
+            });
+
+            TextView txtCO2 = root.findViewById(R.id.txtobjco2);
+            SeekBar seekCO2 = root.findViewById(R.id.seekco2);
+            String objco2 = getString(R.string.objco2);
+
+            txtCO2.setText(objco2 + seekCO2.getProgress() + " / " +seekCO2.getMax()+ " g/CO2");
+            seekCO2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+                int progress_value_CO2;
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                    progress_value_CO2 = progress;
+                    txtCO2.setText(objco2 + seekCO2.getProgress() + " / " +seekCO2.getMax()+ " g/CO2");
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    String obj = getString(R.string.objco2);
+                    txtCO2.setText(objco2 + seekCO2.getProgress() + " / " +seekCO2.getMax()+ " g/CO2");
+                    Map<String, Object> Conso = new HashMap<>();
+                    Conso.put("obj_co2", ""+progress_value_CO2);
+                    db.collection("users").document(uid)
+                            .set(Conso, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // Reload current fragment
+                            getFragmentManager().beginTransaction().detach(ProfilFragment.this).attach(ProfilFragment.this).commit();
+
+                        }
+                    });
+                }
+            });
+
+
+            //
+//            TextView txtEURO = root.findViewById(R.id.txtobjeuro);
+//            SeekBar seekEURO = root.findViewById(R.id.seekeuro);
+//            String objeuro = getString(R.string.objeuro);
+//            txtEURO.setText(objeuro + seekEURO.getProgress() + " / " +seekEURO.getMax()+" euro");
+//            seekEURO.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//
+//                int progress_value_EURO;
+//                @Override
+//                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//
+//                    progress_value_EURO = progress;
+//                    txtEURO.setText(objeuro + seekEURO.getProgress() + " / " +seekEURO.getMax()+" euro");
+//                }
+//
+//                @Override
+//                public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//                }
+//
+//                @Override
+//                public void onStopTrackingTouch(SeekBar seekBar) {
+//                    String obj = getString(R.string.objeuro);
+//                    txtEURO.setText(objeuro + seekEURO.getProgress() + " / " +seekEURO.getMax()+" euro");
+//                    Map<String, Object> Conso = new HashMap<>();
+//                    Conso.put("obj_euro", ""+progress_value_EURO);
+//                    db.collection("users").document(uid)
+//                            .set(Conso, SetOptions.merge());
+//                }
+//            });
+
+            Button btnresetuserdata = root.findViewById(R.id.resetuserdata);
+            btnresetuserdata.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Map<String, Object> User = new HashMap<>();
+                    User.put("obj_co2","0");
+                    User.put("eco_co2","0");
+                    User.put("conso_co2","0");
+                    User.put("kilometre","0");
+
+                    db.collection("users").document(uid)
+                            .set(User, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // Reload current fragment
+                            getFragmentManager().beginTransaction().detach(ProfilFragment.this).attach(ProfilFragment.this).commit();
+
+//                            consochart.notifyDataSetChanged();
+//                            consochart.invalidate();
+//                            consotypechart.notifyDataSetChanged();
+//                            consotypechart.invalidate();
+//                            comparechart.notifyDataSetChanged();
+//                            comparechart.invalidate();
+
+
+
+                        }
+                    });
+                }
+            });
+
+            Button btnresetotherdata = root.findViewById(R.id.resetotherdata);
+            btnresetotherdata.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    db.collection("trajets")
+                            .whereEqualTo("auteurTrajet",uid)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            document.getReference().delete();
+                                            Log.d("suc","sucesssupp");
+                                        }
+                                    } else {
+
+                                    }
+                                }
+                            });
+
+                    db.collection("quizz")
+                            .whereEqualTo("auteurQuizz",uid)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            document.getReference().delete();
+                                            Log.d("suc","sucesssupp");
+                                        }
+                                    } else {
+
+                                    }
+                                }
+                            });
+
+
                 }
             });
 
@@ -249,6 +405,39 @@ public class ProfilFragment extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                    String consoUser = document.getString("conso_co2");
+                                    TextView totco2user = root.findViewById(R.id.totCO2);
+                                    totco2user.setText(consoUser+" g/CO2");
+
+                                    String kilometreUser = document.getString("kilometre");
+                                    TextView totkilouser = root.findViewById(R.id.totKilometre);
+                                    totkilouser.setText(kilometreUser+" Km");
+
+                                    String eco_co2 = document.getString("eco_co2");
+                                    TextView toteco_co2 = root.findViewById(R.id.totecoCO2);
+                                    toteco_co2.setText(eco_co2+" g/CO2");
+
+
+
+
+                                }
+
+
+                            } else {
+                                Log.d("TEST", "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+
+            db.collection("users")
+                    .whereEqualTo(FieldPath.documentId(), uid)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
 
                                 for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -294,14 +483,9 @@ public class ProfilFragment extends Fragment {
                                         barDataSet2.setColors(PIERRE_COLORS3);
                                     }
 
-
                                     BarData barData2 = new BarData(barDataSet2);
                                     consochart.setData(barData2);
                                     consochart.invalidate();
-
-
-
-
 
 
                                 }
@@ -481,74 +665,74 @@ public class ProfilFragment extends Fragment {
                     });
 
 
-            db.collection("users")
-                    .whereEqualTo(FieldPath.documentId(), uid)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                    String euroUser = document.getString("eco_euro");
-                                    String objEuroUser = document.getString("obj_euro");
-
-                                    double interEuroUser = Double.parseDouble(euroUser);
-                                    double interobjEuroUser = Double.parseDouble(objEuroUser);
-
-                                    int finalEuroUser = (int)interEuroUser;
-                                    int finalobjEuroUser = (int)interobjEuroUser;
-
-
-
-                                    dataVals4.add(new BarEntry(1, finalEuroUser));
-                                    dataVals4.add(new BarEntry(2, finalobjEuroUser));
-
-
-
-                                    eurochart = root.findViewById(R.id.euroChart);
-
-
-                                    String[] nBar = new String[] {
-                                            objectif,consommation
-                                    };
-
-                                    XAxis xAxis = eurochart.getXAxis();
-                                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                                    xAxis.setAxisMinimum(0.5f);
-                                    xAxis.setGranularity(1f);
-                                    xAxis.setValueFormatter(new ValueFormatter() {
-                                        @Override
-                                        public String getFormattedValue(float value) {
-                                            return nBar[(int) value % nBar.length];
-                                        }
-                                    });
-
-                                    BarDataSet barDataSet3 = new BarDataSet(dataVals4, "");
-
-                                    if(finalEuroUser > finalobjEuroUser){
-                                        barDataSet3.setColors(PIERRE_COLORS2);
-                                    }else if(finalEuroUser < finalobjEuroUser){
-                                        barDataSet3.setColors(PIERRE_COLORS3);
-                                    }else {
-                                        barDataSet3.setColors(PIERRE_COLORS3);
-                                    }
-
-                                    BarData barData3 = new BarData(barDataSet3);
-                                    eurochart.setData(barData3);
-                                    eurochart.invalidate();
-
-
-                                }
-
-
-
-                            } else {
-                                Log.d("TEST", "Error getting documents: ", task.getException());
-                            }
-                        }
-                    });
+//            db.collection("users")
+//                    .whereEqualTo(FieldPath.documentId(), uid)
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if (task.isSuccessful()) {
+//
+//                                for (QueryDocumentSnapshot document : task.getResult()) {
+//
+//                                    String euroUser = document.getString("eco_euro");
+//                                    String objEuroUser = document.getString("obj_euro");
+//
+//                                    double interEuroUser = Double.parseDouble(euroUser);
+//                                    double interobjEuroUser = Double.parseDouble(objEuroUser);
+//
+//                                    int finalEuroUser = (int)interEuroUser;
+//                                    int finalobjEuroUser = (int)interobjEuroUser;
+//
+//
+//
+//                                    dataVals4.add(new BarEntry(1, finalEuroUser));
+//                                    dataVals4.add(new BarEntry(2, finalobjEuroUser));
+//
+//
+//
+//                                    eurochart = root.findViewById(R.id.euroChart);
+//
+//
+//                                    String[] nBar = new String[] {
+//                                            objectif,consommation
+//                                    };
+//
+//                                    XAxis xAxis = eurochart.getXAxis();
+//                                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+//                                    xAxis.setAxisMinimum(0.5f);
+//                                    xAxis.setGranularity(1f);
+//                                    xAxis.setValueFormatter(new ValueFormatter() {
+//                                        @Override
+//                                        public String getFormattedValue(float value) {
+//                                            return nBar[(int) value % nBar.length];
+//                                        }
+//                                    });
+//
+//                                    BarDataSet barDataSet3 = new BarDataSet(dataVals4, "");
+//
+//                                    if(finalEuroUser > finalobjEuroUser){
+//                                        barDataSet3.setColors(PIERRE_COLORS2);
+//                                    }else if(finalEuroUser < finalobjEuroUser){
+//                                        barDataSet3.setColors(PIERRE_COLORS3);
+//                                    }else {
+//                                        barDataSet3.setColors(PIERRE_COLORS3);
+//                                    }
+//
+//                                    BarData barData3 = new BarData(barDataSet3);
+//                                    eurochart.setData(barData3);
+//                                    eurochart.invalidate();
+//
+//
+//                                }
+//
+//
+//
+//                            } else {
+//                                Log.d("TEST", "Error getting documents: ", task.getException());
+//                            }
+//                        }
+//                    });
 
 
 

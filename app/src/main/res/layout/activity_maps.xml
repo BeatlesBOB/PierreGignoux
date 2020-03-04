@@ -91,12 +91,19 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="5dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/mapvehicule"
-                        android:layout_width="125dp"
-                        android:layout_height="125dp"
-                        android:src="@mipmap/ic_launcher" />
+                        <ImageView
+                            android:id="@+id/mapvehicule"
+                            android:layout_width="125dp"
+                            android:layout_height="125dp"
+                            android:src="@mipmap/ic_launcher" />
+
+                    </LinearLayout>
+
+
 
                     <LinearLayout
                         android:id="@+id/layoutmap"
@@ -152,10 +159,26 @@
                                 android:textAlignment="center" />
 
                         </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/nbperslayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:layout_marginLeft="50dp"
+                            android:layout_marginRight="50dp">
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:id="@+id/tracklayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
+                    </LinearLayout>
 
                         <Button
                             android:id="@+id/btnnodest"
@@ -167,14 +190,6 @@
                             android:background="@color/colorRed"
                             android:text="@string/nodest"
                             android:textColor="@android:color/white" />
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:id="@+id/tracklayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                    </LinearLayout>
 
 
                     <Button
@@ -203,13 +218,43 @@
                         android:layout_width="50dp"
                         android:layout_height="30dp" />
 
-                    <ImageButton
-                        android:id="@+id/addPrefTrajet"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:src="@drawable/ic_add_circle_black_24dp"/>
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:layout_weight="1"
+                            android:textColor="@android:color/white"
+                            android:text="@string/add_favorite_route"
+                            android:id="@+id/addPrefTrajet"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:src="@drawable/ic_add_circle_black_24dp"
+                            android:background="@color/colorPrimary"/>
+
+                        <View
+                            android:layout_width="25dp"
+                            android:layout_height="0dp">
+
+                        </View>
+
+                        <ImageButton
+                            android:layout_weight="1"
+                            android:textColor="@android:color/white"
+                            android:background="@color/colorPrimaryDark"
+                            android:text="@string/add_favorite_route"
+                            android:id="@+id/fbitineraire"
+                            android:layout_width="match_parent"
+                            android:src="@drawable/ic_directions"
+                            android:layout_height="60dp" />
+
+
+                    </LinearLayout>
+
 
                     <ListView
+                        android:layout_marginTop="30dp"
                         android:id="@+id/listpref"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -217,20 +262,7 @@
                 </LinearLayout>
 
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fbitineraire"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:background="@color/colorGreen"
-                    android:src="@drawable/ic_directions"
-                    map:backgroundTint="@color/colorPrimary" />
+
 
 
             </RelativeLayout>

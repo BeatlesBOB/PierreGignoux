@@ -100,7 +100,18 @@
     <string name="titre">Titre</string>
     <string name="nbkilometre">Nombre de kilomètre</string>
     <string name="save">Sauvegarder</string>
-
+    <string name="add_favorite_route">Ajouter une route favorite</string>
+    <string name="name_of_route">Nom du trajet</string>
+    <string name="kilometer">Kilometres</string>
+    <string name="objco2">Vous vous fixer votre objectif CO2 à :</string>
+    <string name="objeuro">Vous vous fixer votre objectif d\'euro économiser à :</string>
+    <string name="total_eco_co2">CO2 total économisé</string>
+    <string name="total_co2">Total CO2</string>
+    <string name="total_kilometre">Total kilometre</string>
+    <string name="resetuserdata">Remettre a zéro votre comsommation et vos objectifs</string>
+    <string name="resetotherdata">Remettre a zéro vos trajet et vos quizz</string>
+    <string name="use_of_different_means_of_transport">% d\'utilisation de different moyens de transport</string>
+    <string name="your_consumption_compared_to_other_country">Votre consommation comparé au autre pays</string>
 
     <string-array name="question_array">
         <item>A quelle fréquence mangez vous de la viande ?</item>

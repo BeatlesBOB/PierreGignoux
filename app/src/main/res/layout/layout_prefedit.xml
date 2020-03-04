@@ -18,7 +18,10 @@
         android:hint="@string/titre"
         android:textAlignment="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        />
 
     <EditText
         android:inputType="number"
@@ -26,7 +29,8 @@
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/nbkilometre"/>
+        android:hint="@string/nbkilometre"
+        android:imeOptions="actionDone"/>
 
     <Button
         android:id="@+id/btnsavepref"

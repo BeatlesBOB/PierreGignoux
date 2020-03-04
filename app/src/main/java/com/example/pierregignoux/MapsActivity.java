@@ -61,6 +61,7 @@ import android.os.ResultReceiver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -201,7 +202,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
         if (vehicule_calc.contains("Y")){
 
-            linearLayout = findViewById(R.id.layoutmap);
+            linearLayout = findViewById(R.id.nbperslayout);
 
             nbpersonne = new EditText(MapsActivity.this);
             nbpersonne.setLayoutParams(new LinearLayout.LayoutParams(
@@ -211,8 +212,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             ));
 
             linearLayout.addView(nbpersonne);
+
             nbpersonne.setHint(getString(R.string.nbpersonne));
             nbpersonne.setInputType(0x00000002);
+            nbpersonne.setImeOptions(EditorInfo.IME_ACTION_DONE);;
+
         }
 
         listView = findViewById(R.id.listpref);
@@ -545,7 +549,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             }
         });
 
-        ImageButton btnaddpreftraj = findViewById(R.id.addPrefTrajet);
+        Button btnaddpreftraj = findViewById(R.id.addPrefTrajet);
         btnaddpreftraj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -680,81 +684,81 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
 
                                                 //EURO ECONOMISER
-                                                db.collection("parametres")
-                                                        .get()
-                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                if (task.isSuccessful()) {
-
-                                                                    for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                                                        String prixCO2=new String(document.getString("prixCO2"));
-
-                                                                        db.collection("vehicules")
-                                                                                .whereEqualTo("titreVehicule" , "Voiture")
-                                                                                .get()
-                                                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                    @Override
-                                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                        if (task.isSuccessful()) {
-                                                                                            for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                                                                                String dist= ((TextView) findViewById(R.id.tvDistance)).getText().toString();
-                                                                                                String finalDist = dist.split(" ")[0];
-
-                                                                                                String consoVoiture = document.getString("ConsoCalculeVehicule");
-                                                                                                String finalConsoVoiture = consoVoiture.replace("X",""+finalDist+"");
-
-                                                                                                String euroEcovoiture = finalConsoVoiture+"*"+prixCO2;
-
-                                                                                                Expression g = new Expression(euroEcovoiture);
-                                                                                                String eurovoiture = String.valueOf(g.calculate());
-
-                                                                                                String currentConsoUser = conso.split(" ")[0];
-                                                                                                String cout = prixCO2+"*"+currentConsoUser;
-
-                                                                                                Expression e = new Expression(cout);
-                                                                                                String eurouser = String.valueOf(e.calculate());
-
-
-                                                                                                String finalEuroEco = eurovoiture+"-"+eurouser;
-                                                                                                String finalEuroEco2 = euroUser +"+"+ finalEuroEco;
-
-                                                                                                Expression i = new Expression(finalEuroEco2);
-                                                                                                String result10 = String.valueOf(i.calculate());
-
-                                                                                                Map<String, Object> Conso = new HashMap<>();
-                                                                                                Conso.put("eco_euro", result10);
-
-                                                                                                db.collection("users").document(uid)
-                                                                                                        .set(Conso, SetOptions.merge());
-
-
-                                                                                            }
-                                                                                        } else {
-                                                                                            Log.d("TEST", "Error getting documents: ", task.getException());
-                                                                                        }
-                                                                                    }
-                                                                                });
-
-
-
-
-
-
-
-
-                                                                        db.collection("users").document(uid)
-                                                                                .set(Conso, SetOptions.merge());
-
-
-                                                                    }
-                                                                } else {
-                                                                    Log.d("TEST", "Error getting documents: ", task.getException());
-                                                                }
-                                                            }
-                                                        });
+//                                                db.collection("parametres")
+//                                                        .get()
+//                                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                                            @Override
+//                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                                                if (task.isSuccessful()) {
+//
+//                                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+//
+//                                                                        String prixCO2=new String(document.getString("prixCO2"));
+//
+//                                                                        db.collection("vehicules")
+//                                                                                .whereEqualTo("titreVehicule" , "Voiture")
+//                                                                                .get()
+//                                                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                                                                    @Override
+//                                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                                                                        if (task.isSuccessful()) {
+//                                                                                            for (QueryDocumentSnapshot document : task.getResult()) {
+//
+//                                                                                                String dist= ((TextView) findViewById(R.id.tvDistance)).getText().toString();
+//                                                                                                String finalDist = dist.split(" ")[0];
+//
+//                                                                                                String consoVoiture = document.getString("ConsoCalculeVehicule");
+//                                                                                                String finalConsoVoiture = consoVoiture.replace("X",""+finalDist+"");
+//
+//                                                                                                String euroEcovoiture = finalConsoVoiture+"*"+prixCO2;
+//
+//                                                                                                Expression g = new Expression(euroEcovoiture);
+//                                                                                                String eurovoiture = String.valueOf(g.calculate());
+//
+//                                                                                                String currentConsoUser = conso.split(" ")[0];
+//                                                                                                String cout = prixCO2+"*"+currentConsoUser;
+//
+//                                                                                                Expression e = new Expression(cout);
+//                                                                                                String eurouser = String.valueOf(e.calculate());
+//
+//
+//                                                                                                String finalEuroEco = eurovoiture+"-"+eurouser;
+//                                                                                                String finalEuroEco2 = euroUser +"+"+ finalEuroEco;
+//
+//                                                                                                Expression i = new Expression(finalEuroEco2);
+//                                                                                                String result10 = String.valueOf(i.calculate());
+//
+//                                                                                                Map<String, Object> Conso = new HashMap<>();
+//                                                                                                Conso.put("eco_euro", result10);
+//
+//                                                                                                db.collection("users").document(uid)
+//                                                                                                        .set(Conso, SetOptions.merge());
+//
+//
+//                                                                                            }
+//                                                                                        } else {
+//                                                                                            Log.d("TEST", "Error getting documents: ", task.getException());
+//                                                                                        }
+//                                                                                    }
+//                                                                                });
+//
+//
+//
+//
+//
+//
+//
+//
+//                                                                        db.collection("users").document(uid)
+//                                                                                .set(Conso, SetOptions.merge());
+//
+//
+//                                                                    }
+//                                                                } else {
+//                                                                    Log.d("TEST", "Error getting documents: ", task.getException());
+//                                                                }
+//                                                            }
+//                                                        });
 
 
 
@@ -764,6 +768,47 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                         }
                                     }
                                 });
+
+
+                        //KILOMETRE PARCOURUE
+                        db.collection("users")
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                                String kilousser=document.getString("kilometre");
+                                                Log.d("kilo",kilousser);
+
+                                                String currentkilo = ((TextView) findViewById(R.id.tvDistance)).getText().toString().split(" ")[0];
+
+                                                String addkilo = kilousser+"+"+currentkilo;
+                                                Log.d("kilo",addkilo);
+
+                                                Expression e = new Expression(addkilo);
+                                                String nkilouser = String.valueOf(e.calculate());
+                                                Log.d("kilo",nkilouser);
+
+
+
+
+                                                Map<String, Object> Kilo = new HashMap<>();
+                                                Kilo.put("kilometre", nkilouser);
+
+                                                db.collection("users").document(uid)
+                                                        .set(Kilo, SetOptions.merge());
+
+
+                                            }
+                                        } else {
+                                            Log.d("TEST", "Error getting documents: ", task.getException());
+                                        }
+                                    }
+                                });
+
 
 
 
@@ -833,7 +878,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                     final Intent intent = getIntent();
                     final String vehicule_methode = intent.getStringExtra("Vehicule methode");
 
-                    if (searchLocation != null){
+                    if (searchLocation2 != null){
                         String origin = searchLocation2.latitude + "," + searchLocation2.longitude;
                         new DirectionFinder(MapsActivity.this, origin, searchLocation.latitude + "," + searchLocation.longitude,vehicule_methode).execute(getString(R.string.google_maps_key));
 
@@ -862,9 +907,18 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                 try {
                     final Intent intent = getIntent();
                     final String vehicule_methode = intent.getStringExtra("Vehicule methode");
+                    String vehicule ="";
+
+                    if(vehicule_methode.equals("d")){
+                        vehicule = "driving";
+                   }else if(vehicule_methode.equals("w")){
+                        vehicule = "walking";
+                   } else if(vehicule_methode.equals("b")){
+                        vehicule = "bicycling";
+                   }
 
                     String origin = locationgps.getLatitude() + "," + locationgps.getLongitude();
-                    new DirectionFinder(MapsActivity.this, origin, searchLocation.latitude + "," + searchLocation.longitude,vehicule_methode).execute(getString(R.string.google_maps_key));
+                    new DirectionFinder(MapsActivity.this, origin, searchLocation.latitude + "," + searchLocation.longitude,vehicule).execute(getString(R.string.google_maps_key));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -955,7 +1009,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                     String routedist = route.distance.text;
                                     String finalRouteDist = routedist.split(" ")[0];
                                     Log.d("dist",finalRouteDist);
-                                    String conso2 = conso.replace("X",""+finalRouteDist+"");
+                                    String conso4 = conso.replace("X",""+finalRouteDist+"");
+                                    String conso2 = conso4.replace(",","");
+
+                                    Log.d("conso",conso2);
+                                    Log.d("conso",conso4);
 
 
                                     if (nbpersonne!= null)

@@ -58,26 +58,61 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
         if (calculeconso.contains("Y")){
             String interconsocalcule = calculeconso.replace("X", "1");
-            String inter2consocalcule =interconsocalcule.replace("Y","1");
+            String inter2consocalcule =interconsocalcule.replace("Y","2");
             Expression expressionconso = new Expression(inter2consocalcule);
-            String result = String.valueOf(expressionconso.calculate());
-            viewHolder.txtconso.setText(result);
+            double inter = expressionconso.calculate();
+
+                double result = inter / 10;
+                int roundofresult = (int) Math.floor(result);
+                String ofresult = ""+roundofresult;
+
+                viewHolder.txtconso.setText(ofresult);
+
+                if (result < 50){
+                    viewHolder.txtconso.setBackgroundColor(context.getResources().getColor(R.color.colorGreen));
+                }else if (result < 100){
+                    viewHolder.txtconso.setBackgroundColor(context.getResources().getColor(R.color.colorOrange));
+                }else {
+                    viewHolder.txtconso.setBackgroundColor(context.getResources().getColor(R.color.colorRed));
+                }
+
+
+
         }else {
             String interconsocalcule = calculeconso.replace("X", "1");
             Expression expressionconso = new Expression(interconsocalcule);
-            String result = String.valueOf(expressionconso.calculate());
-            viewHolder.txtconso.setText(result);
-        }
-        String intercompar = viewHolder.txtconso.getText().toString();
-        Double finalcompar = Double.parseDouble(intercompar);
+            double inter = expressionconso.calculate();
 
-        if (finalcompar < 50){
-            viewHolder.txtconso.setBackgroundColor(context.getResources().getColor(R.color.colorGreen));
-        }else if ( finalcompar < 100){
-            viewHolder.txtconso.setBackgroundColor(context.getResources().getColor(R.color.colorOrange));
-        }else if ( finalcompar < 200){
-            viewHolder.txtconso.setBackgroundColor(context.getResources().getColor(R.color.colorRed));
+
+                double result = inter / 10;
+                int roundofresult = (int) Math.round(result);
+                String ofresult = ""+roundofresult;
+
+                viewHolder.txtconso.setText(ofresult);
+
+                if (result < 50){
+                    viewHolder.txtconso.setBackgroundColor(context.getResources().getColor(R.color.colorGreen));
+                }else if (result < 100){
+                    viewHolder.txtconso.setBackgroundColor(context.getResources().getColor(R.color.colorOrange));
+                }else {
+                    viewHolder.txtconso.setBackgroundColor(context.getResources().getColor(R.color.colorRed));
+                }
+
+
+
+
+
         }
+//        String intercompar = viewHolder.txtconso.getText().toString();
+//        Double finalcompar = Double.parseDouble(intercompar);
+//
+//        if (finalcompar < 50){
+//            viewHolder.txtconso.setBackgroundColor(context.getResources().getColor(R.color.colorGreen));
+//        }else if ( finalcompar < 100){
+//            viewHolder.txtconso.setBackgroundColor(context.getResources().getColor(R.color.colorOrange));
+//        }else {
+//            viewHolder.txtconso.setBackgroundColor(context.getResources().getColor(R.color.colorRed));
+//        }
         String methode = mont.getMethode();
         Picasso.get().load(imageurl).into(viewHolder.imgVehicule);
 

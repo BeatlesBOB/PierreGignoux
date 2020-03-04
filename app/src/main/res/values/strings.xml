@@ -195,5 +195,17 @@
     <string name="titre">Title</string>
     <string name="nbkilometre">Number of Km</string>
     <string name="save">Save</string>
+    <string name="add_favorite_route">Add a favorite route</string>
+    <string name="name_of_route">Name of Route</string>
+    <string name="kilometer">Kilometers</string>
+    <string name="objco2">You are setting your CO2 goal at :</string>
+    <string name="objeuro">You are setting your euro goal at :</string>
+    <string name="total_eco_co2">CO2 total economised</string>
+    <string name="total_co2">Total CO2</string>
+    <string name="total_kilometre">Total kilometer</string>
+    <string name="resetuserdata">Reset your consuption and objectives</string>
+    <string name="resetotherdata">Reset your route and your quizz</string>
+    <string name="use_of_different_means_of_transport">% of use of different means of transport</string>
+    <string name="your_consumption_compared_to_other_country">Your consumption compared to other country</string>
 
 </resources>

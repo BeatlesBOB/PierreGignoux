@@ -108,4 +108,8 @@ public class QuizzAdapter extends RecyclerView.Adapter<QuizzAdapter.ViewHolder> 
     }
 
 
+
+
+
+
 }

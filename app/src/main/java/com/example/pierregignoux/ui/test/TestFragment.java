@@ -19,44 +19,33 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
+
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.pierregignoux.Main2Activity;
-import com.example.pierregignoux.MainActivity;
-import com.example.pierregignoux.MapsActivity;
 import com.example.pierregignoux.Questions;
 import com.example.pierregignoux.Quizz;
 import com.example.pierregignoux.QuizzAdapter;
 import com.example.pierregignoux.R;
-import com.example.pierregignoux.Register;
-import com.example.pierregignoux.TrajetAdapter;
-import com.example.pierregignoux.models.direction.Trajet;
-import com.example.pierregignoux.ui.home.HomeFragment;
-import com.example.pierregignoux.ui.profil.ProfilViewModel;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,8 +73,9 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
     int r;
 
     private RecyclerView recyclerview;
-    QuizzAdapter adapter;
-    final List<Quizz> items = new ArrayList<>();
+    QuizzAdapter adapterquizz;
+
+    List<Quizz> items = new ArrayList<>();
     Questions mQuestions;
 
 
@@ -112,8 +102,9 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
 
         recyclerview = root.findViewById(R.id.quizzrecycler);
         recyclerview.setLayoutManager(new LinearLayoutManager((getActivity())));
-        adapter =  new QuizzAdapter(this.getContext() ,items, this);
-        recyclerview.setAdapter(adapter);
+        adapterquizz =  new QuizzAdapter(this.getContext() ,items, this);
+        adapterquizz.notifyDataSetChanged();
+        recyclerview.setAdapter(adapterquizz);
 
         rgroup = root.findViewById(R.id.radiogroup);
         radio1= root.findViewById(R.id.radio_rep1);
@@ -141,18 +132,20 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
                     if (user != null) {
 
                         String uid = user.getUid();
+                        Timestamp now = new Timestamp(new Date());
 
                         Map<String, Object> Quizz = new HashMap<>();
                         Quizz.put("scoreQuizz", ""+mScore);
                         Quizz.put("auteurQuizz", uid);
-                        Quizz.put("dateQuizz", new Timestamp(new Date()));
+                        Quizz.put("dateQuizz", now);
 
 
                         db.collection("quizz").document().set(Quizz).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-
                                 Toast.makeText(context, getString(R.string.quizz_done), Toast.LENGTH_SHORT).show();
+                               function();
+
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override

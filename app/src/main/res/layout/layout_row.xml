@@ -10,21 +10,60 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/preftitle"
-            android:layout_margin="30dp"
-            android:text="Title"
-            style="@style/TextAppearance.AppCompat.Title"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
-                android:layout_margin="30dp"
-                android:id="@+id/prefkilo"
-                android:text="Title"
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name_of_route" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="10dp">
+
+            </View>
+
+            <TextView
+                android:id="@+id/preftitle"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_marginStart="50dp">
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kilometer" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="10dp">
+
+            </View>
+
+            <TextView
+                android:id="@+id/prefkilo"
+                android:text="Title"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+
+
 
     </LinearLayout>
 

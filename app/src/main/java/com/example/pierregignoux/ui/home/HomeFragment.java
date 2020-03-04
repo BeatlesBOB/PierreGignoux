@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment implements ImageAdapter.OnVehiculeLis
         items.clear();
 
         db.collection("vehicules")
-                .orderBy("ConsoCalculeVehicule", Query.Direction.ASCENDING)
+                .orderBy("orderVehicule", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

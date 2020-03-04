@@ -52,7 +52,7 @@ public class DirectionFinder {
         String urlDestination = URLEncoder.encode(destination, "utf-8");
         String urlMethode = URLEncoder.encode(methode, "utf-8");
 
-        Log.d("url",Constants.DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&key=" + google_api_key);
+        Log.d("url",Constants.DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&mode="+urlMethode+"&key=" + google_api_key);
         return Constants.DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination +"&mode="+urlMethode+"&key=" + google_api_key;
     }
 
