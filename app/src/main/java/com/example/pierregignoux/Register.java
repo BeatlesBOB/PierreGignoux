@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -55,6 +56,17 @@ public class Register extends AppCompatActivity {
         confirmPass = (EditText) findViewById(R.id.txtPassword2);
 
         db = FirebaseFirestore.getInstance();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Title and subtitle
+//        toolbar.setTitle(R.string.about_toolbar_title);
+        toolbar.setNavigationIcon(R.drawable.ic_account_circle_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               onBackPressed();
+            }
+        });
 
 
 

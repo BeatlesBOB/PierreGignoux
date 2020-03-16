@@ -12,7 +12,8 @@
         android:id="@+id/resetemail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/sigin_mail"/>
+        android:hint="@string/sigin_mail"
+        android:imeOptions="actionDone"/>
 
     <Button
         android:id="@+id/sendpassreset"

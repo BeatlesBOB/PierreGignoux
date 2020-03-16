@@ -9,17 +9,24 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GPSService extends Service {
 
     private LocationListener listener;
     private LocationManager locationManager;
+    private List<Location> locationList = new ArrayList<>();
+    private int distancetracking = 0;
+    private int j = 0;
+
 
     public IBinder onBind(Intent intent){
         return null;
@@ -32,8 +39,17 @@ public class GPSService extends Service {
         listener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                locationList.add(location);
                 Intent i = new Intent("location_update");
-                i.putExtra("coordinates",location);
+                while (j < locationList.size() - 1) {
+                    Location loc1 = locationList.get(j);
+                    Location loc2 = locationList.get(j + 1);
+                    distancetracking += loc1.distanceTo(loc2);
+                    j++;
+
+                }
+                distancetracking = distancetracking/1000;
+                i.putExtra("coordinates", distancetracking);
                 sendBroadcast(i);
 
             }

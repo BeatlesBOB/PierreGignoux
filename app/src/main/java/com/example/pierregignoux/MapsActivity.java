@@ -24,6 +24,7 @@ import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -99,6 +100,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.protobuf.StringValue;
 import com.squareup.picasso.Picasso;
 
 import org.mariuszgromada.math.mxparser.*;
@@ -122,7 +124,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final String TAG = MapsActivity.class.getSimpleName();
-    private static final float DEFAULT_ZOOM = 5f;
+    private static final float DEFAULT_ZOOM = 15f;
     private static final long UPDATE_INTERVAL = 500;
     private static final long FASTEST_UPDATE_INTERVAL = UPDATE_INTERVAL / 5;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -155,6 +157,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
     private List<Polyline> polyLinePaths = new ArrayList<>();
     private ProgressDialog progressDialog;
     private BroadcastReceiver broadcastReceiver;
+    private String Disttrack;
+    private Location lastKnownLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +179,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         }
 
         init();
+
+
+
+
+
 
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this);
         resultReceiver = new ResultReceiver(new Handler()) {
@@ -384,6 +393,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
 
 
+
         Button nodestination = findViewById(R.id.btnnodest);
         nodestination.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -391,29 +401,31 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
                 starttime = System.currentTimeMillis();
 
+                SharedPreferences sharedPreferences = getSharedPreferences("Time",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putLong("starttime",starttime);
+                editor.apply();
+
                 Intent intent = new Intent(MapsActivity.this, GPSService.class);
                 startService(intent);
 
-                nodestination.setEnabled(false);
-                nodestination.setBackgroundResource(R.color.colorGray);
-
-                LinearLayout layouttrak = findViewById(R.id.tracklayout);
-
-                ProgressBar load = new ProgressBar(MapsActivity.this);
-                TextView txtload = new TextView(MapsActivity.this);
-                layouttrak.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                ));
-
-                layouttrak.addView(load);
-                layouttrak.addView(txtload);
-                txtload.setText("Enregistrement des données");
-                txtload.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                load.setIndeterminate(true);
-
-
-
+//                nodestination.setEnabled(false);
+//                nodestination.setBackgroundResource(R.color.colorGray);
+//
+//                LinearLayout layouttrak = findViewById(R.id.tracklayout);
+//
+//                ProgressBar load = new ProgressBar(MapsActivity.this);
+//                TextView txtload = new TextView(MapsActivity.this);
+//                layouttrak.setLayoutParams(new LinearLayout.LayoutParams(
+//                        LinearLayout.LayoutParams.WRAP_CONTENT,
+//                        LinearLayout.LayoutParams.WRAP_CONTENT
+//                ));
+//
+//                layouttrak.addView(load);
+//                layouttrak.addView(txtload);
+//                txtload.setText("Enregistrement des données");
+//                txtload.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//                load.setIndeterminate(true);
 
             }
         });
@@ -428,27 +440,22 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                 Intent intent = new Intent(MapsActivity.this, GPSService.class);
                 stopService(intent);
 
-                int j = 0;
-                float distancetracking = 0;
-
-
-                while (j < locationArrayList.size() - 1) {
-                    Location loc1 = locationArrayList.get(j);
-                    Location loc2 = locationArrayList.get(j + 1);
-                    distancetracking += loc1.distanceTo(loc2);
-                    j++;
-
+                SharedPreferences sharedPreferences = getSharedPreferences("Time",MODE_PRIVATE);
+                Long nstarttime = sharedPreferences.getLong("starttime",0);
+                Log.d("nstarttime", String.valueOf(nstarttime));
+                if (nstarttime == 0){
+                    nstarttime = endtime;
                 }
 
-
-                Long time = endtime-starttime;
+                Long time = endtime-nstarttime;
                 Long intertime = time/1000;
                 Long finaltime = intertime/60;
 
+                sharedPreferences.edit().remove("starttime").apply();
+                Log.d("nstarttime", String.valueOf(sharedPreferences.getLong("starttime",0)));
 
 
                 TextView distance = ((TextView) findViewById(R.id.tvDistance));
-                distance.setText("" + distancetracking / 1000 + " Km");
 
                 TextView textViewtime = ((TextView) findViewById(R.id.tvTime));
                 textViewtime.setText(""+finaltime+" minutes");
@@ -465,7 +472,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                 if (task.isSuccessful()) {
 
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-
 
                                         String conso = document.getString("ConsoCalculeVehicule");
                                         String routedist = distance.getText().toString();
@@ -525,7 +531,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                             String result = String.valueOf(e.calculate());
                                             ((TextView) findViewById(R.id.tvCO2)).setText(result+" g/CO2");
                                         }
-                                        deletetracking();
 
                                     }
                                 } else {
@@ -625,7 +630,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
                                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                                String euroUser=new String(document.getString("eco_euro"));
 
                                                 String ecoconsoUser=new String(document.getString("eco_co2"));
                                                 String consoUser=new String(document.getString("conso_co2"));
@@ -859,6 +863,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
 
     private void setupAutoCompleteFragment() {
@@ -939,18 +944,55 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         map.setOnMapClickListener(this);
         map.setOnMarkerClickListener(this);
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationA, DEFAULT_ZOOM));
+        if (!checkPermission()){
+            requestPermission();
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationA, DEFAULT_ZOOM));
+        }else {
+            final Task<Location> locationResult = fusedLocationProvider.getLastLocation();
+            locationResult.addOnCompleteListener(this, task -> {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    lastKnownLocation = task.getResult();
+                    LatLng me = new LatLng(lastKnownLocation.getLatitude()+0.003,lastKnownLocation.getLongitude());
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(me, DEFAULT_ZOOM));
+                } else {
+                    Log.w(TAG, "getLastLocation:exception", task.getException());
+                    showSnackbar(R.string.no_location_detected, Snackbar.LENGTH_LONG, 0, null);
+                }
+            });
 
-        map.getUiSettings().setMapToolbarEnabled(false);
-        map.getUiSettings().setMyLocationButtonEnabled(false);
-//        map.getUiSettings().setCompassEnabled(false);
+            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            LocationListener locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location locationchanged) {
+                    LatLng nlatlng =  new LatLng(locationchanged.getLatitude()+0.003,locationchanged.getLongitude());
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(nlatlng, DEFAULT_ZOOM));
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            };
+            locationManager.requestLocationUpdates("gps",5000,100,locationListener);
+
+        }
+
+        map.getUiSettings().setMapToolbarEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(true);
+        map.getUiSettings().setCompassEnabled(true);
 
         // TODO : location
         map.getProjection().getVisibleRegion();
-
-        if (!checkPermission())
-            requestPermission();
-
         getDeviceLocation(false);
     }
 
@@ -1117,7 +1159,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                 final Task<Location> locationResult = fusedLocationProvider.getLastLocation();
                 locationResult.addOnCompleteListener(this, task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
-                        // lastKnownLocation = task.getResult();
+                        lastKnownLocation = task.getResult();
                     } else {
                         Log.w(TAG, "getLastLocation:exception", task.getException());
                         showSnackbar(R.string.no_location_detected, Snackbar.LENGTH_LONG, 0, null);
@@ -1175,7 +1217,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     Log.d("petard","stp");
-                    locationArrayList.add((Location) intent.getExtras().get("coordinates"));
+                    int intDisttrack = (int) intent.getExtras().get("coordinates");
+                    Log.d("petardtrack", String.valueOf(intDisttrack));
+                    TextView distance = ((TextView) findViewById(R.id.tvDistance));
+                    distance.setText(String.valueOf(intDisttrack));
+
 
                 }
             };
@@ -1382,42 +1428,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         if(mKilometre == null){
             mKilometre = new ArrayList<>();
         }
+        
 
-
-        SharedPreferences sharedlocation = getSharedPreferences("Tracking",MODE_PRIVATE);
-        String track = sharedlocation.getString("tracking tab",null);
-        Log.d("track","osekour :"+track);
-        Type typetracking = new TypeToken<List<Location>>(){}.getType();
-        locationArrayList = gson.fromJson(track, typetracking);
-
-        if(locationArrayList == null){
-            locationArrayList = new ArrayList<>();
-            Button nodestination = findViewById(R.id.btnnodest);
-            nodestination.setEnabled(false);
-            nodestination.setBackgroundResource(R.color.colorGray);
-
-
-            LinearLayout layouttrak = findViewById(R.id.tracklayout);
-
-            ProgressBar load = new ProgressBar(MapsActivity.this);
-            TextView txtload = new TextView(MapsActivity.this);
-            layouttrak.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
-
-            layouttrak.addView(load);
-            layouttrak.addView(txtload);
-            txtload.setText("Enregistrement des données");
-            txtload.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            load.setIndeterminate(true);
-
-
-            Log.d("track", "Load1"+locationArrayList);
-
-        }else{
-            Log.d("track", "Load"+locationArrayList);
-        }
     }
 
     private void savedata(){
@@ -1432,41 +1444,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         editor.apply();
     }
 
-    public void savetracking(){
-
-        SharedPreferences sharedlocation = getSharedPreferences("Tracking",MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedlocation.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(locationArrayList);
-        editor.putString("tracking tab",json);
-        editor.apply();
-
-    }
-
-    public void deletetracking(){
-        Log.d("track","delete");
-        Button nodestination = findViewById(R.id.btnnodest);
-        nodestination.setEnabled(true);
-        nodestination.setBackgroundResource(R.color.colorAccent);
-        LinearLayout layouttrak = findViewById(R.id.tracklayout);
-        layouttrak.removeAllViews();
 
 
-        SharedPreferences sharedlocation = getSharedPreferences("Tracking",MODE_PRIVATE);
-        Log.d("track","delete : "+sharedlocation.getString("tracking tab", null));
-        SharedPreferences.Editor editor = sharedlocation.edit();
-        editor.clear();
-        editor.apply();
-        Log.d("track","delete : "+locationArrayList);
-        Log.d("track","delete : "+sharedlocation.getString("tracking tab", null));
-
-    }
 
     @Override
     public void onPause(){
         super.onPause();
         Log.d("track","Pause");
-        savetracking();
 
     }
 
