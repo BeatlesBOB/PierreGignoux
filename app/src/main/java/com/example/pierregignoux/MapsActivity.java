@@ -157,6 +157,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
     private List<Polyline> polyLinePaths = new ArrayList<>();
     private ProgressDialog progressDialog;
     private BroadcastReceiver broadcastReceiver;
+    private BroadcastReceiver broadcastReceiverchrono;
+
     private String Disttrack;
     private Location lastKnownLocation;
 
@@ -1217,16 +1219,16 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     Log.d("petard","stp");
-                    int intDisttrack = (int) intent.getExtras().get("coordinates");
+                    float intDisttrack = (float) intent.getExtras().get("coordinates");
                     Log.d("petardtrack", String.valueOf(intDisttrack));
                     TextView distance = ((TextView) findViewById(R.id.tvDistance));
                     distance.setText(String.valueOf(intDisttrack));
-
 
                 }
             };
         }
         registerReceiver(broadcastReceiver,new IntentFilter("location_update"));
+        
     }
 
     @Override

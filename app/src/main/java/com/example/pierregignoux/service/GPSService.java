@@ -24,8 +24,10 @@ public class GPSService extends Service {
     private LocationListener listener;
     private LocationManager locationManager;
     private List<Location> locationList = new ArrayList<>();
-    private int distancetracking = 0;
+    private float distancetracking = 0;
     private int j = 0;
+    private float finaldist = 0;
+
 
 
     public IBinder onBind(Intent intent){
@@ -46,10 +48,12 @@ public class GPSService extends Service {
                     Location loc2 = locationList.get(j + 1);
                     distancetracking += loc1.distanceTo(loc2);
                     j++;
-
                 }
-                distancetracking = distancetracking/1000;
-                i.putExtra("coordinates", distancetracking);
+                Log.d("service", String.valueOf(distancetracking));
+
+                finaldist = distancetracking/1000;
+                Log.d("service", String.valueOf(distancetracking/1000));
+                i.putExtra("coordinates", finaldist);
                 sendBroadcast(i);
 
             }
@@ -83,5 +87,7 @@ public class GPSService extends Service {
         if (locationManager != null){
             locationManager.removeUpdates(listener);
         }
+
+        locationList.clear();
     }
 }
