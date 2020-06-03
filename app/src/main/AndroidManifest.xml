@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.pierregignoux">
-
+    package="com.nathanael.pierregignoux">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -14,29 +13,32 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launch_final"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_launch_final"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".service.MessagingService">
+        <activity android:name="com.nathanael.pierregignoux.HistoriqueActivity"></activity>
+        <activity android:name="com.nathanael.pierregignoux.InfoActivity" />
+
+        <service android:name="com.nathanael.pierregignoux.service.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <activity
-            android:name=".ModifProfil"
-            android:parentActivityName=".Main2Activity"
+            android:name="com.nathanael.pierregignoux.ModifProfil"
+            android:parentActivityName="com.nathanael.pierregignoux.Main2Activity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".ForgotPass"
-            android:parentActivityName=".Main2Activity"
+            android:name="com.nathanael.pierregignoux.ForgotPass"
+            android:parentActivityName="com.nathanael.pierregignoux.Main2Activity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <!--
@@ -51,27 +53,31 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
         <activity
-            android:name=".MapsActivity"
+            android:name="com.nathanael.pierregignoux.MapsActivity"
             android:label="@string/title_activity_maps"
-            android:parentActivityName=".Main2Activity"
-            android:theme="@style/AppTheme.NoActionBar2"
+            android:parentActivityName="com.nathanael.pierregignoux.Main2Activity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:parentActivityName=".Main2Activity"
-            android:name=".Register"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:name="com.nathanael.pierregignoux.Register"
+            android:parentActivityName="com.nathanael.pierregignoux.Main2Activity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".Main2Activity"
+            android:name="com.nathanael.pierregignoux.Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
-        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name="com.nathanael.pierregignoux.MainActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -81,10 +87,14 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.GPSService" />
         <service
-            android:name=".service.FetchAddressIntentService"
-            android:exported="false" />
+            android:name="com.nathanael.pierregignoux.service.GPSService"
+            android:process=":GPSService" />
+        <service
+            android:name="com.nathanael.pierregignoux.service.FetchAddressIntentService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location" />
     </application>
 
 </manifest>

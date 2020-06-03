@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingStart="16.3dp"
+    android:paddingTop="21dp"
+    android:paddingEnd="16.3dp"
+    android:paddingBottom="21dp">
+
+<ImageView
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_gravity="center_vertical"
+    android:src="@drawable/ic_keyboard_arrow_down"
+    android:tint="@color/colorPrimary" />
+
+<TextView
+    android:id="@+id/txtcorres"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:layout_marginStart="41.3dp"
+    android:layout_marginTop="3dp"
+    android:ellipsize="end"
+    android:fontFamily="@font/quicksand"
+    android:maxLines="1"
+    android:text="Correspondance"
+    android:textColor="@color/black_txt_Color"
+    android:textSize="15sp"
+    android:textStyle="normal" />
+</LinearLayout>

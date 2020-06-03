@@ -2,25 +2,43 @@
 
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:weightSum="2">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="12dp">
 
             <TextView
-                style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/name_of_route" />
+                android:text="@string/name_of_route"
+                android:fontFamily="@font/quicksand"
+                android:textColor="@color/black_txt_Color"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
             <View
                 android:layout_width="0dp"
                 android:layout_height="10dp">
@@ -32,21 +50,28 @@
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title" />
+                android:text="Title"
+                android:fontFamily="@font/quicksand"
+                android:textColor="@color/black_txt_Color"
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="10dp"
-            android:layout_marginStart="50dp">
+            android:padding="12dp">
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/kilometer" />
+                android:text="@string/kilometer"
+                android:fontFamily="@font/quicksand"
+                android:textColor="@color/black_txt_Color"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
             <View
                 android:layout_width="0dp"
                 android:layout_height="10dp">
@@ -56,15 +81,12 @@
             <TextView
                 android:id="@+id/prefkilo"
                 android:text="Title"
-                style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksand"
+                android:textColor="@color/black_txt_Color"
+                android:textSize="16sp"/>
         </LinearLayout>
-
-
-
-
-
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

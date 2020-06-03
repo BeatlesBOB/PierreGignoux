@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">PierreGignoux</string>
+    <string name="app_name">CO2 meter</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_main2">HUB</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_login">Sign in</string>
 
-    <string name="nav_header_title">Pierre Gignoux</string>
+    <string name="nav_header_title">CO2 meter</string>
     <string name="nav_header_subtitle">Application</string>
 
     //Navigation
@@ -110,6 +110,7 @@
     <string name="US">United States</string>
     <string name="Angleterre">England</string>
     <string name="no_account">Account needed</string>
+    <string name="no_point">You need to respond at least one question</string>
 
     <string name="img_sucess">Your profile image has been saved</string>
     <string name="img_failed">Your profile image hasn\'t be saved</string>
@@ -174,9 +175,11 @@
     <string name="current_location_null">Current location is null. Permission Denied.</string>
     <string name="destination">Destination</string>
     <string name="departure_optional">Departure (optional)</string>
-    <string name="done">Record your route</string>
+    <string name="done">Save your travel</string>
     <string name="nodest">Launch tracking</string>
     <string name="nodest2">Stop tracking</string>
+    <string name="Distance" translatable="false">Distance </string>
+    <string name="Time">Time</string>
 
     <string name="service_not_available">Service not available</string>
     <string name="invalid_lat_long_used">invalid lat long used</string>
@@ -187,9 +190,9 @@
     <string name="permission_rationale">permission rationale</string>
     <string name="update_km">Your Kilometers Travelled</string>
     <string name="newfavroute">New favorite route</string>
-    <string name="nbpersonne">Enter the number of people</string>
+    <string name="nbpersonne">Number of passenger</string>
     <string name="sure">Are you sure ?</string>
-    <string name="deleteitem">Do you want to delete this item </string>
+    <string name="deleteitem">Do you want to delete this item</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="titre">Title</string>
@@ -200,12 +203,62 @@
     <string name="kilometer">Kilometers</string>
     <string name="objco2">You are setting your CO2 goal at :</string>
     <string name="objeuro">You are setting your euro goal at :</string>
-    <string name="total_eco_co2">CO2 total economised</string>
+    <string name="total_eco_co2">CO2 economised</string>
     <string name="total_co2">Total CO2</string>
     <string name="total_kilometre">Total kilometer</string>
     <string name="resetuserdata">Reset your consuption and objectives</string>
     <string name="resetotherdata">Reset your route and your quizz</string>
     <string name="use_of_different_means_of_transport">% of use of different means of transport</string>
     <string name="your_consumption_compared_to_other_country">Your consumption compared to other country</string>
+    <string name="recover_npassword">Recover\nPassword</string>
+    <string name="update_profil">Update profil</string>
+    <string name="sign_up">Sign Up</string>
+
+    <string name="sigin_nom">First Name</string>
+    <string name="sigin_prnom">Last Name</string>
+    <string name="sigin_password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+
+
+    <string name="plantV">Green plante</string>
+    <string name="plantVDesc">You need to economise CO2</string>
+
+    <string name="QM">Quizz master</string>
+    <string name="QMSTATUE">Your score</string>
+    <string name="QMDESC">You need to get the average score on quizz</string>
+
+    <string name="VOITC">Michael Schumacher</string>
+    <string name="VOITCDESC">You need to consumn less than 100kg of CO2 using car</string>
+
+    <string name="bonneH">Good habits</string>
+    <string name="bonneHDESC">You need to do at least 5 travel by using green transport in the last 10 travel</string>
+
+    <string name="avc">Airplane!</string>
+    <string name="avcDESC">You need to consumn less than 100kg of CO2 using Avion</string>
+
+    <string name="motoc">Valentino Rossi</string>
+    <string name="motocDESC">You need to consumn less than 100kg of CO2 using motocycle</string>
+
+    <string name="covoit">Car sharing</string>
+    <string name="covoitDESC">You need to do at least 100km by car sharing</string>
+
+    <string name="rosap">Rosa Park</string>
+    <string name="rosapDESC">You need to do at least 100km by Bus</string>
+
+    <string name="interR"><![CDATA[Quai 9 &#190;]]></string>
+    <string name="interRDESC">You need to do at least 100km by rail</string>
+
+    <string name="marcheB">Forest Gump</string>
+    <string name="marcheBDESC">You need to do at least 100km by walking</string>
+
+    <string name="maillotJ">Yellow jersey</string>
+    <string name="maillotJDESC">You need to do at least 100km by bicycle</string>
+
+    <string name="globeT">Globe Trotteur</string>
+    <string name="globeTDESC">You need to travel more than 1000km</string>
+    <string name="compared_to_previous_month">compared to previous month</string>
+
+    <string name="Recording">tracking …</string>
+
 
 </resources>

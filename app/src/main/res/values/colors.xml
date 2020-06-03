@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#B5EAD7</color>
-    <color name="colorPrimaryDark">#84B5A3</color>
-    <color name="colorAccent">#FF9AA2</color>
-    <color name="colorBlue">#71C2CC</color>
-    <color name="colorRed">#FF9AA2</color>
-    <color name="colorOrange">#FFDAC1</color>
-    <color name="colorGreen">#B5EAD7</color>
-    <color name="colorGray">#7F7F7F</color>
+        <color name="colorPrimary">#45B549</color>
+        <color name="colorPrimaryDark">#009549</color>
+        <color name="colorAccent">#7be878</color>
+        <color name="colorPrimaryLight">#7be878</color>
+        <color name="primaryTextColor">#ffffff</color>
+        <color name="primaryColor">#45B549</color>
+        <color name="primaryDarkColor" >#009549</color>
+        <color name="primaryLightColor">#7be878</color>
+        <color name="white">#ffffff</color>
+        <color name="transparent">#00000000</color>
+        <color name="colorEditTextBg">#E7FBF7</color>
+        <color name="registerBgColor">#21254a</color>
+
+        <color name="black_txt_Color">#222426</color>
+        <color name="hint_color">#a6a6a6</color>
+        <color name="colorDivider">#aaaaaa</color>
+        <color name="white_smoke">#cccccc</color>
+        <color name="white_smoke_light">#dddddd</color>
+        <color name="geryTxt">#858585</color>
+        <color name="parent_background">#f6f6f6</color>
+        <color name="contentBadgeTitle">#a9a9a9</color>
+        <color name="contentDividerLine">#e0e0e0</color>
+        <color name="mainTextColor">#343d43</color>
+
+    <color name="red">#DC143C</color>
+
+
 
     <array name="colorPagesViewPager">
         <item>#FFFFFF</item>

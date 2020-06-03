@@ -1,15 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/homeLayout"
     android:layout_width="match_parent"
+   android:layout_height="match_parent">
+
+<!-- TODO: Update blank fragment layout -->
+<ImageView
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp"
-    android:orientation="vertical">
-
-
-   <androidx.recyclerview.widget.RecyclerView
-       android:id="@+id/recyclerview"
+    android:src="@drawable/ic_journey"
+    android:padding="100dp"
+    android:alpha="0.1"
+    android:tint="@color/primaryDarkColor" />
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recyclerview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom">
+   <TextView
+       android:id="@+id/tv_description"
        android:layout_width="match_parent"
-       android:layout_height="match_parent" />
+       android:layout_height="wrap_content"
+       android:textColor="@color/white"
+       android:textSize="14sp"
+       android:padding="4dp"
+       android:layout_marginEnd="60dp"
+       android:maxLines="1"
+       android:gravity="start|center"
+       android:fontFamily="@font/lato"
+       android:scrollHorizontally="true"
+       android:scrollbars="horizontal"
+       android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque rhoncus."
+       android:background="@drawable/bg_tv_description"/>
 </LinearLayout>
+
+</FrameLayout>

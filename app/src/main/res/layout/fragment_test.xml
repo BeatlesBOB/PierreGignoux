@@ -1,150 +1,253 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-<LinearLayout
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:background="@color/primaryDarkColor">
 
-    <LinearLayout
+    <!-- TODO: Update blank fragment layout -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/questionlayout"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/colorGreen"
+        android:layout_height="180dp"
         android:gravity="center">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:alpha="0.5"
+            android:rotation="90"
+            android:src="@drawable/ic_leaf_outline"
+            android:tint="@color/white"
+            android:translationX="-10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:alpha="0.5"
+            android:rotation="270"
+            android:src="@drawable/ic_leaf_outline"
+            android:tint="@color/white"
+            android:translationX="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
             android:id="@+id/question"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Questions"
-            android:lines="2"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"/>
-
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/progressExpandableView"
-        android:visibility="visible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/consoDesc"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center"
-        android:layout_marginTop="5dp">
-
-        <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/score"/>
-
-        <ProgressBar
-            android:id="@+id/globalprogress"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            style="?android:progressBarStyleHorizontal"
-            android:progress="1"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/quicksand"
+            android:gravity="center"
+            android:lines="2"
+            android:text="Questions"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:progressDrawable="@drawable/circle"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/radiolayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        android:gravity="center">
-
-        <RadioGroup
-            android:id="@+id/radiogroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/radio_rep1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked" />
-
-            <RadioButton
-                android:id="@+id/radio_rep2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked" />
-
-            <RadioButton
-                android:id="@+id/radio_rep3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked" />
-
-            <RadioButton
-                android:id="@+id/radio_rep4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked" />
-
-        </RadioGroup>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_marginTop="50dp"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btnquizz"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:text="@string/btn_quizz_done" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/quizz_history"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_keyboard_arrow_down_black_24dp"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <RelativeLayout
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/quizzrecycler"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_test_main"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-    </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/progressExpandableView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/consoDesc">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/score"
+                        android:fontFamily="@font/quicksand"
+                        android:gravity="center"
+                        android:textColor="@color/black_txt_Color"
+                        android:lines="2"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp">
+                        <ProgressBar
+                            android:id="@+id/globalprogress"
+                            style="?android:progressBarStyleHorizontal"
+                            android:layout_width="140dp"
+                            android:layout_height="140dp"
+                            android:padding="16dp"
+                            android:indeterminate="false"
+                            android:progress="0"
+                            android:max="100"
+                            android:indeterminateOnly="false"
+                            android:progressDrawable="@drawable/bg_progress_circle"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                        <TextView
+                            android:id="@+id/score"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:textSize="22sp"
+                            android:fontFamily="@font/quicksand"
+                            android:textColor="@color/primaryDarkColor"
+                            android:text="0"
+                            android:textStyle="bold"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/radiolayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:gravity="start">
+
+                <RadioGroup
+                    android:id="@+id/radiogroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/radio_rep1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/primaryDarkColor"
+                        android:text="Option 1"
+                        android:textSize="18sp"
+                        android:padding="8dp"
+                        android:textColor="@color/black_txt_Color"
+                        android:fontFamily="@font/quicksand"/>
+
+                    <RadioButton
+                        android:id="@+id/radio_rep2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/primaryDarkColor"
+                        android:text="Option 2"
+                        android:textSize="18sp"
+                        android:padding="8dp"
+                        android:textColor="@color/black_txt_Color"
+                        android:fontFamily="@font/quicksand"/>
+
+                    <RadioButton
+                        android:id="@+id/radio_rep3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/primaryDarkColor"
+                        android:text="Option 3"
+                        android:textSize="18sp"
+                        android:padding="8dp"
+                        android:textColor="@color/black_txt_Color"
+                        android:fontFamily="@font/quicksand"/>
+
+                    <RadioButton
+                        android:id="@+id/radio_rep4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/primaryDarkColor"
+                        android:text="Option 4"
+                        android:textSize="18sp"
+                        android:padding="8dp"
+                        android:textColor="@color/black_txt_Color"
+                        android:fontFamily="@font/quicksand"/>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="36dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btnquizz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/bg_primary_btn"
+                    android:paddingStart="80dp"
+                    android:paddingEnd="80dp"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/quicksand"
+                    android:textAllCaps="false"
+                    android:text="@string/btn_quizz_done" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:padding="4dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/quizz_history"
+                        android:fontFamily="@font/quicksand"
+                        android:gravity="center"
+                        android:textColor="@color/black_txt_Color"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_keyboard_arrow_down_black_24dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/quizzrecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
-
-
-
-</ScrollView>

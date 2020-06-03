@@ -5,10 +5,10 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.example.pierregignoux"
+        applicationId "com.nathanael.pierregignoux"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 1
+        versionCode 4
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,12 +44,12 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'com.google.firebase:firebase-database:19.2.1'
-    implementation 'com.google.firebase:firebase-auth:19.2.0'
-    implementation 'com.google.firebase:firebase-firestore:21.4.0'
+    implementation 'com.google.firebase:firebase-auth:19.3.0'
+    implementation 'com.google.firebase:firebase-firestore:21.4.2'
     implementation 'com.google.firebase:firebase-storage:19.1.1'
-    implementation 'com.google.firebase:firebase-analytics:17.2.2'
-    implementation 'com.google.firebase:firebase-messaging:20.1.0'
-    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.3'
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
+    implementation 'com.google.firebase:firebase-messaging:20.1.5'
+    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.4'
 
 
     // Add the dependency for the Performance Monitoring library
@@ -78,9 +78,7 @@ dependencies {
     implementation 'com.github.hajiyevelnur92:intentanimation:1.0'
 
     implementation 'com.google.code.gson:gson:2.8.5'
-
-    implementation 'com.airbnb.android:lottie:3.4.0'
-
+    implementation 'org.greenrobot:eventbus:3.2.0'
 
 
 }

@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PierreGignoux</string>
+    <string name="app_name">Compteur de CO2</string>
     <string name="Angleterre">Angleterre</string>
     <string name="Chine">Chine</string>
     <string name="France">France</string>
-    <string name="US">Etats Unies</string>
+    <string name="US">Etats-Unies</string>
     <string name="address_found">Adresse trouvée</string>
     <string name="auth_failed">L\'authentification a échoué</string>
-    <string name="auth_sucess">L\'authentification a réussie</string>
+    <string name="auth_sucess">L\'authentification a réussi</string>
     <string name="btn_continue">Continuer</string>
-    <string name="btn_quizz_done">Quizz terminer</string>
+    <string name="btn_quizz_done">Quizz terminé</string>
     <string name="confirm">Confirmer</string>
     <string name="conso">Votre consommation de CO2</string>
     <string name="consommation">Votre consommation</string>
-    <string name="consosub">Votre consommation vis a vis de vos objectifs</string>
+    <string name="consosub">Votre consommation vis-à-vis de vos objectifs</string>
     <string name="consotrajet">Consommation :</string>
-    <string name="current_location_null">Votre position est null, permission refusée</string>
+    <string name="current_location_null">Votre position est nulle, permission refusée</string>
     <string name="date_history">Fait le :</string>
     <string name="departure_optional">Départ (optionel)</string>
     <string name="destination">Destination</string>
-    <string name="disttrajet">Kilomètre parcourue</string>
+    <string name="disttrajet">Kilomètres parcourus</string>
     <string name="done">Enregistrer son trajet</string>
     <string name="email_sent">Email envoyé</string>
     <string name="euroeco">Votre économie d\'argent</string>
-    <string name="eurosub">Comparé à l\'utilisation d\'un voiture</string>
+    <string name="eurosub">Comparé à l\'utilisation d\'une voiture</string>
     <string name="img_failed">Votre image de profil n\'a pas été sauvgardée</string>
     <string name="img_sucess">Votre image de profil à été sauvgardée</string>
     <string name="invalid_lat_long_used">Latitude et longitude invalide</string>
-    <string name="invalid_password_confirm">Les mot de passes doivent etre similaire</string>
+    <string name="invalid_password_confirm">Les mots de passe doivent être similaires</string>
     <string name="label_fragment_home">Nouveau trajet</string>
-    <string name="label_fragment_profil">Votre profile</string>
+    <string name="label_fragment_profil">Votre profil</string>
     <string name="label_fragment_test">Se tester</string>
     <string name="label_fragment_trajet">Vos trajets</string>
     <string name="login">S\'identifier</string>
     <string name="mdp1">Votre mot de passe</string>
     <string name="mdp2">Votre mot de passe de confirmation</string>
     <string name="nav_header_subtitle">Application</string>
-    <string name="nav_header_title">Pierre Gignoux</string>
-    <string name="nav_home">Nouveaux trajets</string>
+    <string name="nav_header_title">Compteur de CO2</string>
+    <string name="nav_home">Nouveau trajet</string>
     <string name="nav_label_account">Compte</string>
     <string name="nav_label_sign_in">Se connecter ou s\'enregistrer</string>
-    <string name="nav_profil">Profile</string>
+    <string name="nav_profil">Profil</string>
     <string name="nav_routes">Mes trajets</string>
     <string name="nav_sign_in">Se connecter</string>
     <string name="nav_test">Se tester</string>
@@ -49,6 +49,8 @@
     <string name="new_name">Votre nouveau nom / pseudonyme</string>
     <string name="new_password">Votre nouveau mot de passe</string>
     <string name="no_account">Vous avez besoin d\'un compte</string>
+    <string name="no_point">Vous avez à répondre a au moins une questions</string>
+
     <string name="no_destination">Vous avez besoin d\'enregistrer une destination</string>
     <string name="no_geocoder_available">Pas de geocoder disponible</string>
     <string name="no_location_data_provided">Pas de localisation fournit</string>
@@ -69,7 +71,7 @@
     <string name="quizz_complete">Le quizz est complet</string>
     <string name="quizz_done">Votre résultat a été mise a jour</string>
     <string name="quizz_history">Historique</string>
-    <string name="quizz_not_done">Il semble que nous rencontront un problème</string>
+    <string name="quizz_not_done">Il semble que nous rencontrons un problème</string>
     <string name="register">S\'enregistrer</string>
     <string name="score">Votre résultat :</string>
     <string name="score_history">Votre résultat était :</string>
@@ -92,7 +94,7 @@
     <string name="wait">Attendez …</string>
     <string name="update_km">Vos kilomètres parcourus</string>
     <string name="newfavroute">Nouveau trajet régulier / favorie</string>
-    <string name="nbpersonne">Entrez le nombre de personne dans la voiture</string>
+    <string name="nbpersonne">Nombre de passager</string>
     <string name="sure">Etes vous sure ?</string>
     <string name="deleteitem">Voulez vous supprimer cette item</string>
     <string name="yes">Oui</string>
@@ -100,18 +102,19 @@
     <string name="titre">Titre</string>
     <string name="nbkilometre">Nombre de kilomètre</string>
     <string name="save">Sauvegarder</string>
-    <string name="add_favorite_route">Ajouter une route favorite</string>
+    <string name="add_favorite_route">Ajouter un trajet favori</string>
     <string name="name_of_route">Nom du trajet</string>
     <string name="kilometer">Kilometres</string>
-    <string name="objco2">Vous vous fixer votre objectif CO2 à :</string>
-    <string name="objeuro">Vous vous fixer votre objectif d\'euro économiser à :</string>
-    <string name="total_eco_co2">CO2 total économisé</string>
+    <string name="objco2">Vous vous fixez votre objectif CO2 à :</string>
+    <string name="objeuro">Vous vous fixez votre objectif d\'euro économiser à :</string>
+    <string name="total_eco_co2">CO2 économisé</string>
     <string name="total_co2">Total CO2</string>
-    <string name="total_kilometre">Total kilometre</string>
-    <string name="resetuserdata">Remettre a zéro votre comsommation et vos objectifs</string>
-    <string name="resetotherdata">Remettre a zéro vos trajet et vos quizz</string>
+    <string name="total_kilometre">Total des kilomètres</string>
+    <string name="resetuserdata">Remettre à zéro votre comsommation et vos objectifs</string>
+    <string name="resetotherdata">Remettre à zéro vos trajets et vos quizz</string>
     <string name="use_of_different_means_of_transport">% d\'utilisation de different moyens de transport</string>
     <string name="your_consumption_compared_to_other_country">Votre consommation comparé au autre pays</string>
+    <string name="sign_up">Se connecter</string>
 
     <string-array name="question_array">
         <item>A quelle fréquence mangez vous de la viande ?</item>
@@ -172,4 +175,56 @@
         <item>Il n\'a jamais été allumé</item>
         <item>Jamais</item>
     </string-array>
+
+    <string name="Time" >Temps</string>
+    <string name="recover_npassword">Retrouver\nVotre mot de passe</string>
+    <string name="update_profil">Mettre a jour votre profil</string>
+
+    <string name="sigin_nom">Nom</string>
+    <string name="sigin_prnom">Prénom</string>
+    <string name="sigin_password">Mot de passe</string>
+    <string name="confirm_password">Confirmation du mot de passe</string>
+
+
+    <string name="plantV">Plante verte</string>
+    <string name="plantVDesc">Vous devez économiser du CO2</string>
+
+    <string name="QM">Quizz master</string>
+    <string name="QMSTATUE">Votre score</string>
+    <string name="QMDESC">Vous devez avoir la moyenne sur tous les quizz auxquels vous avez participé répondus</string>
+
+    <string name="VOITC">Michael Schumacher</string>
+    <string name="VOITCDESC">Vous devez consommer moins de 100kg de CO2 en utilisant la voiture</string>
+
+    <string name="bonneH">Bonne habitude</string>
+    <string name="bonneHDESC">Vous devez faire au moins 5 trajet en utilisant des moyens de transport vert sur vos 10 dernier trajet</string>
+
+    <string name="avc">Y\'a t\'il un pilote dans l\'avion</string>
+    <string name="avcDESC">Vous devez consommer moins de 100kg de CO2 en utilisant l\'avion</string>
+
+    <string name="motoc">Valentino Rossi</string>
+    <string name="motocDESC">You need to consumn less than 100kg of CO2 using motocycle</string>
+
+    <string name="covoit">Covoiturage</string>
+    <string name="covoitDESC">Vous devez faire au moins 100km en convoiturage</string>
+
+    <string name="rosap">Rosa Park</string>
+    <string name="rosapDESC">Y>Vous devez faire au moins 100km en bus</string>
+
+    <string name="interR"><![CDATA[Quai 9 &#190;]]></string>
+    <string name="interRDESC">Vous devez faire au moins 100km en rail</string>
+
+    <string name="marcheB">Forest Gump</string>
+    <string name="marcheBDESC">Vous devez faire au moins 100km en marchant</string>
+
+    <string name="maillotJ">Maillot jaune</string>
+    <string name="maillotJDESC">>Vous devez faire au moins 100km en vélo</string>
+
+    <string name="globeT">Globe Trotteur</string>
+    <string name="globeTDESC">Vous devez faire au moins 1000km</string>
+    <string name="compared_to_previous_month">Comparé au mois précédent</string>
+
+    <string name="Recording">Tracking en cours …</string>
+
+
 </resources>

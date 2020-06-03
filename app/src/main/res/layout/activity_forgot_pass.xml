@@ -1,24 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".ForgotPass"
+android:background="@color/white">
+
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ForgotPass"
-    android:orientation="vertical">
-
-    <EditText
-        android:id="@+id/resetemail"
+    android:id="@+id/iv_wave"
+    android:clipChildren="false"
+    android:layout_width="0dp"
+    android:layout_height="150dp"
+    android:gravity="bottom"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/sigin_mail"
-        android:imeOptions="actionDone"/>
-
-    <Button
-        android:id="@+id/sendpassreset"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/send_email"/>
-
+        android:layout_marginStart="-12dp"
+        android:layout_marginEnd="-20dp"
+        android:layout_marginBottom="-8dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_grass" />
 </LinearLayout>
+
+<ImageView
+    android:id="@+id/iv_circle1"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_margin="16dp"
+    android:padding="8dp"
+    android:rotation="270"
+    android:translationX="36dp"
+    android:src="@drawable/ic_leaf"
+    android:elevation="2dp"
+    app:layout_constraintBottom_toTopOf="@+id/iv_wave"
+    app:layout_constraintEnd_toEndOf="parent" />
+
+<ImageView
+    android:id="@+id/iv_circle3"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:translationX="-30dp"
+    android:layout_margin="16dp"
+    android:rotation="90"
+    android:src="@drawable/ic_leaf"
+    android:elevation="2dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:fontFamily="@font/quicksand"
+    android:text="@string/login"
+    android:layout_marginStart="32dp"
+    android:textColor="@color/black_txt_Color"
+    android:textSize="36sp"
+    android:textStyle="bold"
+    app:layout_constraintBottom_toBottomOf="@+id/iv_circle1"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/iv_circle1" />
+
+<TextView
+    android:id="@+id/textView2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="32dp"
+    android:fontFamily="@font/quicksand"
+    android:text="@string/recover_npassword"
+    android:textColor="@color/black_txt_Color"
+    android:textSize="36sp"
+    android:textStyle="bold"
+    app:layout_constraintBottom_toBottomOf="@+id/iv_circle3"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/iv_circle3" />
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:translationZ="15dp"
+    android:background="@android:color/transparent"
+    app:layout_constraintBottom_toBottomOf="@+id/card_login"
+    app:layout_constraintEnd_toEndOf="@+id/card_login"
+    app:layout_constraintTop_toBottomOf="@+id/card_login">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/sendpassreset"
+        android:layout_margin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/primaryColor"
+        android:src="@drawable/ic_arrow_forward_black_24dp"
+        android:tint="@color/white" />
+</LinearLayout>
+
+<androidx.cardview.widget.CardView
+    android:id="@+id/card_login"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="30dp"
+    android:layout_marginEnd="30dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp"
+    app:layout_constraintBottom_toTopOf="@+id/iv_circle1"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/iv_circle3">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="24dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:hint="Email"
+                android:theme="@style/PrimaryColorEditTextStyle">
+
+                <EditText
+                    android:id="@+id/resetemail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_mail_black_24dp"
+                    android:drawableTint="@color/primaryColor"
+                    android:inputType="textEmailAddress"
+                    android:paddingStart="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="15dp"
+                    android:theme="@style/PrimaryColorEditTextStyle"
+                    android:imeOptions="actionDone"/>
+
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
