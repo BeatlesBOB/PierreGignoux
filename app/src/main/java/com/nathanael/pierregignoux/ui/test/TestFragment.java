@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.nathanael.pierregignoux.Questions;
 import com.nathanael.pierregignoux.Quizz;
 import com.nathanael.pierregignoux.QuizzAdapter;
@@ -121,9 +122,9 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
             public void onClick(View v) {
                 Log.d("btnquizz","btnquizz");
 
-                if (r != 0){
+                if (user != null){
 
-                    if (user != null) {
+                    if (r != 0) {
 
                         String uid = user.getUid();
                         Timestamp now = new Timestamp(new Date());
@@ -149,11 +150,11 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
                         });
 
                     }else {
-                        Toast.makeText(context,getString(R.string.no_account), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,getString(R.string.no_point), Toast.LENGTH_SHORT).show();
                     }
 
                 }else {
-                    Toast.makeText(context,getString(R.string.no_point), Toast.LENGTH_SHORT).show();
+                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content), getString(R.string.no_account), Snackbar.LENGTH_LONG);snackBar.show();
                 }
 
             }
@@ -169,7 +170,7 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
                     Log.d("score", String.valueOf(mScore));
 
                     if (r+1 == 7){
-                        mScore += 10;
+                        mScore += 16.6;
                         gprog.setProgress(mScore);
                         score.setText(""+mScore);
                     }
@@ -178,7 +179,7 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
                         Log.d("index","oui");
                         Toast.makeText(context, getString(R.string.quizz_complete), Toast.LENGTH_LONG).show();
                     } else {
-                        mScore += 10;
+                        mScore += 16.6;
                         gprog.setProgress(mScore);
                         score.setText(""+mScore);
 
@@ -220,7 +221,7 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
                     Log.d("score", String.valueOf(mScore));
 
                     if (r+1 == 7){
-                        mScore += 10;
+                        mScore += 16.6;
                         gprog.setProgress(mScore);
                         score.setText(""+mScore);
 
@@ -230,7 +231,7 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
                         Log.d("index","oui");
                         Toast.makeText(context, getString(R.string.quizz_complete), Toast.LENGTH_LONG).show();
                     } else {
-                        mScore += 10;
+                        mScore += 16.6;
                         gprog.setProgress(mScore);
                         score.setText(""+mScore);
 
@@ -269,7 +270,7 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
                     Log.d("score", String.valueOf(mScore));
 
                     if (r+1 == 7){
-                        mScore += 10;
+                        mScore += 16.6;
                         gprog.setProgress(mScore);
                         score.setText(""+mScore);
 
@@ -279,7 +280,7 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
                         Log.d("index","oui");
                         Toast.makeText(context, getString(R.string.quizz_complete), Toast.LENGTH_LONG).show();
                     } else {
-                        mScore += 10;
+                        mScore += 16.6;
                         gprog.setProgress(mScore);
                         score.setText(""+mScore);
 
@@ -318,7 +319,7 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
                     Log.d("score", String.valueOf(mScore));
 
                     if (r+1 == 7){
-                        mScore += 10;
+                        mScore += 16.6;
                         gprog.setProgress(mScore);
                         score.setText(""+mScore);
 
@@ -328,7 +329,7 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
                         Log.d("index","oui");
                         Toast.makeText(context, getString(R.string.quizz_complete), Toast.LENGTH_LONG).show();
                     } else {
-                        mScore += 10;
+                        mScore += 16.6;
                         gprog.setProgress(mScore);
                         score.setText(""+mScore);
 

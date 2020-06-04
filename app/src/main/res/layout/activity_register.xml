@@ -28,6 +28,7 @@
     </LinearLayout>
 
     <ImageView
+        android:translationY="80dp"
         android:id="@+id/iv_circle1"
         android:layout_width="100dp"
         android:layout_height="100dp"

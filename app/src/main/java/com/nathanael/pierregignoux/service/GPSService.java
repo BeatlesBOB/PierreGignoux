@@ -1,4 +1,5 @@
 package com.nathanael.pierregignoux.service;
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,10 +8,15 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 
+import android.location.Criteria;
 import android.location.Location;
 
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 
 
@@ -19,12 +25,6 @@ import androidx.core.app.NotificationCompat;
 
 import com.nathanael.pierregignoux.MapsActivity;
 import com.nathanael.pierregignoux.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,13 +37,14 @@ public class GPSService extends Service {
     private static final int NOTIF_ID = 1;
     private static final String NOTIF_CHANNEL_ID = "Service GPS";
 
-    public static FusedLocationProviderClient fusedLocationProviderClient;
-    private LocationRequest locationRequest;
-    public static LocationCallback locationCallback;
     private List<Location> locationList = new ArrayList<>();
     private float distancetracking;
     private int j = 0;
     BigDecimal finaldist = new BigDecimal("0");
+    private LocationListener listener;
+    private LocationManager locationManager;
+    private String provider;
+    private Location lastLocation, newLocation;
 
     Timer chrono = new Timer();
 
@@ -66,14 +67,14 @@ public class GPSService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
         locationList.clear();
+        locationManager.removeUpdates((android.location.LocationListener) listener);
         chrono.cancel();
     }
 
+    @SuppressLint("MissingPermission")
     private void startForeground() {
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
 
         chrono.schedule(new TimerTask() {
@@ -97,20 +98,25 @@ public class GPSService extends Service {
                 sendBroadcast(i2);
             }
         }, 0, 1000);
-
-
-        locationCallback=new LocationCallback(){
+        listener = new LocationListener() {
             @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                finaldist = BigDecimal.valueOf(0);
-                locationList.add(locationResult.getLastLocation());
-                while (j < locationList.size() - 1) {
-                    Location loc1 = locationList.get(j);
-                    Location loc2 = locationList.get(j + 1);
-                    distancetracking += loc1.distanceTo(loc2);
-                    j++;
+            public void onLocationChanged(Location locationResult) {
+
+                //Verify accuracy of this location in meters.
+                if (locationResult.getAccuracy() > 50){
+                    return;
                 }
+
+                lastLocation = newLocation;
+                newLocation = locationResult;
+
+                locationList.add(newLocation);
+
+                if (lastLocation == null)   //first gps triger.
+                    distancetracking = 0;
+                else
+                    distancetracking += lastLocation.distanceTo(newLocation);
+
                 finaldist = BigDecimal.valueOf(distancetracking/1000);
                 Intent i = new Intent("location_update");
                 i.putExtra("coordinates", finaldist);
@@ -118,9 +124,32 @@ public class GPSService extends Service {
                 notification(finaldist+ " Km");
 
             }
-        };
-        oncreatelocation();
 
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+
+            }
+        };
+
+
+        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        provider = locationManager.getBestProvider(criteria, false);
+        locationManager.requestLocationUpdates(provider,0,0,listener);
     }
 
     private void notification(String distance) {
@@ -146,7 +175,7 @@ public class GPSService extends Service {
             startForeground(NOTIF_ID, new NotificationCompat.Builder(this,
                     NOTIF_CHANNEL_ID) // don't forget create a notification channel first
                     .setOngoing(true)
-                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setSmallIcon(R.drawable.ic_launch_final)
                     .setContentTitle(getString(R.string.app_name))
                     .setContentText(distance)
                     .setContentIntent(pendingIntent)
@@ -155,13 +184,5 @@ public class GPSService extends Service {
 
     }
 
-    private void oncreatelocation() {
-
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(5000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
-    }
 
 }

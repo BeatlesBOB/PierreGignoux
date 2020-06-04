@@ -414,7 +414,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                 nodestination.setEnabled(true);
                 nodestination2.setText(getString(R.string.nodest2));
                 nodestination.setBackground(getDrawable(R.drawable.bg_primary_btn));
-                nodestination2.setBackground(getDrawable(R.drawable.bg_primary_btn));
+                nodestination2.setBackground(getDrawable(R.drawable.bg_secondary_btn));
 
                 Intent intent = new Intent(MapsActivity.this,GPSService.class);
                 stopService(intent);
