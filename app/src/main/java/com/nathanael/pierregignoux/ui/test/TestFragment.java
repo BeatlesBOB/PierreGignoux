@@ -1,6 +1,8 @@
 package com.nathanael.pierregignoux.ui.test;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FieldPath;
+import com.google.firebase.firestore.SetOptions;
 import com.nathanael.pierregignoux.Questions;
 import com.nathanael.pierregignoux.Quizz;
 import com.nathanael.pierregignoux.QuizzAdapter;
@@ -38,6 +42,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.mariuszgromada.math.mxparser.Expression;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -139,6 +145,11 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(context, getString(R.string.quizz_done), Toast.LENGTH_SHORT).show();
+                                r= 0;
+                                mScore = 0;
+                                gprog.setProgress(mScore);
+                                score.setText(""+mScore);
+                                updateQuestion(r);
                                function();
 
                             }
@@ -418,10 +429,31 @@ public class TestFragment extends Fragment implements QuizzAdapter.OnQuizzListen
 
 
     @Override
-    public void onQuizzClick(int position) {
+    public void onQuizzClick(Quizz quizz, int position) {
 
-        Log.d(TAG,"onTicketClick: clicked.");
+        if (user != null) {
 
+            new AlertDialog.Builder(getActivity())
+                    .setIcon(R.drawable.ic_delete_black_24dp)
+                    .setTitle(getString(R.string.sure))
+                    .setMessage(getString(R.string.deleteitem))
+                    .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            db.collection("quizz").document(quizz.getId())
+                                    .delete();
+
+                            items.remove(position);
+                            adapterquizz.notifyItemRemoved(position);
+                            adapterquizz.notifyItemRangeChanged(position, items.size());
+
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.no), null)
+                    .show();
+
+        }
     }
 
 

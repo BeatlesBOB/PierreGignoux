@@ -1,11 +1,17 @@
 package com.nathanael.pierregignoux.ui.profil;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -17,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +36,9 @@ import com.bumptech.glide.Glide;
 import com.nathanael.pierregignoux.HistoriqueActivity;
 import com.nathanael.pierregignoux.InfoActivity;
 import com.nathanael.pierregignoux.Main2Activity;
+import com.nathanael.pierregignoux.MapsActivity;
 import com.nathanael.pierregignoux.ModifProfil;
+import com.nathanael.pierregignoux.MonthActivity;
 import com.nathanael.pierregignoux.R;
 import com.nathanael.pierregignoux.models.direction.Trajet;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -51,15 +60,19 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.nathanael.pierregignoux.service.ReminderBroadcast;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 public class ProfilFragment extends Fragment {
@@ -75,13 +88,6 @@ public class ProfilFragment extends Fragment {
 
     ArrayList<Double> trajdistvelo;
 
-    boolean habituedesrails;
-    boolean partagevoiture;
-    boolean bonnehabitude;
-    boolean plante;
-    boolean six;
-    boolean sept;
-    boolean huit;
     int counthabitude = 0;
 
 
@@ -92,22 +98,23 @@ public class ProfilFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         profilViewModel = ViewModelProviders.of(this).get(ProfilViewModel.class);
         View root = inflater.inflate(R.layout.fragment_profil, container, false);
+
+        createNotificationChannel();
+
         trajtype = new ArrayList<>();
         trajdistvelo = new ArrayList<Double>();
 
         db = FirebaseFirestore.getInstance();
         name= root.findViewById(R.id.profilnom);
         proimg = root.findViewById(R.id.imageprofil);
-        habituedesrails = false;
-        partagevoiture = false;
-        plante = false;
-        bonnehabitude = false;
+
 
         final double[] velodist = {0};
         final double[] marchedist = {0};
         final double[] raildist = {0};
         final double[] busdist = {0};
         final double[] codist = {0};
+        final double[] ecoCO2 = {0};
 
 
         final double[] deuxRconso = {0};
@@ -116,6 +123,7 @@ public class ProfilFragment extends Fragment {
 
         final double[] moyenneQuizz = {0};
         final double[] intkilometreUser = {0};
+        final double[] bonneH = {0};
 
 
         if (user!= null) {
@@ -135,19 +143,22 @@ public class ProfilFragment extends Fragment {
 
                                 for (String s : trajtype){
                                     if (s.contains("Métro") || s.contains("TRAM") || s.contains("RER")|| s.contains("Train") || s.contains("Covoiturage") || s.contains("Auto-Stop") || s.contains("Vélo") || s.contains("Télétravail")|| s.contains("Marche")){
-                                        counthabitude++;
+                                        bonneH[0]++;
                                     }
                                 }
                                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
                                 String stringbonneH = sharedPreferences.getString("bonneH","5");
+                                String stringbonneHSave = sharedPreferences.getString("bonneHSave", String.valueOf(bonneH[0]));
+
                                 double doublebonneH = Double.parseDouble(stringbonneH);
-                                if (counthabitude >= doublebonneH){
-                                    bonnehabitude = true;
+                                double doublebonneHSave = Double.parseDouble(stringbonneHSave);
+
+                                ImageButton btnbonneH = root.findViewById(R.id.BH);
+
+                                if (bonneH[0]-doublebonneHSave >= doublebonneH){
+                                    btnbonneH.clearColorFilter();
                                 }
-                                ImageButton bonneH = root.findViewById(R.id.BH);
-                                if (bonnehabitude){
-                                    bonneH.clearColorFilter();
-                                }
+
 
                             } else {
 
@@ -204,37 +215,57 @@ public class ProfilFragment extends Fragment {
 
                                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
                                     String stringvelodist = sharedPreferences.getString("velodist","100");
-                                    Log.d("stringvelodist",stringvelodist);
+                                    String stringvelodistSave = sharedPreferences.getString("velodistSave", String.valueOf(velodist[0]));
+
                                     double doublevelodist = Double.parseDouble(stringvelodist);
-                                    if (velodist[0] >= doublevelodist){
+                                    double doublevelodistSave = Double.parseDouble(stringvelodistSave);
+
+                                    if (velodist[0]-doublevelodistSave >= doublevelodist){
                                         maillotJ.clearColorFilter();
                                     }
                                     ImageButton marcheB = root.findViewById(R.id.MB);
 
                                     String stringmarchedist = sharedPreferences.getString("marchedist","100");
+                                    String stringmarchedistSave = sharedPreferences.getString("marchedistSave", String.valueOf(marchedist[0]));
+
                                     double doublemarchedist = Double.parseDouble(stringmarchedist);
-                                    if (marchedist[0] >= doublemarchedist){
+                                    double doublemarchedistSave = Double.parseDouble(stringmarchedistSave);
+
+                                    if (marchedist[0]-doublemarchedistSave >= doublemarchedist){
                                         marcheB.clearColorFilter();
                                     }
 
 
                                     ImageButton interR = root.findViewById(R.id.IR);
                                     String stringraildist = sharedPreferences.getString("raildist","100");
+                                    String stringraildistSave = sharedPreferences.getString("raildistSave", String.valueOf(raildist[0]));
+
                                     double doubleraildist = Double.parseDouble(stringraildist);
-                                    if (raildist[0] >= doubleraildist){
+                                    double doubleraildistSave = Double.parseDouble(stringraildistSave);
+
+                                    if (raildist[0]-doubleraildistSave >= doubleraildist){
                                         interR.setBackgroundColor(getContext().getColor(R.color.colorAccent));
                                     }
 
                                     String stringbusdist = sharedPreferences.getString("busdist","100");
+                                    String stringbusdistSave = sharedPreferences.getString("busdistSave", String.valueOf(busdist[0]));
+
                                     double doublebusdist = Double.parseDouble(stringbusdist);
+                                    double doublebusdistSave = Double.parseDouble(stringbusdistSave);
+
                                     ImageButton rosaP = root.findViewById(R.id.RP);
-                                    if (busdist[0] >= doublebusdist){
+                                    if (busdist[0]-doublebusdistSave >= doublebusdist){
                                         rosaP.clearColorFilter();
                                     }
+
                                     String stringcovoit = sharedPreferences.getString("covoit","100");
+                                    String stringcovoitSave = sharedPreferences.getString("covoitSave", String.valueOf(codist[0]));
+
                                     double doublecovoit = Double.parseDouble(stringcovoit);
+                                    double doublecovoitSave = Double.parseDouble(stringcovoitSave);
+
                                     ImageButton covoit = root.findViewById(R.id.CV);
-                                    if (codist[0] >= doublecovoit){
+                                    if (codist[0]-doublecovoitSave >= doublecovoit){
                                         covoit.clearColorFilter();
                                     }
 
@@ -257,21 +288,33 @@ public class ProfilFragment extends Fragment {
                                     ImageButton motoc = root.findViewById(R.id.MC);
                                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
                                     String stringdeuxRconso = sharedPreferences.getString("deuxRconso","100");
-                                    double doubledeuxRconso = Double.parseDouble(stringdeuxRconso)*100;
-                                    if (deuxRconso[0] <= doubledeuxRconso){
+                                    String stringdeuxRconsoSave = sharedPreferences.getString("deuxRconsoSave", String.valueOf(deuxRconso[0]));
+
+                                    double doubledeuxRconso = Double.parseDouble(stringdeuxRconso)*1000;
+                                    double doubledeuxRconsoSave = Double.parseDouble(stringdeuxRconsoSave)*1000;
+
+                                    if (deuxRconso[0]-doubledeuxRconsoSave <= doubledeuxRconso){
                                         motoc.clearColorFilter();
                                     }
                                     ImageButton voitc = root.findViewById(R.id.VC);
                                     String stringdvoitconso = sharedPreferences.getString("voitconso","100");
-                                    double doubledvoitconso = Double.parseDouble(stringdvoitconso)*100;
-                                    if (voitconso[0] <= doubledvoitconso){
+                                    String stringdvoitconsoSave = sharedPreferences.getString("voitconsoSave", String.valueOf(voitconso[0]));
+
+                                    double doubledvoitconso = Double.parseDouble(stringdvoitconso)*1000;
+                                    double doubledvoitconsoSave = Double.parseDouble(stringdvoitconsoSave)*1000;
+
+                                    if (voitconso[0]-doubledvoitconsoSave <= doubledvoitconso){
                                         voitc.clearColorFilter();
                                     }
 
                                     ImageButton avc = root.findViewById(R.id.AC);
                                     String stringdavconso = sharedPreferences.getString("avconso","100");
-                                    double doubledavconso = Double.parseDouble(stringdavconso)*100;
-                                    if (avconso[0] <= doubledavconso){
+                                    String stringdavconsoSave = sharedPreferences.getString("avconsoSave", String.valueOf(avconso[0]));
+
+                                    double doubledavconso = Double.parseDouble(stringdavconso)*1000;
+                                    double doubledavconsoSave = Double.parseDouble(stringdavconsoSave)*1000;
+
+                                    if (avconso[0]-doubledavconsoSave <= doubledavconso){
                                         avc.clearColorFilter();
                                     }
                                 }
@@ -309,6 +352,16 @@ public class ProfilFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), InfoActivity.class);
+                    intent.putExtra("From","Profil");
+                    startActivity(intent);
+                }
+            });
+
+            Button btnMonth = root.findViewById(R.id.monthbutton);
+            btnMonth.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), MonthActivity.class);
                     startActivity(intent);
                 }
             });
@@ -419,9 +472,12 @@ public class ProfilFragment extends Fragment {
                                 ImageButton qm = root.findViewById(R.id.QM);
                                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
                                 String stringmoyenneQuizz = sharedPreferences.getString("moyenneQuizz","50");
-                                double doubledmoyenneQuizz = Double.parseDouble(stringmoyenneQuizz);
+                                String stringmoyenneQuizzSave = sharedPreferences.getString("moyenneQuizzSave", String.valueOf(moyenneQuizz[0]));
 
-                                if (moyenneQuizz[0] >= doubledmoyenneQuizz){
+                                double doubledmoyenneQuizz = Double.parseDouble(stringmoyenneQuizz);
+                                double doubledmoyenneQuizzSave = Double.parseDouble(stringmoyenneQuizzSave);
+
+                                if (moyenneQuizz[0]-doubledmoyenneQuizzSave >= doubledmoyenneQuizz){
                                     qm.clearColorFilter();
                                 }
                             }
@@ -448,7 +504,6 @@ public class ProfilFragment extends Fragment {
 
                                    if (intConsoUser/1000000 >= 1){
                                         intConsoUser = intConsoUser/1000000;
-
                                         totco2user.setText(Math.round(intConsoUser)+" t/CO2");
                                     }else if(intConsoUser/1000 >= 1){
                                         intConsoUser = intConsoUser/1000;
@@ -465,8 +520,12 @@ public class ProfilFragment extends Fragment {
                                     ImageButton globeT = root.findViewById(R.id.GT);
                                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
                                     String stringglobeT = sharedPreferences.getString("globeT","1000");
-                                    Double DoubleglobeT = Double.parseDouble(stringglobeT);
-                                    if (intkilometreUser[0] >= DoubleglobeT){
+                                    String stringglobeTSave = sharedPreferences.getString("globeTSave", String.valueOf(intkilometreUser[0]));
+
+                                   double DoubleglobeT = Double.parseDouble(stringglobeT);
+                                   double DoubleglobeTSave = Double.parseDouble(stringglobeTSave);
+
+                                   if (intkilometreUser[0]-DoubleglobeTSave >= DoubleglobeT){
                                         globeT.clearColorFilter();
                                     }
 
@@ -474,34 +533,41 @@ public class ProfilFragment extends Fragment {
 
                                     String eco_co2 = document.getString("eco_co2");
                                     TextView toteco_co2 = root.findViewById(R.id.totecoCO2);
-                                    double intEco_co2 = Double.parseDouble(eco_co2);
-                                    if (intEco_co2 >=0){
-                                        if (intEco_co2/1000000 >= 1){
-                                            intEco_co2 = intEco_co2/1000000;
-                                            toteco_co2.setText(Math.round(intEco_co2)+" t/CO2");
-                                        }else if(intEco_co2/1000 >= 1){
-                                            intEco_co2 = intEco_co2/1000;
-                                            toteco_co2.setText(Math.round(intEco_co2)+" kg/CO2");
+                                    ecoCO2[0] = Double.parseDouble(eco_co2);
+                                    if (ecoCO2[0] >=0){
+                                        if (ecoCO2[0]/1000000 >= 1){
+                                            ecoCO2[0] = ecoCO2[0]/1000000;
+                                            toteco_co2.setText(Math.round(ecoCO2[0])+" t/CO2");
+                                        }else if(ecoCO2[0]/1000 >= 1){
+                                            ecoCO2[0] = ecoCO2[0]/1000;
+                                            toteco_co2.setText(Math.round(ecoCO2[0])+" kg/CO2");
                                         }else {
-                                            toteco_co2.setText(Math.round(intEco_co2)+" g/CO2");
+                                            toteco_co2.setText(Math.round(ecoCO2[0])+" g/CO2");
                                         }
-                                        ImageButton planteV = root.findViewById(R.id.PV);
-                                        plante = true;
-                                        if (plante){
-                                            planteV.clearColorFilter();
-                                        }
+
                                     }
+                                   ImageButton planteV = root.findViewById(R.id.PV);
+                                   String stringplante = sharedPreferences.getString("planteVerte", "0");
+                                   String stringplanteSave = sharedPreferences.getString("planteVSave", String.valueOf(ecoCO2[0]));
+                                   Log.d("ntmdefi",stringplante);
 
 
-                                   if (intEco_co2 < 0){
-                                       if (intEco_co2/1000000 <= -1){
-                                           intEco_co2 = intEco_co2/1000000;
-                                           toteco_co2.setText(intEco_co2+" t/CO2");
-                                       }else if(intEco_co2/1000 <= -1){
-                                           intEco_co2 = intEco_co2/1000;
-                                           toteco_co2.setText(intEco_co2+" kg/CO2");
+                                   double doublePlanteVSave = Double.parseDouble(stringplanteSave);
+                                   double doublePlante = Double.parseDouble(stringplante);
+
+                                   if (ecoCO2[0]-doublePlanteVSave < doublePlante){
+                                       planteV.clearColorFilter();
+                                   }
+
+                                   if (ecoCO2[0] < 0){
+                                       if (ecoCO2[0]/1000000 <= -1){
+                                           ecoCO2[0] = ecoCO2[0]/1000000;
+                                           toteco_co2.setText(ecoCO2[0]+" t/CO2");
+                                       }else if(ecoCO2[0]/1000 <= -1){
+                                           ecoCO2[0] = ecoCO2[0]/1000;
+                                           toteco_co2.setText(ecoCO2[0]+" kg/CO2");
                                        }else {
-                                           toteco_co2.setText(intEco_co2+" g/CO2");
+                                           toteco_co2.setText(ecoCO2[0]+" g/CO2");
                                        }
 
                                    }
@@ -520,12 +586,17 @@ public class ProfilFragment extends Fragment {
                                                     for (QueryDocumentSnapshot document : task.getResult()) {
 
                                                         String txtConsoMois = document.getString("consommation");
-                                                        Double intConsoMois= Double.parseDouble(txtConsoMois);
-                                                        Log.d("compamois", String.valueOf(intConsoMois));
-                                                        Log.d("compamois", String.valueOf(finalIntConsoUser));
-                                                        Double comparatifmois = (finalIntConsoUser*100/intConsoMois)-100;
-                                                        TextView prevMonth = root.findViewById(R.id.totMois);
-                                                        prevMonth.setText(comparatifmois+"%");
+                                                        double intConsoMois= Double.parseDouble(txtConsoMois);
+
+                                                        if (intConsoMois>0){
+                                                            double comparatifmois = (finalIntConsoUser*100/intConsoMois)-100;
+                                                            TextView prevMonth = root.findViewById(R.id.totMois);
+                                                            prevMonth.setText(comparatifmois+"%");
+                                                        }else {
+                                                            TextView prevMonth = root.findViewById(R.id.totMois);
+                                                            prevMonth.setText(0+"%");
+                                                        }
+
 
 
                                                     }
@@ -558,7 +629,6 @@ public class ProfilFragment extends Fragment {
         planteV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("btnimage","click");
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
                 bottomSheetDialog.setContentView(R.layout.activity_badges);
                 bottomSheetDialog.setCanceledOnTouchOutside(true);
@@ -568,12 +638,107 @@ public class ProfilFragment extends Fragment {
                 TextView statueBadges = bottomSheetDialog.findViewById(R.id.statueBadges);
                 TextView descBadges = bottomSheetDialog.findViewById(R.id.descBadges);
 
-                LinearLayout modif = bottomSheetDialog.findViewById(R.id.modifdefi);
-                modif.removeAllViews();
+                Date now = new Date();
+
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
+                String stringplanteVSave = sharedPreferences.getString("planteVSave", String.valueOf(ecoCO2[0]));
+                String stringplanteV = sharedPreferences.getString("planteVerte", "0");
+
+                RadioButton btnsemaine = bottomSheetDialog.findViewById(R.id.btnsemaine);
+                btnsemaine.toggle();
+
+                final Boolean[] isWeek = {true};
+                final Boolean[] isMonth = {false};
+                final Boolean[] isYear = {false};
+
+
+                btnsemaine.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                         isWeek[0] = true;
+                         isMonth[0] = false;
+                         isYear[0] = false;
+                    }
+                });
+
+
+                RadioButton btnmois = bottomSheetDialog.findViewById(R.id.btnmois);
+                btnmois.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = true;
+                        isYear[0] = false;
+
+                    }
+                });
+
+                RadioButton btnannee = bottomSheetDialog.findViewById(R.id.btnannee);
+                btnannee.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = false;
+                        isYear[0] = true;
+
+                    }
+                });
+
+
+                Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
+                savedef.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+                        intent.putExtra("title","TEST1");
+                        intent.putExtra("texte","TEST1");
+
+                        cancelAlarmIfExists(getContext(),0,intent);
+
+                        PendingIntent pendingIntent =  PendingIntent.getBroadcast(getContext(),0,intent,0);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(now);
+
+                        if (isWeek[0]){
+                            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                        }else if(isMonth[0]){
+                            calendar.add(Calendar.MONTH, 1);
+                        }else if(isYear[0]){
+                            calendar.add(Calendar.YEAR, 1);
+
+                        }
+
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                        EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
+
+                        String newdef = ndef.getText().toString();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        if (!newdef.isEmpty()){
+                            editor.putString("planteVerte",newdef);
+                        }
+                        editor.putString("planteVSave", String.valueOf(ecoCO2[0]));
+                        editor.apply();
+
+                        Intent intent2 = new Intent(getActivity(), Main2Activity.class);
+                        startActivity(intent2);
+                        Log.d("minteur", String.valueOf(calendar.getTime()));
+
+                    }
+                });
+
+
+
+
+                double doublePlanteVSave = Double.parseDouble(stringplanteVSave);
+                double currentPlanteV = ecoCO2[0]-doublePlanteVSave;
 
                 titleBadges.setText(getString(R.string.plantV));
                 descBadges.setText(getString(R.string.plantVDesc));
-                statueBadges.setText("");
+                statueBadges.setText(currentPlanteV+" < "+stringplanteV);
                 imgBadges.setImageResource(R.drawable.ic_plantev);
                 bottomSheetDialog.show();
             }
@@ -592,27 +757,105 @@ public class ProfilFragment extends Fragment {
                 TextView statueBadges = bottomSheetDialog.findViewById(R.id.statueBadges);
                 TextView descBadges = bottomSheetDialog.findViewById(R.id.descBadges);
 
-                Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
-                EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
-                savedef.setOnClickListener(new View.OnClickListener() {
+
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+                RadioButton btnsemaine = bottomSheetDialog.findViewById(R.id.btnsemaine);
+                btnsemaine.toggle();
+
+                btnsemaine.toggle();
+
+                final Boolean[] isWeek = {true};
+                final Boolean[] isMonth = {false};
+                final Boolean[] isYear = {false};
+
+
+                btnsemaine.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("defi","click QM");
-                        String newdef = ndef.getText().toString();
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("moyenneQuizz",newdef);
-                        editor.apply();
-                        Intent intent = new Intent(getActivity(), Main2Activity.class);
-                        startActivity(intent);
+                        isWeek[0] = true;
+                        isMonth[0] = false;
+                        isYear[0] = false;
                     }
                 });
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                String stringvelodist = sharedPreferences.getString("moyenneQuizz","100");
+
+                RadioButton btnmois = bottomSheetDialog.findViewById(R.id.btnmois);
+                btnmois.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = true;
+                        isYear[0] = false;
+
+                    }
+                });
+
+                RadioButton btnannee = bottomSheetDialog.findViewById(R.id.btnannee);
+                btnannee.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = false;
+                        isYear[0] = true;
+
+                    }
+                });
+
+
+                Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
+                savedef.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+                        intent.putExtra("title","TEST2");
+                        intent.putExtra("texte","TEST2");
+
+                        cancelAlarmIfExists(getContext(),1,intent);
+
+                        Date now = new Date();
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(now);
+
+                        if (isWeek[0]){
+                            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                        }else if(isMonth[0]){
+                            calendar.add(Calendar.MONTH, 1);
+                        }else if(isYear[0]){
+                            calendar.add(Calendar.YEAR, 1);
+
+                        }
+
+                        PendingIntent pendingIntent =  PendingIntent.getBroadcast(getContext(),1,intent,0);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                        EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
+
+                        String newdef = ndef.getText().toString();
+                        if (!newdef.isEmpty()){
+                            editor.putString("moyenneQuizz",newdef);
+                        }
+                        editor.putString("moyenneQuizzSave", String.valueOf(moyenneQuizz[0]));
+                        editor.apply();
+
+                        Intent intent2 = new Intent(getActivity(), Main2Activity.class);
+                        startActivity(intent2);
+                    }
+                });
 
                 titleBadges.setText(getString(R.string.QM));
-                statueBadges.setText(getString(R.string.QMSTATUE)+" "+moyenneQuizz[0]+"/"+stringvelodist);
+                String stringmoyenneQuizzSave = sharedPreferences.getString("moyenneQuizzSave", String.valueOf(moyenneQuizz[0]));
+                String stringmoyenneQuizz = sharedPreferences.getString("moyenneQuizz", "0");
+
+                double doublemoyenneQuizzSave = Double.parseDouble(stringmoyenneQuizzSave);
+                double currentmoyenneQuizz = moyenneQuizz[0]-doublemoyenneQuizzSave;
+
+                statueBadges.setText(getString(R.string.QMSTATUE)+" "+currentmoyenneQuizz+"/"+stringmoyenneQuizz);
                 descBadges.setText(getString(R.string.QMDESC));
                 imgBadges.setImageResource(R.drawable.ic_lepers);
                 bottomSheetDialog.show();
@@ -635,37 +878,111 @@ public class ProfilFragment extends Fragment {
                 TextView statueBadges = bottomSheetDialog.findViewById(R.id.statueBadges);
                 TextView descBadges = bottomSheetDialog.findViewById(R.id.descBadges);
 
-                Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
-                EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
-                savedef.setOnClickListener(new View.OnClickListener() {
+                RadioButton btnsemaine = bottomSheetDialog.findViewById(R.id.btnsemaine);
+                btnsemaine.toggle();
+
+                btnsemaine.toggle();
+
+                final Boolean[] isWeek = {true};
+                final Boolean[] isMonth = {false};
+                final Boolean[] isYear = {false};
+
+
+                btnsemaine.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("defi","click voitconso");
-                        String newdef = ndef.getText().toString();
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("voitconso",newdef);
-                        editor.apply();
-                        Intent intent = new Intent(getActivity(), Main2Activity.class);
-                        startActivity(intent);
+                        isWeek[0] = true;
+                        isMonth[0] = false;
+                        isYear[0] = false;
                     }
                 });
 
+
+                RadioButton btnmois = bottomSheetDialog.findViewById(R.id.btnmois);
+                btnmois.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = true;
+                        isYear[0] = false;
+
+                    }
+                });
+
+                RadioButton btnannee = bottomSheetDialog.findViewById(R.id.btnannee);
+                btnannee.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = false;
+                        isYear[0] = true;
+
+                    }
+                });
+
+                Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
+                EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                String stringvelodist = sharedPreferences.getString("voitconso","100");
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                savedef.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+                        intent.putExtra("title","TEST3");
+                        intent.putExtra("texte","TEST3");
+
+                        cancelAlarmIfExists(getContext(),2,intent);
+
+                        Date now = new Date();
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(now);
+
+                        if (isWeek[0]){
+                            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                        }else if(isMonth[0]){
+                            calendar.add(Calendar.MONTH, 1);
+                        }else if(isYear[0]){
+                            calendar.add(Calendar.YEAR, 1);
+
+                        }
+
+                        PendingIntent pendingIntent =  PendingIntent.getBroadcast(getContext(),2,intent,0);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                        EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
+
+                        String newdef = ndef.getText().toString();
+                        if (!newdef.isEmpty()){
+                            editor.putString("voitconso",newdef);
+                        }
+                        editor.putString("voitconsoSave", String.valueOf(voitconso[0]));
+                        editor.apply();
+
+                        Intent intent2 = new Intent(getActivity(), Main2Activity.class);
+                        startActivity(intent2);
+                    }
+                });
+
+                String stringvoitconso = sharedPreferences.getString("voitconso","100");
+                String stringvoitconsoSave = sharedPreferences.getString("voitconsoSave", String.valueOf(voitconso[0]));
+                double doublevoitconsoSave = Double.parseDouble(stringvoitconsoSave);
+                double currentvoitconso = voitconso[0]-doublevoitconsoSave;
 
                 titleBadges.setText(getString(R.string.VOITC));
-                statueBadges.setText(Math.round(voitconso[0])+" < "+stringvelodist+" kg/CO2");
+                statueBadges.setText(Math.round(currentvoitconso)+" < "+stringvoitconso+" kg/CO2");
                 descBadges.setText(getString(R.string.VOITCDESC));
                 imgBadges.setImageResource(R.drawable.ic_voit);
 
                 bottomSheetDialog.show();
             }
         });
-        ImageButton bonneH = root.findViewById(R.id.BH);
-        bonneH.setColorFilter(filter);
+        ImageButton btnimgbonneH = root.findViewById(R.id.BH);
+        btnimgbonneH.setColorFilter(filter);
 
-        bonneH.setOnClickListener(new View.OnClickListener() {
+        btnimgbonneH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
@@ -679,25 +996,98 @@ public class ProfilFragment extends Fragment {
 
                 Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
                 EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
-                savedef.setOnClickListener(new View.OnClickListener() {
+
+                RadioButton btnsemaine = bottomSheetDialog.findViewById(R.id.btnsemaine);
+                btnsemaine.toggle();
+
+                btnsemaine.toggle();
+
+                final Boolean[] isWeek = {true};
+                final Boolean[] isMonth = {false};
+                final Boolean[] isYear = {false};
+
+
+                btnsemaine.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("defi","click voitconso");
-                        String newdef = ndef.getText().toString();
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("bonneH",newdef);
-                        editor.apply();
-                        Intent intent = new Intent(getActivity(), Main2Activity.class);
-                        startActivity(intent);
+                        isWeek[0] = true;
+                        isMonth[0] = false;
+                        isYear[0] = false;
                     }
                 });
 
+
+                RadioButton btnmois = bottomSheetDialog.findViewById(R.id.btnmois);
+                btnmois.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = true;
+                        isYear[0] = false;
+
+                    }
+                });
+
+                RadioButton btnannee = bottomSheetDialog.findViewById(R.id.btnannee);
+                btnannee.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = false;
+                        isYear[0] = true;
+
+                    }
+                });
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                String stringvelodist = sharedPreferences.getString("bonneH","10");
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                savedef.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+                        intent.putExtra("title","TEST4");
+                        intent.putExtra("texte","TEST4");
+
+                        cancelAlarmIfExists(getContext(),3,intent);
+
+                        Date now = new Date();
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(now);
+
+                        if (isWeek[0]){
+                            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                        }else if(isMonth[0]){
+                            calendar.add(Calendar.MONTH, 1);
+                        }else if(isYear[0]){
+                            calendar.add(Calendar.YEAR, 1);
+
+                        }
+
+                        PendingIntent pendingIntent =  PendingIntent.getBroadcast(getContext(),3,intent,0);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                        EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
+
+                        String newdef = ndef.getText().toString();
+                        if (!newdef.isEmpty()){
+                            editor.putString("bonneH",newdef);
+                        }
+                        editor.putString("bonneHSAVE", String.valueOf(bonneH[0]));
+                        editor.apply();
+
+                        Intent intent2 = new Intent(getActivity(), Main2Activity.class);
+                        startActivity(intent2);
+                    }
+                });
+                String stringbonneH = sharedPreferences.getString("bonneH","5");
+                String stringbonneHSave = sharedPreferences.getString("bonneHSave", String.valueOf(bonneH[0]));
+                double doublebonneHSave = Double.parseDouble(stringbonneHSave);
+                double currentbonneH = bonneH[0]-doublebonneHSave;
 
                 titleBadges.setText(getString(R.string.bonneH));
-                statueBadges.setText(counthabitude+"/"+stringvelodist);
+                statueBadges.setText(currentbonneH+"/"+bonneH[0]);
                 descBadges.setText(getString(R.string.bonneHDESC));
                 imgBadges.setImageResource(R.drawable.ic_bonneh);
 
@@ -720,27 +1110,102 @@ public class ProfilFragment extends Fragment {
                 TextView statueBadges = bottomSheetDialog.findViewById(R.id.statueBadges);
                 TextView descBadges = bottomSheetDialog.findViewById(R.id.descBadges);
 
+                RadioButton btnsemaine = bottomSheetDialog.findViewById(R.id.btnsemaine);
+                btnsemaine.toggle();
+
+                btnsemaine.toggle();
+
+                final Boolean[] isWeek = {true};
+                final Boolean[] isMonth = {false};
+                final Boolean[] isYear = {false};
+
+
+                btnsemaine.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = true;
+                        isMonth[0] = false;
+                        isYear[0] = false;
+                    }
+                });
+
+
+                RadioButton btnmois = bottomSheetDialog.findViewById(R.id.btnmois);
+                btnmois.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = true;
+                        isYear[0] = false;
+
+                    }
+                });
+
+                RadioButton btnannee = bottomSheetDialog.findViewById(R.id.btnannee);
+                btnannee.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = false;
+                        isYear[0] = true;
+
+                    }
+                });
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
                 Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
                 EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("defi","click avconso");
+                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+                        intent.putExtra("title","TEST5");
+                        intent.putExtra("texte","TEST5");
+
+                        cancelAlarmIfExists(getContext(),4,intent);
+
+                        Date now = new Date();
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(now);
+
+                        if (isWeek[0]){
+                            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                        }else if(isMonth[0]){
+                            calendar.add(Calendar.MONTH, 1);
+                        }else if(isYear[0]){
+                            calendar.add(Calendar.YEAR, 1);
+
+                        }
+
+                        PendingIntent pendingIntent =  PendingIntent.getBroadcast(getContext(),4,intent,0);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                        EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
+
                         String newdef = ndef.getText().toString();
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("avconso",newdef);
+                        if (!newdef.isEmpty()){
+                            editor.putString("avconso",newdef);
+                        }
+                        editor.putString("avconsoSave", String.valueOf(avconso[0]));
                         editor.apply();
-                        Intent intent = new Intent(getActivity(), Main2Activity.class);
-                        startActivity(intent);
+
+                        Intent intent2 = new Intent(getActivity(), Main2Activity.class);
+                        startActivity(intent2);
                     }
                 });
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                String stringvelodist = sharedPreferences.getString("avconso","100");
+                String stringdavconso = sharedPreferences.getString("avconso","100");
+                String stringdavconsoSave = sharedPreferences.getString("avconsoSave", String.valueOf(avconso[0]));
+
+                double doubledavconsoSave = Double.parseDouble(stringdavconsoSave);
+                double currentavconso = avconso[0]-doubledavconsoSave;
 
                 titleBadges.setText(getString(R.string.avc));
-                statueBadges.setText(Math.round(avconso[0])+" <"+stringvelodist+" kg/CO2");
+                statueBadges.setText(Math.round(currentavconso)+" <"+stringdavconso+" kg/CO2");
                 descBadges.setText(getString(R.string.avcDESC));
                 imgBadges.setImageResource(R.drawable.ic_pilote);
 
@@ -761,28 +1226,103 @@ public class ProfilFragment extends Fragment {
                 TextView statueBadges = bottomSheetDialog.findViewById(R.id.statueBadges);
                 TextView descBadges = bottomSheetDialog.findViewById(R.id.descBadges);
 
+                RadioButton btnsemaine = bottomSheetDialog.findViewById(R.id.btnsemaine);
+                btnsemaine.toggle();
+
+                btnsemaine.toggle();
+
+                final Boolean[] isWeek = {true};
+                final Boolean[] isMonth = {false};
+                final Boolean[] isYear = {false};
+
+
+                btnsemaine.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = true;
+                        isMonth[0] = false;
+                        isYear[0] = false;
+                    }
+                });
+
+
+                RadioButton btnmois = bottomSheetDialog.findViewById(R.id.btnmois);
+                btnmois.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = true;
+                        isYear[0] = false;
+
+                    }
+                });
+
+                RadioButton btnannee = bottomSheetDialog.findViewById(R.id.btnannee);
+                btnannee.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = false;
+                        isYear[0] = true;
+
+                    }
+                });
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
                 Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
                 EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("defi","click Globt");
+                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+                        intent.putExtra("title","TEST6");
+                        intent.putExtra("texte","TEST6");
+
+                        cancelAlarmIfExists(getContext(),5,intent);
+
+                        Date now = new Date();
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(now);
+
+                        if (isWeek[0]){
+                            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                        }else if(isMonth[0]){
+                            calendar.add(Calendar.MONTH, 1);
+                        }else if(isYear[0]){
+                            calendar.add(Calendar.YEAR, 1);
+
+                        }
+
+                        PendingIntent pendingIntent =  PendingIntent.getBroadcast(getContext(),5,intent,0);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                        EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
+
                         String newdef = ndef.getText().toString();
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("globeT",newdef);
+                        if (!newdef.isEmpty()){
+                            editor.putString("globeT",newdef);
+                        }
+                        editor.putString("globeTSave", String.valueOf(intkilometreUser[0]));
                         editor.apply();
-                        Intent intent = new Intent(getActivity(), Main2Activity.class);
-                        startActivity(intent);
+
+                        Intent intent2 = new Intent(getActivity(), Main2Activity.class);
+                        startActivity(intent2);
                     }
                 });
 
 
 
                 titleBadges.setText(getString(R.string.globeT));
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
                 String stringglobeT = sharedPreferences.getString("globeT","1000");
-                statueBadges.setText(Math.round(intkilometreUser[0])+" > "+stringglobeT+ " km");
+                String stringglobeTSave = sharedPreferences.getString("globeTSave", String.valueOf(intkilometreUser[0]));
+
+                double DoubleglobeTSave = Double.parseDouble(stringglobeTSave);
+                double currentglobT = intkilometreUser[0]-DoubleglobeTSave;
+
+                statueBadges.setText(Math.round(currentglobT)+" > "+stringglobeT+ " km");
                 descBadges.setText(getString(R.string.globeTDESC));
                 imgBadges.setImageResource(R.drawable.ic_globet);
                 bottomSheetDialog.show();
@@ -805,27 +1345,101 @@ public class ProfilFragment extends Fragment {
                 TextView statueBadges = bottomSheetDialog.findViewById(R.id.statueBadges);
                 TextView descBadges = bottomSheetDialog.findViewById(R.id.descBadges);
 
+                RadioButton btnsemaine = bottomSheetDialog.findViewById(R.id.btnsemaine);
+                btnsemaine.toggle();
+
+                btnsemaine.toggle();
+
+                final Boolean[] isWeek = {true};
+                final Boolean[] isMonth = {false};
+                final Boolean[] isYear = {false};
+
+
+                btnsemaine.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = true;
+                        isMonth[0] = false;
+                        isYear[0] = false;
+                    }
+                });
+
+
+                RadioButton btnmois = bottomSheetDialog.findViewById(R.id.btnmois);
+                btnmois.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = true;
+                        isYear[0] = false;
+
+                    }
+                });
+
+                RadioButton btnannee = bottomSheetDialog.findViewById(R.id.btnannee);
+                btnannee.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = false;
+                        isYear[0] = true;
+
+                    }
+                });
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
                 Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
                 EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("defi","click avconso");
+                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+                        intent.putExtra("title","TEST7");
+                        intent.putExtra("texte","TEST7");
+
+                        cancelAlarmIfExists(getContext(),6,intent);
+
+                        Date now = new Date();
+                        PendingIntent pendingIntent =  PendingIntent.getBroadcast(getContext(),6,intent,0);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(now);
+
+                        if (isWeek[0]){
+                            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                        }else if(isMonth[0]){
+                            calendar.add(Calendar.MONTH, 1);
+                        }else if(isYear[0]){
+                            calendar.add(Calendar.YEAR, 1);
+
+                        }
+
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                        EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
+
                         String newdef = ndef.getText().toString();
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("deuxRconso",newdef);
+                        if (!newdef.isEmpty()){
+                            editor.putString("deuxRconso",newdef);
+                        }
+                        editor.putString("deuxRconsoSave", String.valueOf(ecoCO2[0]));
                         editor.apply();
-                        Intent intent = new Intent(getActivity(), Main2Activity.class);
-                        startActivity(intent);
+
+                        Intent intent2 = new Intent(getActivity(), Main2Activity.class);
+                        startActivity(intent2);
                     }
                 });
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                String stringvelodist = sharedPreferences.getString("deuxRconso","100");
+                String stringdeuxRconso = sharedPreferences.getString("deuxRconso","100");
+                String stringdeuxRconsoSave = sharedPreferences.getString("deuxRconsoSave", String.valueOf(deuxRconso[0]));
+
+                double doubledeuxRconsoSave = Double.parseDouble(stringdeuxRconsoSave)*1000;
+                double currentdeuxRconso = deuxRconso[0]-doubledeuxRconsoSave;
 
                 titleBadges.setText(getString(R.string.motoc));
-                statueBadges.setText(Math.round(deuxRconso[0])+" <"+stringvelodist+" kg/CO2");
+                statueBadges.setText(Math.round(currentdeuxRconso)+" <"+stringdeuxRconso+" kg/CO2");
                 descBadges.setText(getString(R.string.motocDESC));
                 imgBadges.setImageResource(R.drawable.ic_moto);
 
@@ -848,27 +1462,102 @@ public class ProfilFragment extends Fragment {
                 TextView statueBadges = bottomSheetDialog.findViewById(R.id.statueBadges);
                 TextView descBadges = bottomSheetDialog.findViewById(R.id.descBadges);
 
+                RadioButton btnsemaine = bottomSheetDialog.findViewById(R.id.btnsemaine);
+                btnsemaine.toggle();
+
+                btnsemaine.toggle();
+
+                final Boolean[] isWeek = {true};
+                final Boolean[] isMonth = {false};
+                final Boolean[] isYear = {false};
+
+
+                btnsemaine.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = true;
+                        isMonth[0] = false;
+                        isYear[0] = false;
+                    }
+                });
+
+
+                RadioButton btnmois = bottomSheetDialog.findViewById(R.id.btnmois);
+                btnmois.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = true;
+                        isYear[0] = false;
+
+                    }
+                });
+
+                RadioButton btnannee = bottomSheetDialog.findViewById(R.id.btnannee);
+                btnannee.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = false;
+                        isYear[0] = true;
+
+                    }
+                });
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
                 Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
                 EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("defi","click covoit");
+                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+                        intent.putExtra("title","TEST8");
+                        intent.putExtra("texte","TEST8");
+
+                        cancelAlarmIfExists(getContext(),7,intent);
+
+                        Date now = new Date();
+                        PendingIntent pendingIntent =  PendingIntent.getBroadcast(getContext(),7,intent,0);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(now);
+
+                        if (isWeek[0]){
+                            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                        }else if(isMonth[0]){
+                            calendar.add(Calendar.MONTH, 1);
+                        }else if(isYear[0]){
+                            calendar.add(Calendar.YEAR, 1);
+
+                        }
+
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                        EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
+
                         String newdef = ndef.getText().toString();
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("covoit",newdef);
+                        if (!newdef.isEmpty()){
+                            editor.putString("covoit",newdef);
+                        }
+                        editor.putString("covoitSave", String.valueOf(codist[0]));
                         editor.apply();
-                        Intent intent = new Intent(getActivity(), Main2Activity.class);
-                        startActivity(intent);
+
+                        Intent intent2 = new Intent(getActivity(), Main2Activity.class);
+                        startActivity(intent2);
                     }
                 });
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                String stringvelodist = sharedPreferences.getString("covoit","100");
+                String stringcovoit = sharedPreferences.getString("covoit","100");
+                String stringcovoitSave = sharedPreferences.getString("covoitSave", String.valueOf(codist[0]));
+
+                double doublecovoitSave = Double.parseDouble(stringcovoitSave);
+
+                double currentcovoit = codist[0]-doublecovoitSave;
 
                 titleBadges.setText(getString(R.string.covoit));
-                statueBadges.setText(Math.round(codist[0])+"/"+stringvelodist+" km");
+                statueBadges.setText(Math.round(currentcovoit)+"/"+stringcovoit+" km");
                 descBadges.setText(getString(R.string.covoitDESC));
                 imgBadges.setImageResource(R.drawable.ic_covoit_1);
                 bottomSheetDialog.show();
@@ -890,27 +1579,102 @@ public class ProfilFragment extends Fragment {
                 TextView statueBadges = bottomSheetDialog.findViewById(R.id.statueBadges);
                 TextView descBadges = bottomSheetDialog.findViewById(R.id.descBadges);
 
+                RadioButton btnsemaine = bottomSheetDialog.findViewById(R.id.btnsemaine);
+                btnsemaine.toggle();
+
+                btnsemaine.toggle();
+
+                final Boolean[] isWeek = {true};
+                final Boolean[] isMonth = {false};
+                final Boolean[] isYear = {false};
+
+
+                btnsemaine.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = true;
+                        isMonth[0] = false;
+                        isYear[0] = false;
+                    }
+                });
+
+
+                RadioButton btnmois = bottomSheetDialog.findViewById(R.id.btnmois);
+                btnmois.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = true;
+                        isYear[0] = false;
+
+                    }
+                });
+
+                RadioButton btnannee = bottomSheetDialog.findViewById(R.id.btnannee);
+                btnannee.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = false;
+                        isYear[0] = true;
+
+                    }
+                });
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
                 Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
                 EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("defi","click busdist");
+                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+                        intent.putExtra("title","TEST9");
+                        intent.putExtra("texte","TEST9");
+
+                        cancelAlarmIfExists(getContext(),8,intent);
+
+                        Date now = new Date();
+                        PendingIntent pendingIntent =  PendingIntent.getBroadcast(getContext(),8,intent,0);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(now);
+
+                        if (isWeek[0]){
+                            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                        }else if(isMonth[0]){
+                            calendar.add(Calendar.MONTH, 1);
+                        }else if(isYear[0]){
+                            calendar.add(Calendar.YEAR, 1);
+
+                        }
+
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                        EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
+
                         String newdef = ndef.getText().toString();
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("busdist",newdef);
+                        if (!newdef.isEmpty()){
+                            editor.putString("busdist",newdef);
+                        }
+                        editor.putString("busdistSave", String.valueOf(busdist[0]));
                         editor.apply();
-                        Intent intent = new Intent(getActivity(), Main2Activity.class);
-                        startActivity(intent);
+
+                        Intent intent2 = new Intent(getActivity(), Main2Activity.class);
+                        startActivity(intent2);
                     }
                 });
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                String stringvelodist = sharedPreferences.getString("busdist","100");
+                String stringbusdist = sharedPreferences.getString("busdist","100");
+                String stringbusdistSave = sharedPreferences.getString("busdistSave", String.valueOf(busdist[0]));
+
+                double doublebusdistSave = Double.parseDouble(stringbusdistSave);
+                double currentbustdist = busdist[0]-doublebusdistSave;
 
                 titleBadges.setText(getString(R.string.rosap));
-                statueBadges.setText(Math.round(busdist[0])+"/"+stringvelodist+" km");
+                statueBadges.setText(Math.round(currentbustdist)+"/"+stringbusdist+" km");
                 descBadges.setText(getString(R.string.rosapDESC));
                 imgBadges.setImageResource(R.drawable.ic_imperial);
                 bottomSheetDialog.show();
@@ -932,27 +1696,103 @@ public class ProfilFragment extends Fragment {
                 TextView statueBadges = bottomSheetDialog.findViewById(R.id.statueBadges);
                 TextView descBadges = bottomSheetDialog.findViewById(R.id.descBadges);
 
+                RadioButton btnsemaine = bottomSheetDialog.findViewById(R.id.btnsemaine);
+                btnsemaine.toggle();
+
+                btnsemaine.toggle();
+
+                final Boolean[] isWeek = {true};
+                final Boolean[] isMonth = {false};
+                final Boolean[] isYear = {false};
+
+
+                btnsemaine.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = true;
+                        isMonth[0] = false;
+                        isYear[0] = false;
+                    }
+                });
+
+
+                RadioButton btnmois = bottomSheetDialog.findViewById(R.id.btnmois);
+                btnmois.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = true;
+                        isYear[0] = false;
+
+                    }
+                });
+
+                RadioButton btnannee = bottomSheetDialog.findViewById(R.id.btnannee);
+                btnannee.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = false;
+                        isYear[0] = true;
+
+                    }
+                });
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
                 Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
                 EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("defi","click busdist");
+                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+                        intent.putExtra("title","TEST10");
+                        intent.putExtra("texte","TEST10");
+
+                        cancelAlarmIfExists(getContext(),9,intent);
+
+                        Date now = new Date();
+                        PendingIntent pendingIntent =  PendingIntent.getBroadcast(getContext(),9,intent,0);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(now);
+
+                        if (isWeek[0]){
+                            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                        }else if(isMonth[0]){
+                            calendar.add(Calendar.MONTH, 1);
+                        }else if(isYear[0]){
+                            calendar.add(Calendar.YEAR, 1);
+
+                        }
+
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                        EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
+
                         String newdef = ndef.getText().toString();
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("raildist",newdef);
+                        if (!newdef.isEmpty()){
+                            editor.putString("raildist",newdef);
+                        }
+                        editor.putString("raildistSave", String.valueOf(raildist[0]));
                         editor.apply();
-                        Intent intent = new Intent(getActivity(), Main2Activity.class);
-                        startActivity(intent);
+
+                        Intent intent2 = new Intent(getActivity(), Main2Activity.class);
+                        startActivity(intent2);
                     }
                 });
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                String stringvelodist = sharedPreferences.getString("raildist","100");
+                String stringraildist = sharedPreferences.getString("raildist","100");
+                String stringraildistSave = sharedPreferences.getString("raildistSave", String.valueOf(raildist[0]));
+
+                double doubleraildistSave = Double.parseDouble(stringraildistSave);
+
+                double currentraildist = raildist[0]-doubleraildistSave;
 
                 titleBadges.setText(getString(R.string.interR));
-                statueBadges.setText(Math.round(raildist[0])+"/"+stringvelodist+" km");
+                statueBadges.setText(Math.round(currentraildist)+"/"+stringraildist+" km");
                 descBadges.setText(getString(R.string.interRDESC));
                 imgBadges.setImageResource(R.drawable.ic_harry);
 
@@ -976,27 +1816,102 @@ public class ProfilFragment extends Fragment {
                 TextView statueBadges = bottomSheetDialog.findViewById(R.id.statueBadges);
                 TextView descBadges = bottomSheetDialog.findViewById(R.id.descBadges);
 
+                RadioButton btnsemaine = bottomSheetDialog.findViewById(R.id.btnsemaine);
+                btnsemaine.toggle();
+
+                btnsemaine.toggle();
+
+                final Boolean[] isWeek = {true};
+                final Boolean[] isMonth = {false};
+                final Boolean[] isYear = {false};
+
+
+                btnsemaine.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = true;
+                        isMonth[0] = false;
+                        isYear[0] = false;
+                    }
+                });
+
+
+                RadioButton btnmois = bottomSheetDialog.findViewById(R.id.btnmois);
+                btnmois.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = true;
+                        isYear[0] = false;
+
+                    }
+                });
+
+                RadioButton btnannee = bottomSheetDialog.findViewById(R.id.btnannee);
+                btnannee.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = false;
+                        isYear[0] = true;
+
+                    }
+                });
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
                 Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
                 EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("defi","click marchedist");
+                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+                        intent.putExtra("title","TEST11");
+                        intent.putExtra("texte","TEST11");
+
+                        cancelAlarmIfExists(getContext(),10,intent);
+
+                        Date now = new Date();
+                        PendingIntent pendingIntent =  PendingIntent.getBroadcast(getContext(),10,intent,0);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(now);
+
+                        if (isWeek[0]){
+                            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                        }else if(isMonth[0]){
+                            calendar.add(Calendar.MONTH, 1);
+                        }else if(isYear[0]){
+                            calendar.add(Calendar.YEAR, 1);
+
+                        }
+
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                        EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
+
                         String newdef = ndef.getText().toString();
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("marchedist",newdef);
+                        if (!newdef.isEmpty()){
+                            editor.putString("marchedist",newdef);
+                        }
+                        editor.putString("marchedistSave", String.valueOf(marchedist[0]));
                         editor.apply();
-                        Intent intent = new Intent(getActivity(), Main2Activity.class);
-                        startActivity(intent);
+
+                        Intent intent2 = new Intent(getActivity(), Main2Activity.class);
+                        startActivity(intent2);
                     }
                 });
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                String stringvelodist = sharedPreferences.getString("marchedist","100");
+                String stringmarchedist = sharedPreferences.getString("marchedist","100");
+                String stringmarchedistSave = sharedPreferences.getString("marchedistSave", String.valueOf(marchedist[0]));
+
+                double doublemarchedistSave = Double.parseDouble(stringmarchedistSave);
+
+                double currentmarchedist = marchedist[0]-doublemarchedistSave;
 
                 titleBadges.setText(getString(R.string.marcheB));
-                statueBadges.setText(Math.round(marchedist[0])+"/"+stringvelodist+" km");
+                statueBadges.setText(Math.round(currentmarchedist)+"/"+stringmarchedist+" km");
                 descBadges.setText(getString(R.string.marcheBDESC));
                 imgBadges.setImageResource(R.drawable.ic_gump_1);
                 bottomSheetDialog.show();
@@ -1021,27 +1936,102 @@ public class ProfilFragment extends Fragment {
                 TextView statueBadges = bottomSheetDialog.findViewById(R.id.statueBadges);
                 TextView descBadges = bottomSheetDialog.findViewById(R.id.descBadges);
 
+                RadioButton btnsemaine = bottomSheetDialog.findViewById(R.id.btnsemaine);
+                btnsemaine.toggle();
+
+                btnsemaine.toggle();
+
+                final Boolean[] isWeek = {true};
+                final Boolean[] isMonth = {false};
+                final Boolean[] isYear = {false};
+
+
+                btnsemaine.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = true;
+                        isMonth[0] = false;
+                        isYear[0] = false;
+                    }
+                });
+
+
+                RadioButton btnmois = bottomSheetDialog.findViewById(R.id.btnmois);
+                btnmois.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = true;
+                        isYear[0] = false;
+
+                    }
+                });
+
+                RadioButton btnannee = bottomSheetDialog.findViewById(R.id.btnannee);
+                btnannee.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        isWeek[0] = false;
+                        isMonth[0] = false;
+                        isYear[0] = true;
+
+                    }
+                });
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
                 Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
                 EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("defi","click velo");
+                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
+                        intent.putExtra("title","TEST12");
+                        intent.putExtra("texte","TEST12");
+
+                        cancelAlarmIfExists(getContext(),11,intent);
+
+                        Date now = new Date();
+                        PendingIntent pendingIntent =  PendingIntent.getBroadcast(getContext(),11,intent,0);
+                        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(now);
+
+                        if (isWeek[0]){
+                            calendar.add(Calendar.WEEK_OF_MONTH, 1);
+                        }else if(isMonth[0]){
+                            calendar.add(Calendar.MONTH, 1);
+                        }else if(isYear[0]){
+                            calendar.add(Calendar.YEAR, 1);
+
+                        }
+
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+                        EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
+
                         String newdef = ndef.getText().toString();
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("velodist",newdef);
+                        if (!newdef.isEmpty()){
+                            editor.putString("velodist",newdef);
+                        }
+                        editor.putString("velodistSave", String.valueOf(velodist[0]));
                         editor.apply();
-                        Intent intent = new Intent(getActivity(), Main2Activity.class);
-                        startActivity(intent);
+
+                        Intent intent2 = new Intent(getActivity(), Main2Activity.class);
+                        startActivity(intent2);
                     }
                 });
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
                 String stringvelodist = sharedPreferences.getString("velodist","100");
+                String stringvelodistSave = sharedPreferences.getString("velodistSave", String.valueOf(velodist[0]));
+
+                double doublevelodistSave = Double.parseDouble(stringvelodistSave);
+
+                double currentvelodist = velodist[0]-doublevelodistSave;
 
                 titleBadges.setText(getString(R.string.maillotJ));
-                statueBadges.setText(Math.round(velodist[0])+"/"+stringvelodist+" km");
+                statueBadges.setText(Math.round(currentvelodist)+"/"+stringvelodist+" km");
                 descBadges.setText(getString(R.string.maillotJDESC));
                 imgBadges.setImageResource(R.drawable.ic_maillotj);
                 bottomSheetDialog.show();
@@ -1138,5 +2128,28 @@ public class ProfilFragment extends Fragment {
                 Toast.makeText(getContext(),getString(R.string.img_failed), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void createNotificationChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "DefiReminderChannel";
+            String description = "Channel for Defis Reminder";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("NotificationDefis",name,importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    public void cancelAlarmIfExists(Context mContext, int requestCode, Intent intent){
+        try {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, requestCode, intent,0);
+            AlarmManager am=(AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+            am.cancel(pendingIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

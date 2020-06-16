@@ -22,23 +22,24 @@
         android:roundIcon="@drawable/ic_launch_final"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.nathanael.pierregignoux.HistoriqueActivity"></activity>
-        <activity android:name="com.nathanael.pierregignoux.InfoActivity" />
+        <activity android:name=".MonthActivity"></activity>
+        <activity android:name=".HistoriqueActivity" />
+        <activity android:name=".InfoActivity" />
 
-        <service android:name="com.nathanael.pierregignoux.service.MessagingService">
+        <service android:name=".service.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <activity
-            android:name="com.nathanael.pierregignoux.ModifProfil"
-            android:parentActivityName="com.nathanael.pierregignoux.Main2Activity"
+            android:name=".ModifProfil"
+            android:parentActivityName=".Main2Activity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name="com.nathanael.pierregignoux.ForgotPass"
-            android:parentActivityName="com.nathanael.pierregignoux.Main2Activity"
+            android:name=".ForgotPass"
+            android:parentActivityName=".Main2Activity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <!--
@@ -52,32 +53,31 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name="com.nathanael.pierregignoux.MapsActivity"
+            android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
-            android:parentActivityName="com.nathanael.pierregignoux.Main2Activity"
+            android:parentActivityName=".Main2Activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name="com.nathanael.pierregignoux.Register"
-            android:parentActivityName="com.nathanael.pierregignoux.Main2Activity"
+            android:name=".Register"
+            android:parentActivityName=".Main2Activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name="com.nathanael.pierregignoux.Main2Activity"
+            android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name="com.nathanael.pierregignoux.MainActivity"
+            android:name=".MainActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -88,13 +88,14 @@
         </activity>
 
         <service
-            android:name="com.nathanael.pierregignoux.service.GPSService"
+            android:name=".service.GPSService"
             android:process=":GPSService" />
         <service
-            android:name="com.nathanael.pierregignoux.service.FetchAddressIntentService"
+            android:name=".service.FetchAddressIntentService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="location" />
+        <receiver android:name=".service.ReminderBroadcast"/>
     </application>
 
 </manifest>

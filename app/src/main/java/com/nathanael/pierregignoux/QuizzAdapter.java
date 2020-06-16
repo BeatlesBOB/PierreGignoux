@@ -94,13 +94,13 @@ public class QuizzAdapter extends RecyclerView.Adapter<QuizzAdapter.ViewHolder> 
 
         @Override
         public void onClick(View v) {
-            onQuizzListener.onQuizzClick(getAdapterPosition());
+            onQuizzListener.onQuizzClick(data.get(getAdapterPosition()),getAdapterPosition());
 
         }
     }
 
     public interface OnQuizzListener{
-        void onQuizzClick(int position);
+        void onQuizzClick(Quizz quizz, int position);
     }
 
 

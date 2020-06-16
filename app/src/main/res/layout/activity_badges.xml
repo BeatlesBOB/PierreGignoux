@@ -29,8 +29,8 @@
 
             <ImageView
                 android:id="@+id/imgBadges"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"/>
+                android:layout_width="150dp"
+                android:layout_height="150dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -49,9 +49,21 @@
                     android:textSize="24sp" />
 
                 <TextView
+                    android:layout_marginTop="20dp"
                     android:id="@+id/statueBadges"
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand"
+                    android:text="Anonymous"
+                    android:textColor="@color/black_txt_Color"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:padding="30dp"
+                    android:id="@+id/descBadges"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/quicksand"
                     android:text="Anonymous"
@@ -62,16 +74,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:padding="30dp"
-            android:id="@+id/descBadges"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/quicksand"
-            android:text="Anonymous"
-            android:textColor="@color/black_txt_Color"
-            android:textSize="15sp" />
+
 <LinearLayout
     android:id="@+id/modifdefi"
     android:layout_width="match_parent"
@@ -101,18 +104,78 @@
             android:theme="@style/PrimaryColorEditTextStyle" />
 
     </com.google.android.material.textfield.TextInputLayout>
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <RadioGroup
+            android:id="@+id/radiogroupDefis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/btnsemaine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/primaryDarkColor"
+                android:text="Semaine"
+                android:textSize="18sp"
+                android:padding="8dp"
+                android:textColor="@color/black_txt_Color"
+                android:fontFamily="@font/quicksand"/>
+
+            <RadioButton
+                android:id="@+id/btnmois"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/primaryDarkColor"
+                android:text="Mois"
+                android:textSize="18sp"
+                android:padding="8dp"
+                android:textColor="@color/black_txt_Color"
+                android:fontFamily="@font/quicksand"/>
+
+            <RadioButton
+                android:id="@+id/btnannee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/primaryDarkColor"
+                android:text="Année"
+                android:textSize="18sp"
+                android:padding="8dp"
+                android:textColor="@color/black_txt_Color"
+                android:fontFamily="@font/quicksand"/>
+
+        </RadioGroup>
+        <TextView
+            android:padding="30dp"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:fontFamily="@font/quicksand"
+            android:textColor="@color/black_txt_Color"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:text="Sur quelle période"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
     <Button
-
         android:layout_gravity="center"
         android:textColor="@color/white"
         android:id="@+id/btnsavedef"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="@string/save"
+        android:text="Lancer le défis"
         android:background="@drawable/bg_primary_btn"
-        android:layout_marginBottom="50dp"/>
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_marginBottom="30dp"/>
+
 
 </LinearLayout>
 

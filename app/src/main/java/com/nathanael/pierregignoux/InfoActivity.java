@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,54 +59,118 @@ public class InfoActivity extends AppCompatActivity {
         String uid = user.getUid();
         total=0;
 
+
         db = FirebaseFirestore.getInstance();
 
-        db.collection("trajets")
-                .whereEqualTo("auteurTrajet", uid)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
+        final Intent intent = getIntent();
+        String from = intent.getStringExtra("From");
 
-                            Map<String, Integer> sum = null;
-
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+        if(!from.equals("Profil")){
+            Date datefin = new Date();
+            Date datedebut = new Date();
+            datedebut.setTime(intent.getLongExtra("DateStart", -1));
+            datefin.setTime(intent.getLongExtra("DateEnd", -1));
 
 
-                                Trajet nTrajet = new Trajet(document.getId(), document.getString("auteurTrajet"), document.getTimestamp("dateTrajet"), document.getString("consoTrajet"), document.getString("vehiculeTrajet"), document.getString("distanceTrajet"),document.getString("imageTrajet"), document.getString("consoTrajet"));
 
-                                items.add(nTrajet);
+            db.collection("trajets")
+                    .whereEqualTo("auteurTrajet", uid)
+                    .whereLessThan("dateTrajet",datefin)
+                    .whereGreaterThan("dateTrajet",datedebut)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
 
-                                sum = items.stream().collect(
-                                        Collectors.groupingBy(Trajet::getImage, Collectors.summingInt(Trajet::getConsommation)));
+                                Map<String, Integer> sum = null;
 
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+
+
+                                    Trajet nTrajet = new Trajet(document.getId(), document.getString("auteurTrajet"), document.getTimestamp("dateTrajet"), document.getString("consoTrajet"), document.getString("vehiculeTrajet"), document.getString("distanceTrajet"),document.getString("imageTrajet"), document.getString("consoTrajet"));
+
+                                    items.add(nTrajet);
+
+                                    sum = items.stream().collect(
+                                            Collectors.groupingBy(Trajet::getImage, Collectors.summingInt(Trajet::getConsommation)));
+
+                                }
+
+                                if (sum != null) {
+                                    total = mTotal.get(0);
+                                    sum.forEach((k, v) -> {
+                                        Log.d("info", "Item : " + k + " Count : " + v);
+
+                                        mImage.add(k);
+                                        mCO2.add(String.valueOf(v));
+                                        total += v;
+                                        mTotal.set(0,total);
+                                    });
+                                    Log.d("calculepourcentage","mtotal.get(0)"+mTotal.get(0));
+
+                                    listAdapter.notifyDataSetChanged();
+
+                                }
+
+
+
+
+                            } else {
+                                Log.d("TEST", "Error getting documents: ", task.getException());
                             }
-
-                            if (sum != null) {
-                                total = mTotal.get(0);
-                                sum.forEach((k, v) -> {
-                                    Log.d("info", "Item : " + k + " Count : " + v);
-
-                                    mImage.add(k);
-                                    mCO2.add(String.valueOf(v));
-                                    total += v;
-                                    mTotal.set(0,total);
-                                });
-                                Log.d("calculepourcentage","mtotal.get(0)"+mTotal.get(0));
-
-                                listAdapter.notifyDataSetChanged();
-
-                            }
-
-
-
-
-                        } else {
-                            Log.d("TEST", "Error getting documents: ", task.getException());
                         }
-                    }
-                });
+                    });
+
+        }else {
+            db.collection("trajets")
+                    .whereEqualTo("auteurTrajet", uid)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+
+                                Map<String, Integer> sum = null;
+
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+
+
+                                    Trajet nTrajet = new Trajet(document.getId(), document.getString("auteurTrajet"), document.getTimestamp("dateTrajet"), document.getString("consoTrajet"), document.getString("vehiculeTrajet"), document.getString("distanceTrajet"),document.getString("imageTrajet"), document.getString("consoTrajet"));
+
+                                    items.add(nTrajet);
+
+                                    sum = items.stream().collect(
+                                            Collectors.groupingBy(Trajet::getImage, Collectors.summingInt(Trajet::getConsommation)));
+
+                                }
+
+                                if (sum != null) {
+                                    total = mTotal.get(0);
+                                    sum.forEach((k, v) -> {
+                                        Log.d("info", "Item : " + k + " Count : " + v);
+
+                                        mImage.add(k);
+                                        mCO2.add(String.valueOf(v));
+                                        total += v;
+                                        mTotal.set(0,total);
+                                    });
+                                    Log.d("calculepourcentage","mtotal.get(0)"+mTotal.get(0));
+
+                                    listAdapter.notifyDataSetChanged();
+
+                                }
+
+                            } else {
+                                Log.d("TEST", "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+
+        }
+
+
+
 
 
     }

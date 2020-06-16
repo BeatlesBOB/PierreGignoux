@@ -36,7 +36,7 @@
        android:fontFamily="@font/lato"
        android:scrollHorizontally="true"
        android:scrollbars="horizontal"
-       android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque rhoncus."
+       android:text="@string/select_your_means_of_conveyance"
        android:background="@drawable/bg_tv_description"/>
 </LinearLayout>
 

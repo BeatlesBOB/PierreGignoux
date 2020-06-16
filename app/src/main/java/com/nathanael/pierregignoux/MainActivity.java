@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -75,7 +76,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = getSharedPreferences("Main",MODE_PRIVATE);
+        Boolean alreadylaunch = sharedPreferences.getBoolean("alreadylaunch",false);
+        if(alreadylaunch){
+            Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+            startActivity(intent);
+        }else {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("alreadylaunch",true);
+            editor.apply();
+        }
+    }
 }
 

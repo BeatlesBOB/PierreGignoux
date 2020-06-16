@@ -34,7 +34,7 @@ import maes.tech.intentanim.CustomIntent;
 
 public class LoginFragment extends Fragment {
 
-    private Button btnregister;
+    private TextView btnregister;
     private FloatingActionButton btncnx;
     private FirebaseAuth mAuth;
     EditText user, password;
@@ -57,7 +57,6 @@ public class LoginFragment extends Fragment {
         password = (EditText) root.findViewById(R.id.textPassword);
         password.setCompoundDrawablePadding(30);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        btnregister = root.findViewById(R.id.btnregister);
 
         btncnx = root.findViewById(R.id.btnConnexion);
 
@@ -114,6 +113,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        btnregister = root.findViewById(R.id.btnregister);
         btnregister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

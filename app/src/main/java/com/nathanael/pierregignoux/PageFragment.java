@@ -61,21 +61,19 @@ public class PageFragment extends Fragment {
         {
             rootView.setBackgroundColor(color);
             textView.setText(getString(R.string.viewpage1));
-           imageView.setImageResource(R.drawable.img_onboard_1);
+           imageView.setImageResource(R.drawable.img_onboard_2);
 
         }else if(position == 1)
         {
             rootView.setBackgroundColor(color);
             textView.setText(getString(R.string.viewpage2));
-            imageView.setImageResource(R.drawable.img_onboard_2);
+            imageView.setImageResource(R.drawable.img_onboard_3);
 
 
         }else {
             rootView.setBackgroundColor(color);
             textView.setText(getString(R.string.viewpage3));
-            imageView.setImageResource(R.drawable.img_onboard_3);
-
-
+            imageView.setImageResource(R.drawable.img_onboard_1);
         }
 
         Log.e(getClass().getSimpleName(), "onCreateView called for fragment number "+position);

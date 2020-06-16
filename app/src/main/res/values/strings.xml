@@ -20,9 +20,16 @@
     <string name="nav_label_sign_in">Sign in or register</string>
 
     //1st page
-    <string name="viewpage1">Quid? qui se etiam nunc subsidiis patrimonii aut amicorum liberalitate sustentant, hos perire patiemur? An, si qui frui publico non potuit per hostem, hic tegitur ipsa lege censoria;</string>
-    <string name="viewpage2">Constituendi autem sunt qui sint in amicitia fines et quasi termini diligendi. De quibus tres video sententias ferri, quarum nullam probo, unam, ut eodem modo erga amicum adfecti simus, quo erga nosmet ipsos, alteram, ut nostra in amicos benevolentia illorum erga nos benevolentiae pariter aequaliterque respondeat, tertiam, ut, quanti quisque se ipse facit, tanti fiat ab amicis.</string>
-    <string name="viewpage3">Martinus agens illas provincias pro praefectis aerumnas innocentium graviter gemens saepeque obsecrans, ut ab omni culpa inmunibus parceretur, cum non inpetraret, minabatur se discessurum: ut saltem id metuens perquisitor malivolus tandem desineret quieti coalitos homines in aperta pericula proiectare.</string>
+    <string name="viewpage1">
+This application allows you to account for your CO2 emissions when travelling.
+Travelling is the main source of CO2 emissions, a French person emits on average 2.5 tons of CO2 per year for his travels for a total of 12 tons,
+As a reminder, in theory one should not exceed 1.2 to 2 tons of CO2 per year and per inhabitant to be carbon neutral.
+With this application you will be able to set monthly or annual targets to reduce your emissions.</string>
+    <string name="viewpage2">There are 3 modes for posting:
+Tracking: choose the logo corresponding to the mode of travel and launch the GPS tracking.
+Favourite journeys: you can save your home to work or other regular journeys and just add this journey to the meter without activating tracking.
+Route: The application allows you to search for a route with a starting and destination point.</string>
+    <string name="viewpage3">Use: Means of transport marked with a plus allows you to define the number of passengers in the vehicle and thus reduce your emissions. The number marked below is an indication, the larger the number, the more polluting the vehicle is.</string>
     <string name="btn_continue">Continue</string>
 
     //Home Fragment
@@ -245,7 +252,7 @@
     <string name="rosap">Rosa Park</string>
     <string name="rosapDESC">You need to do at least 100km by Bus</string>
 
-    <string name="interR"><![CDATA[Quai 9 &#190;]]></string>
+    <string name="interR">Quai 9 3/4</string>
     <string name="interRDESC">You need to do at least 100km by rail</string>
 
     <string name="marcheB">Forest Gump</string>
@@ -259,6 +266,8 @@
     <string name="compared_to_previous_month">compared to previous month</string>
 
     <string name="Recording">tracking …</string>
+    <string name="select_your_means_of_conveyance">Select your means of conveyance</string>
+    <string name="month">This mont</string>
 
 
 </resources>

@@ -129,13 +129,13 @@ public class TrajetAdapter extends RecyclerView.Adapter<TrajetAdapter.ViewHolder
 
         @Override
         public void onClick(View v) {
-            onTicketListener.onTrajetClick(getAdapterPosition());
+            onTicketListener.onTrajetClick(data.get(getAdapterPosition()),getAdapterPosition());
 
         }
     }
 
     public interface OnTrajetListener{
-        void onTrajetClick(int position);
+        void onTrajetClick(Trajet trajet, int position);
     }
 
 

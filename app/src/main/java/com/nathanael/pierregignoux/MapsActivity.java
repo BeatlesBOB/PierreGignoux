@@ -231,12 +231,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         listAdapter.notifyDataSetChanged();
         listView.setAdapter(listAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            }
-        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -385,6 +380,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                 progressBar.setIndeterminate(true);
                 linearLayout.addView(progressBar);
                 nodestination.setEnabled(false);
+                nodestination2.setEnabled(true);
+
                 nodestination.setBackground(getDrawable(R.drawable.bg_secondary_btn));
 
                 nodestination2.setBackground(getDrawable(R.drawable.bg_red));
@@ -412,6 +409,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                 LinearLayout linearLayout = findViewById(R.id.tracklayout);
                 linearLayout.removeAllViews();
                 nodestination.setEnabled(true);
+                nodestination2.setEnabled(false);
                 nodestination2.setText(getString(R.string.nodest2));
                 nodestination.setBackground(getDrawable(R.drawable.bg_primary_btn));
                 nodestination2.setBackground(getDrawable(R.drawable.bg_secondary_btn));
@@ -536,10 +534,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
                 TextView distance = ((TextView) findViewById(R.id.tvDistance));
                 String comparedist = distance.getText().toString();
+                Log.d("comparedist",comparedist);
 
                 if (!comparedist.equals("0.0 Km")){
 
                     if (user != null){
+                        btnDone.setEnabled(false);
+                        btnDone.setBackground(getDrawable(R.drawable.bg_secondary_btn));
 
                         String uid = user.getUid();
                         String economieCO2;
@@ -570,7 +571,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
 
                                                 String ecoconsoUser=new String(document.getString("eco_co2"));
+                                                String ecoconsoUsermois=new String(document.getString("eco_mois"));
+
+
                                                 String consoUser=new String(document.getString("conso_co2"));
+
                                                 String currentConsoUser = conso.split(" ")[0];
 
                                                 String finalConsoUser = currentConsoUser+"+"+consoUser;
@@ -614,15 +619,20 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                                                         Expression i = new Expression(co2Eco);
                                                                         String economieCO2 = String.valueOf(i.calculate());
 
-                                                                        String finalCo2Eco = ecoconsoUser+"+"+co2Eco;
+                                                                        String finalCo2Eco = ecoconsoUser+"+"+economieCO2;
                                                                         Expression h = new Expression(finalCo2Eco);
                                                                         String finaleconomieCO2 = String.valueOf(h.calculate());
 
 
+                                                                        String finalCo2EcoMois = ecoconsoUsermois+"+"+economieCO2;
+                                                                        Expression j = new Expression(finalCo2EcoMois);
+                                                                        String finaleconomieMois = String.valueOf(j.calculate());
 
 
                                                                         Map<String, Object> Conso = new HashMap<>();
                                                                         Conso.put("eco_co2", finaleconomieCO2);
+                                                                        Conso.put("eco_mois", finaleconomieMois);
+
 
                                                                         db.collection("users").document(uid)
                                                                                 .set(Conso, SetOptions.merge());
@@ -777,11 +787,17 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                                                 String nkilouser = String.valueOf(e.calculate());
                                                 Log.d("kilo",nkilouser);
 
+                                                String kilomois=document.getString("kilometre_mois");
+                                                String addkilomois = currentkilo+"+"+kilomois;
+
+                                                Expression f = new Expression(addkilomois);
+                                                String nkilomois = String.valueOf(f.calculate());
 
 
 
                                                 Map<String, Object> Kilo = new HashMap<>();
                                                 Kilo.put("kilometre", nkilouser);
+                                                Kilo.put("kilometre_mois", nkilomois);
 
                                                 db.collection("users").document(uid)
                                                         .set(Kilo, SetOptions.merge());
@@ -1235,6 +1251,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             Button btntrack2 = findViewById(R.id.btnnodest2);
             btntrack.setBackground(getDrawable(R.drawable.bg_secondary_btn));
             btntrack2.setBackground(getDrawable(R.drawable.bg_red));
+            btntrack2.setEnabled(true);
         }
 
 

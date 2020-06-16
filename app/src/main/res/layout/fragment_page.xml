@@ -15,10 +15,16 @@
         android:src="@drawable/ic_groupe_744"/>
 
     <TextView
+        android:fontFamily="@font/lato"
         android:id="@+id/fragment_page_title"
-        android:layout_width="wrap_content"
+        android:justificationMode="inter_word"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="50dip"
+       android:layout_margin="10dp"
+        android:scrollbars = "vertical"
+        android:text="@string/no_account"
         style="@style/TextAppearance.AppCompat.Body1"/>
+
+
 
 </LinearLayout>

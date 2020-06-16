@@ -59,6 +59,22 @@ public class HistoriqueAdapter extends RecyclerView.Adapter<HistoriqueAdapter.Vi
                 viewHolder.txtconsommation.setText(Math.round(consommation)+" g/CO2");
             }
 
+        viewHolder.txtkilometre.setText(mont.getKilometre()+" km");
+
+        String economie = mont.getEconomie();
+
+        double doubleEco = Double.parseDouble(economie);
+
+        if (doubleEco/1000000 >= 1){
+            doubleEco = doubleEco/1000000;
+            viewHolder.txteconomie.setText(Math.round(doubleEco)+" t/CO2");
+
+        }else if(doubleEco/1000 >= 1){
+            doubleEco = doubleEco/1000;
+            viewHolder.txteconomie.setText(Math.round(doubleEco)+" kg/CO2");
+        }else {
+            viewHolder.txteconomie.setText(Math.round(doubleEco)+" g/CO2");
+        }
 
         viewHolder.txtdate.setText(date);
     }
@@ -69,9 +85,9 @@ public class HistoriqueAdapter extends RecyclerView.Adapter<HistoriqueAdapter.Vi
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener,View.OnLongClickListener{
 
-        TextView txtconsommation,txtdate;
+        TextView txtconsommation,txtdate,txtkilometre, txteconomie;
         OnHistoriqueListener onHistoriqueListener;
 
 
@@ -81,20 +97,36 @@ public class HistoriqueAdapter extends RecyclerView.Adapter<HistoriqueAdapter.Vi
 
             txtconsommation = itemView.findViewById(R.id.txtConsommation);
             txtdate = itemView.findViewById(R.id.txtMois);
+            txtkilometre = itemView.findViewById(R.id.txtkilometre);
+            txteconomie = itemView.findViewById(R.id.txtEconomie);
+
             this.onHistoriqueListener = onHistoriqueListener;
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
 
         }
 
         @Override
         public void onClick(View v) {
-            onHistoriqueListener.onHistoriqueClick(getAdapterPosition());
+            onHistoriqueListener.onHistoriqueClick(data.get(getAdapterPosition()),getAdapterPosition());
+
+        }
+
+
+        @Override
+        public boolean onLongClick(View v) {
+            onHistoriqueListener.onHistoriqueLongClick(data.get(getAdapterPosition()),getAdapterPosition());
+            return false;
         }
     }
 
     public interface OnHistoriqueListener{
-        void onHistoriqueClick(int position);
+        void onHistoriqueClick(Historique historique,int position);
+        void onHistoriqueLongClick(Historique historique,int position);
+
     }
+
+
 
 
 }

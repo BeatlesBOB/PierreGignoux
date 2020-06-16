@@ -277,10 +277,12 @@
                             android:fontFamily="@font/quicksand"
                             android:text="@string/nodest"
                             android:textColor="@android:color/white"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:foreground="?android:attr/selectableItemBackground"/>
 
                         <Button
                             android:id="@+id/btnnodest2"
+                            android:enabled="false"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -288,7 +290,8 @@
                             android:fontFamily="@font/quicksand"
                             android:text="@string/nodest2"
                             android:textColor="@android:color/white"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:foreground="?android:attr/selectableItemBackground"/>
 
                     </LinearLayout>
 
@@ -303,7 +306,8 @@
                         android:fontFamily="@font/quicksand"
                         android:text="@string/done"
                         android:textColor="@android:color/white"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -322,7 +326,8 @@
                             android:fontFamily="@font/quicksand"
                             android:text="@string/add_favorite_route"
                             android:textColor="@android:color/white"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:foreground="?android:attr/selectableItemBackground"/>
 
                         <ImageButton
                             android:id="@+id/fbitineraire"
@@ -332,7 +337,8 @@
                             android:layout_weight="1"
                             android:background="@drawable/bg_primary_btn"
                             android:src="@drawable/ic_directions_black_36dp"
-                            android:tint="@color/white" />
+                            android:tint="@color/white"
+                            android:foreground="?android:attr/selectableItemBackground"/>
 
 
                     </LinearLayout>

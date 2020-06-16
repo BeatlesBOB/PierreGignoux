@@ -23,6 +23,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.nathanael.pierregignoux.MapsActivity;
 import com.nathanael.pierregignoux.R;
 import java.math.BigDecimal;
@@ -37,7 +38,6 @@ public class GPSService extends Service {
     private static final int NOTIF_ID = 1;
     private static final String NOTIF_CHANNEL_ID = "Service GPS";
 
-    private List<Location> locationList = new ArrayList<>();
     private float distancetracking;
     private int j = 0;
     BigDecimal finaldist = new BigDecimal("0");
@@ -57,7 +57,6 @@ public class GPSService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
-
         startForeground();
 
         return super.onStartCommand(intent, flags, startId);
@@ -67,19 +66,19 @@ public class GPSService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        locationList.clear();
-        locationManager.removeUpdates((android.location.LocationListener) listener);
+        locationManager.removeUpdates(listener);
         chrono.cancel();
+
     }
 
     @SuppressLint("MissingPermission")
     private void startForeground() {
 
-
-
         chrono.schedule(new TimerTask() {
             int seconde = 0;
             int minute = 0;
+            int heure = 0;
+
             @Override
             public void run() {
                 seconde++;
@@ -91,9 +90,10 @@ public class GPSService extends Service {
                 if(minute==60)
                 {
                     minute=0;
+                    heure++;
                 }
                 Intent i2 = new Intent("chrono_update");
-                String temps = +minute+" min "+seconde+" sec";
+                String temps = heure+" h "+minute+" min "+seconde+" sec";
                 i2.putExtra("chrono", temps);
                 sendBroadcast(i2);
             }
@@ -104,13 +104,13 @@ public class GPSService extends Service {
 
                 //Verify accuracy of this location in meters.
                 if (locationResult.getAccuracy() > 50){
+                    Log.d("alloaccu","JPPPPP");
                     return;
                 }
 
                 lastLocation = newLocation;
                 newLocation = locationResult;
 
-                locationList.add(newLocation);
 
                 if (lastLocation == null)   //first gps triger.
                     distancetracking = 0;
@@ -140,16 +140,19 @@ public class GPSService extends Service {
                 Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
-
             }
         };
 
-
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
+        final Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        provider = locationManager.getBestProvider(criteria, false);
-        locationManager.requestLocationUpdates(provider,0,0,listener);
+        criteria.setSpeedRequired(true);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setCostAllowed(true);
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        provider = locationManager.getBestProvider(criteria, true);
+        locationManager.requestLocationUpdates(provider,1000,0,listener);
     }
 
     private void notification(String distance) {

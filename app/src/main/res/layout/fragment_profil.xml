@@ -304,7 +304,8 @@
                     android:src="@drawable/ic_arrow_forward_black_24dp"
                     android:tint="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:foreground="?android:attr/selectableItemBackground"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
@@ -312,13 +313,31 @@
             android:textColor="@color/white"
             android:id="@+id/historiquebutton"
             android:layout_width="match_parent"
-            android:layout_margin="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="50dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline"
             android:text="historique"
-            android:background="@drawable/bg_primary_btn"/>
+            android:background="@drawable/bg_primary_btn"
+            android:foreground="?android:attr/selectableItemBackground"/>
+
+        <Button
+            android:textColor="@color/white"
+            android:id="@+id/monthbutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            android:text="Ce mois ci"
+            android:background="@drawable/bg_primary_btn"
+            android:foreground="?android:attr/selectableItemBackground"/>
 
         <TextView
             style="@style/TextAppearance.AppCompat.Title"
@@ -349,7 +368,8 @@
                         android:src="@drawable/ic_globet"
                         android:scaleType="fitCenter"
                         android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"/>
+                        android:layout_columnWeight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <!--Economise CO2-->
                     <ImageButton
@@ -357,7 +377,8 @@
                         android:src="@drawable/ic_plantev"
                         android:scaleType="fitCenter"
                         android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"/>
+                        android:layout_columnWeight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <!--100km en velo-->
                     <ImageButton
@@ -365,7 +386,8 @@
                         android:scaleType="fitCenter"
                         android:id="@+id/MJ"
                         android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"/>
+                        android:layout_columnWeight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <!--100km en marchant-->
                     <ImageButton
@@ -373,7 +395,8 @@
                         android:scaleType="fitCenter"
                         android:id="@+id/MB"
                         android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"/>
+                        android:layout_columnWeight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <!--100km en rail-->
                     <ImageButton
@@ -381,7 +404,8 @@
                         android:scaleType="fitCenter"
                         android:id="@+id/IR"
                         android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"/>
+                        android:layout_columnWeight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <!--100km en bus-->
                     <ImageButton
@@ -389,7 +413,8 @@
                         android:scaleType="fitCenter"
                         android:id="@+id/RP"
                         android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"/>
+                        android:layout_columnWeight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <!--100km en covoit-->
                     <ImageButton
@@ -397,7 +422,8 @@
                         android:scaleType="fitCenter"
                         android:id="@+id/CV"
                         android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"/>
+                        android:layout_columnWeight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <!--100kg en voiture-->
                     <ImageButton
@@ -405,7 +431,8 @@
                         android:scaleType="fitCenter"
                         android:id="@+id/VC"
                         android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"/>
+                        android:layout_columnWeight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <!--100kg en Avion-->
                     <ImageButton
@@ -413,7 +440,8 @@
                         android:scaleType="fitCenter"
                         android:id="@+id/AC"
                         android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"/>
+                        android:layout_columnWeight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <!--100kg en moto-->
                     <ImageButton
@@ -421,7 +449,8 @@
                         android:scaleType="fitCenter"
                         android:id="@+id/MC"
                         android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"/>
+                        android:layout_columnWeight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <!--5/10 des dernier trajet en transport vert-->
                     <ImageButton
@@ -429,7 +458,8 @@
                         android:scaleType="fitCenter"
                         android:id="@+id/BH"
                         android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"/>
+                        android:layout_columnWeight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                     <!--MOYENNE QUIZZ-->
                     <ImageButton
@@ -437,7 +467,8 @@
                         android:scaleType="fitCenter"
                         android:id="@+id/QM"
                         android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"/>
+                        android:layout_columnWeight="1"
+                        android:foreground="?android:attr/selectableItemBackground"/>
 
                 </GridLayout>
             </LinearLayout>
@@ -459,7 +490,8 @@
                 android:layout_margin="20dp"
                 android:id="@+id/resetuserdata"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"/>
 
             <Button
                 android:textColor="@android:color/white"
@@ -475,7 +507,8 @@
                 android:layout_marginBottom="80dp"
                 android:id="@+id/resetotherdata"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"/>
         </LinearLayout>
     </LinearLayout>
 </com.nathanael.pierregignoux.CustomScrollView>

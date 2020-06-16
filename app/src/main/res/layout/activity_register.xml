@@ -100,7 +100,8 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/primaryColor"
             android:src="@drawable/ic_arrow_forward_black_24dp"
-            android:tint="@color/white" />
+            android:tint="@color/white"
+            android:foreground="?android:attr/selectableItemBackground"/>
     </LinearLayout>
 
     <androidx.cardview.widget.CardView

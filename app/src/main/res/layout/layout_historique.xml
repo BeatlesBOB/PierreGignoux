@@ -31,7 +31,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/quicksand"
         android:maxLines="1"
-        android:text="Consommation du"
+        android:text="@string/conso"
         android:textColor="@color/black_txt_Color"
         android:textSize="15sp"
         android:textStyle="normal"/>
@@ -42,16 +42,55 @@
         android:orientation="horizontal"
         android:layout_marginTop="10dp">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/quicksand"
+                android:maxLines="1"
+                android:text="@string/date_history"
+                android:textColor="@color/black_txt_Color"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+            <TextView
+                android:id="@+id/txtMois"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/quicksand"
+                android:maxLines="1"
+                android:text="Correspondance"
+                android:textColor="@color/black_txt_Color"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <TextView
-            android:id="@+id/txtMois"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="41.3dp"
             android:layout_marginTop="3dp"
             android:ellipsize="end"
             android:fontFamily="@font/quicksand"
             android:maxLines="1"
-            android:text="Correspondance"
+            android:text="@string/conso"
             android:textColor="@color/black_txt_Color"
             android:textSize="15sp"
             android:textStyle="normal" />
@@ -70,6 +109,90 @@
             android:textColor="@color/black_txt_Color"
             android:textSize="15sp"
             android:textStyle="normal" />
+
+    </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/quicksand"
+                android:maxLines="1"
+                android:text="@string/kilometer"
+                android:textColor="@color/black_txt_Color"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/txtkilometre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/quicksand"
+                android:maxLines="1"
+                android:text="Correspondance"
+                android:textColor="@color/black_txt_Color"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="41.3dp"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/quicksand"
+                android:maxLines="1"
+                android:text="@string/total_eco_co2"
+                android:textColor="@color/black_txt_Color"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/txtEconomie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="41.3dp"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/quicksand"
+                android:maxLines="1"
+                android:text="Correspondance"
+                android:textColor="@color/black_txt_Color"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
