@@ -13,11 +13,56 @@ android:layout_height="match_parent">
     android:padding="100dp"
     android:alpha="0.1"
     android:tint="@color/primaryDarkColor" />
-<ListView
-    android:id="@+id/listinfo"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="3"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <Button
+                android:id="@+id/btndatedebut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_primary_btn"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:text="Debut"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/btndatefin"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Fin"
+                android:background="@drawable/bg_primary_btn"
+                android:foreground="?android:attr/selectableItemBackground"
+                />
+            <Button
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="total"
+                android:background="@drawable/bg_primary_btn"
+                android:foreground="?android:attr/selectableItemBackground"
+                />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listinfo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            />
+
+    </LinearLayout>
+
 
 </FrameLayout>

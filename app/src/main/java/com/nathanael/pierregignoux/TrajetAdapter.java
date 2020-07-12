@@ -53,12 +53,12 @@ public class TrajetAdapter extends RecyclerView.Adapter<TrajetAdapter.ViewHolder
 
         String vehicule = mont.getVehicule();
         String date = donedate+" "+mont.getDate();
-        String consommation = consotrajet+" "+mont.getConsommation()+" g/CO2";
-        String kilometre = disttrajet+" "+mont.getKilometre();
+        String consommation = consotrajet+" "+Math.round(mont.getConsommation())+" g/CO2";
+        String kilometre = disttrajet+" "+Math.round(mont.getIntKilometre());
         String imageurl = mont.getImage();
         String ecoCO2 = mont.getEcoCO2();
         double DoubleEco_co2 = Double.parseDouble(ecoCO2);
-        int intEco_co2 = (int) DoubleEco_co2;
+
 
 
         viewHolder.txtvehicule.setText(vehicule);
@@ -66,29 +66,29 @@ public class TrajetAdapter extends RecyclerView.Adapter<TrajetAdapter.ViewHolder
         viewHolder.txtdate.setText(date);
         viewHolder.txtkilometre.setText(kilometre);
 
-        if (intEco_co2 >=0){
-            if (intEco_co2/1000000 >= 1){
-                intEco_co2 = intEco_co2/1000000;
+        if (DoubleEco_co2 >=0){
+            if (DoubleEco_co2/1000000 >= 1){
+                DoubleEco_co2 = DoubleEco_co2/1000000;
 
-                viewHolder.txteco.setText(eco+" "+intEco_co2+" t/CO2");
-            }else if(intEco_co2/1000 >= 1){
-                intEco_co2 = intEco_co2/1000;
-                viewHolder.txteco.setText(eco+" "+intEco_co2+" kg/CO2");
+                viewHolder.txteco.setText(eco+" "+Math.round(DoubleEco_co2)+" t/CO2");
+            }else if(DoubleEco_co2/1000 >= 1){
+                DoubleEco_co2 = DoubleEco_co2/1000;
+                viewHolder.txteco.setText(eco+" "+Math.round(DoubleEco_co2)+" kg/CO2");
             }else {
-                viewHolder.txteco.setText(eco+" "+intEco_co2+" g/CO2");
+                viewHolder.txteco.setText(eco+" "+Math.round(DoubleEco_co2)+" g/CO2");
 
             }
         }
 
-        if (intEco_co2 < 0){
-            if (intEco_co2/1000000 <= -1){
-                intEco_co2 = intEco_co2/1000000;
-                viewHolder.txteco.setText(eco+" "+intEco_co2+" t/CO2");
-            }else if(intEco_co2/1000 <= -1){
-                intEco_co2 = intEco_co2/1000;
-                viewHolder.txteco.setText(eco+" "+intEco_co2+" kg/CO2");
+        if (DoubleEco_co2 < 0){
+            if (DoubleEco_co2/1000000 <= -1){
+                DoubleEco_co2 = DoubleEco_co2/1000000;
+                viewHolder.txteco.setText(eco+" "+Math.round(DoubleEco_co2)+" t/CO2");
+            }else if(DoubleEco_co2/1000 <= -1){
+                DoubleEco_co2 = DoubleEco_co2/1000;
+                viewHolder.txteco.setText(eco+" "+Math.round(DoubleEco_co2)+" kg/CO2");
             }else {
-                viewHolder.txteco.setText(eco+" "+intEco_co2+" g/CO2");
+                viewHolder.txteco.setText(eco+" "+Math.round(DoubleEco_co2)+" g/CO2");
             }
 
         }

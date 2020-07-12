@@ -96,7 +96,9 @@ public class HistoriqueActivity extends AppCompatActivity implements HistoriqueA
         long dateEndLong = dateEnd.getTime();
 
         Intent intent = new Intent(HistoriqueActivity.this, InfoActivity.class);
-        intent.putExtra("From","Month");
+        intent.putExtra("MoisDate",true);
+        intent.putExtra("TotalDate",false);
+        intent.putExtra("SemaineDate",false);
         intent.putExtra("DateStart",dateStartLong);
         intent.putExtra("DateEnd",dateEndLong);
         startActivity(intent);

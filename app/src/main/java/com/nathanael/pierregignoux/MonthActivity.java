@@ -133,9 +133,11 @@ public class MonthActivity extends AppCompatActivity {
                 long dateEndLong = dateEnd.getTime();
 
                 Intent intent = new Intent(MonthActivity.this, InfoActivity.class);
-                intent.putExtra("From","Month");
                 intent.putExtra("DateStart",dateStartLong);
                 intent.putExtra("DateEnd",dateEndLong);
+                intent.putExtra("MoisDate",true);
+                intent.putExtra("TotalDate",false);
+                intent.putExtra("SemaineDate",false);
                 startActivity(intent);
             }
         });

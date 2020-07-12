@@ -75,6 +75,7 @@ android:background="@color/white">
     android:textColor="@color/black_txt_Color"
     android:textSize="36sp"
     android:textStyle="bold"
+    android:translationY="90dp"
     app:layout_constraintBottom_toBottomOf="@+id/iv_circle3"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="@+id/iv_circle3" />

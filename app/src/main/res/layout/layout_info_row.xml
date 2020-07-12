@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.cardview.widget.CardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,7 +13,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="3">
+        android:weightSum="4">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -24,8 +25,8 @@
 
             <ImageView
                 android:id="@+id/imageinfo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:src="@drawable/img_home_1"
                 android:scaleType="centerCrop"/>
             <View
@@ -46,14 +47,16 @@
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Title"
-                android:textAlignment="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="CO2 TOTAL"
                 android:fontFamily="@font/quicksand"
+                android:text="@string/co2_total"
+                android:textAlignment="center"
                 android:textColor="@color/black_txt_Color"
-                android:textSize="10sp"
-                android:textStyle="bold"/>
+                app:autoSizeMaxTextSize="10sp"
+                app:autoSizeMinTextSize="4sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform" />
             <View
                 android:layout_width="0dp"
                 android:layout_height="10dp">
@@ -68,7 +71,10 @@
                 android:fontFamily="@font/quicksand"
                 android:text="Title"
                 android:textColor="@color/black_txt_Color"
-                android:textSize="16sp" />
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="8sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeStepGranularity="2sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -82,11 +88,13 @@
                 android:textAlignment="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pourcentage"
+                android:text="@string/pourcentage"
                 android:fontFamily="@font/quicksand"
                 android:textColor="@color/black_txt_Color"
-                android:textSize="10sp"
-                android:textStyle="bold"/>
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="8sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"/>
             <View
                 android:layout_width="0dp"
                 android:layout_height="10dp">
@@ -102,8 +110,52 @@
                 android:text="Title"
                 android:fontFamily="@font/quicksand"
                 android:textColor="@color/black_txt_Color"
-                android:textSize="16sp"/>
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="8sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"/>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:gravity="center">
+
+            <TextView
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kilometre"
+                android:fontFamily="@font/quicksand"
+                android:textColor="@color/black_txt_Color"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="8sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="10dp">
+
+            </View>
+
+            <TextView
+                android:id="@+id/infoKilo"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:fontFamily="@font/quicksand"
+                android:textColor="@color/black_txt_Color"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="8sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

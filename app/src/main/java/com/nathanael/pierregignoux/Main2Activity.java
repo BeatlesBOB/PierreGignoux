@@ -93,7 +93,6 @@ public class Main2Activity extends AppCompatActivity {
 
         if (user != null){
 
-
             String nomprenom = user.getDisplayName();
             String email = user.getEmail();
 

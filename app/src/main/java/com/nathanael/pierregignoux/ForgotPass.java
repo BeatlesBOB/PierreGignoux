@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ForgotPass extends AppCompatActivity {
@@ -23,7 +24,7 @@ public class ForgotPass extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_pass);
 
-        Button passreset = findViewById(R.id.sendpassreset);
+        FloatingActionButton passreset = findViewById(R.id.sendpassreset);
 
 
         passreset.setOnClickListener(new View.OnClickListener() {

@@ -4,7 +4,6 @@
     android:id="@+id/homeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp"
     android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
@@ -18,10 +17,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerviewtrajet"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp" />
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

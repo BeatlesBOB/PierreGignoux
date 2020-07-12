@@ -543,7 +543,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
                         btnDone.setBackground(getDrawable(R.drawable.bg_secondary_btn));
 
                         String uid = user.getUid();
-                        String economieCO2;
 
                         String conso = ((TextView) findViewById(R.id.tvCO2)).getText().toString();
                         String finalConso = conso.split(" ")[0];
@@ -867,9 +866,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocompleate_fragment);
 
+        autocompleteFragment.setHint(getString(R.string.arriver));
         PlaceAutocompleteFragment autocompleteFragment2 = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocompleate_fragment2);
-
+        autocompleteFragment2.setHint(getString(R.string.depart));
         autocompleteFragment2.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 
 
@@ -980,7 +980,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
 
                 }
             };
-            locationManager.requestLocationUpdates("gps",5000,100,locationListener);
+            locationManager.requestLocationUpdates("gps",1000,0,locationListener);
 
         }
 
@@ -1286,6 +1286,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnMarke
             } else { // grantResults.length > 0
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getDeviceLocation(false);
+
                 } else {
                     showSnackbar(R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE, android.R.string.ok, view -> requestPermission());
                 }

@@ -210,7 +210,7 @@ Route: The application allows you to search for a route with a starting and dest
     <string name="kilometer">Kilometers</string>
     <string name="objco2">You are setting your CO2 goal at :</string>
     <string name="objeuro">You are setting your euro goal at :</string>
-    <string name="total_eco_co2">CO2 economised</string>
+    <string name="total_eco_co2">CO2 avoid</string>
     <string name="total_co2">Total CO2</string>
     <string name="total_kilometre">Total kilometer</string>
     <string name="resetuserdata">Reset your consuption and objectives</string>
@@ -226,48 +226,63 @@ Route: The application allows you to search for a route with a starting and dest
     <string name="sigin_password">Password</string>
     <string name="confirm_password">Confirm Password</string>
 
+    <string name="notifdefis">Time to check your challenge</string>
+    <string name="launchdef">Challenge launched</string>
+    <string name="periodedef">During ?</string>
+
 
     <string name="plantV">Green plante</string>
-    <string name="plantVDesc">You need to economise CO2</string>
+    <string name="plantVDesc">You need to avoid CO2</string>
 
     <string name="QM">Quizz master</string>
     <string name="QMSTATUE">Your score</string>
     <string name="QMDESC">You need to get the average score on quizz</string>
 
     <string name="VOITC">Michael Schumacher</string>
-    <string name="VOITCDESC">You need to consumn less than 100kg of CO2 using car</string>
+    <string name="VOITCDESC">You need to consumn less than XZ of CO2 using car</string>
 
     <string name="bonneH">Good habits</string>
-    <string name="bonneHDESC">You need to do at least 5 travel by using green transport in the last 10 travel</string>
+    <string name="bonneHDESC">You need to do at least XZ travel by using green transport in the last 10 travel</string>
 
     <string name="avc">Airplane!</string>
-    <string name="avcDESC">You need to consumn less than 100kg of CO2 using Avion</string>
+    <string name="avcDESC">You need to consumn less than XZ of CO2 using Avion</string>
 
     <string name="motoc">Valentino Rossi</string>
-    <string name="motocDESC">You need to consumn less than 100kg of CO2 using motocycle</string>
+    <string name="motocDESC">You need to consumn less than XZ of CO2 using motocycle</string>
 
     <string name="covoit">Car sharing</string>
-    <string name="covoitDESC">You need to do at least 100km by car sharing</string>
+    <string name="covoitDESC">You need to do at least XZ by car sharing</string>
 
     <string name="rosap">Rosa Park</string>
-    <string name="rosapDESC">You need to do at least 100km by Bus</string>
+    <string name="rosapDESC">You need to do at least XZ by Bus</string>
 
     <string name="interR">Quai 9 3/4</string>
-    <string name="interRDESC">You need to do at least 100km by rail</string>
+    <string name="interRDESC">You need to do at least XZ by rail</string>
 
     <string name="marcheB">Forest Gump</string>
-    <string name="marcheBDESC">You need to do at least 100km by walking</string>
+    <string name="marcheBDESC">You need to do at least XZ by walking</string>
 
     <string name="maillotJ">Yellow jersey</string>
-    <string name="maillotJDESC">You need to do at least 100km by bicycle</string>
+    <string name="maillotJDESC">You need to do at least XZ by bicycle</string>
 
     <string name="globeT">Globe Trotteur</string>
-    <string name="globeTDESC">You need to travel more than 1000km</string>
+    <string name="globeTDESC">You need to travel more than XZ</string>
     <string name="compared_to_previous_month">compared to previous month</string>
 
     <string name="Recording">tracking …</string>
     <string name="select_your_means_of_conveyance">Select your means of conveyance</string>
-    <string name="month">This mont</string>
+    <string name="month">This month</string>
+    <string name="year">Year</string>
+    <string name="mont">Month</string>
+    <string name="semaine">Week</string>
+    <string name="launchchallenge">Launch the challenge</string>
+    <string name="modifier_votre_defis">Change your challenge</string>
+
+    <string name="challenge">Challenge</string>
+    <string name="co2_total" translatable="false">CO2</string>
+    <string name="pourcentage">Percentage</string>
+    <string name="arriver">Arriving</string>
+    <string name="depart">Departure</string>
 
 
 </resources>

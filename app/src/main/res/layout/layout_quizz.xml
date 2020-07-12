@@ -6,19 +6,20 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
+
     android:foreground="?android:attr/selectableItemBackground">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cards"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_margin="4dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="3">
 
@@ -54,7 +55,7 @@
                 android:id="@+id/progresshisto"
                 style="?android:progressBarStyleHorizontal"
                 android:layout_width="0dp"
-                android:layout_weight="1.1"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:padding="16dp"
                 android:progress="70"

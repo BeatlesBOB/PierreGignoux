@@ -59,7 +59,8 @@ public class HistoriqueAdapter extends RecyclerView.Adapter<HistoriqueAdapter.Vi
                 viewHolder.txtconsommation.setText(Math.round(consommation)+" g/CO2");
             }
 
-        viewHolder.txtkilometre.setText(mont.getKilometre()+" km");
+            double kilometer = Double.parseDouble(mont.getKilometre());
+        viewHolder.txtkilometre.setText(Math.round(kilometer)+" km");
 
         String economie = mont.getEconomie();
 

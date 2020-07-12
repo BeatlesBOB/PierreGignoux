@@ -244,7 +244,7 @@ public class ProfilFragment extends Fragment {
                                     double doubleraildistSave = Double.parseDouble(stringraildistSave);
 
                                     if (raildist[0]-doubleraildistSave >= doubleraildist){
-                                        interR.setBackgroundColor(getContext().getColor(R.color.colorAccent));
+                                        interR.clearColorFilter();
                                     }
 
                                     String stringbusdist = sharedPreferences.getString("busdist","100");
@@ -290,20 +290,25 @@ public class ProfilFragment extends Fragment {
                                     String stringdeuxRconso = sharedPreferences.getString("deuxRconso","100");
                                     String stringdeuxRconsoSave = sharedPreferences.getString("deuxRconsoSave", String.valueOf(deuxRconso[0]));
 
-                                    double doubledeuxRconso = Double.parseDouble(stringdeuxRconso)*1000;
-                                    double doubledeuxRconsoSave = Double.parseDouble(stringdeuxRconsoSave)*1000;
+                                    double doubledeuxRconso = Double.parseDouble(stringdeuxRconso);
+                                    double doubledeuxRconsoSave = Double.parseDouble(stringdeuxRconsoSave)/1000;
+                                    double currenteuxRconso = (deuxRconso[0]-doubledeuxRconsoSave)/1000;
 
-                                    if (deuxRconso[0]-doubledeuxRconsoSave <= doubledeuxRconso){
+                                    if (currenteuxRconso <= doubledeuxRconso){
                                         motoc.clearColorFilter();
                                     }
                                     ImageButton voitc = root.findViewById(R.id.VC);
                                     String stringdvoitconso = sharedPreferences.getString("voitconso","100");
                                     String stringdvoitconsoSave = sharedPreferences.getString("voitconsoSave", String.valueOf(voitconso[0]));
 
-                                    double doubledvoitconso = Double.parseDouble(stringdvoitconso)*1000;
-                                    double doubledvoitconsoSave = Double.parseDouble(stringdvoitconsoSave)*1000;
+                                    double doubledvoitconso = Double.parseDouble(stringdvoitconso);
+                                    double doubledvoitconsoSave = Double.parseDouble(stringdvoitconsoSave);
+                                    double currentvoitconso = (voitconso[0]-doubledvoitconsoSave)/1000;
 
-                                    if (voitconso[0]-doubledvoitconsoSave <= doubledvoitconso){
+                                    Log.d("Voituredebug", String.valueOf(voitconso[0]));
+                                    Log.d("Voituredebug", String.valueOf(doubledvoitconsoSave));
+
+                                    if (currentvoitconso <= doubledvoitconso){
                                         voitc.clearColorFilter();
                                     }
 
@@ -311,10 +316,11 @@ public class ProfilFragment extends Fragment {
                                     String stringdavconso = sharedPreferences.getString("avconso","100");
                                     String stringdavconsoSave = sharedPreferences.getString("avconsoSave", String.valueOf(avconso[0]));
 
-                                    double doubledavconso = Double.parseDouble(stringdavconso)*1000;
-                                    double doubledavconsoSave = Double.parseDouble(stringdavconsoSave)*1000;
+                                    double doubledavconso = Double.parseDouble(stringdavconso);
+                                    double doubledavconsoSave = Double.parseDouble(stringdavconsoSave);
+                                    double currentavconso = (avconso[0]-doubledavconsoSave)/1000;
 
-                                    if (avconso[0]-doubledavconsoSave <= doubledavconso){
+                                    if (currentavconso <= doubledavconso){
                                         avc.clearColorFilter();
                                     }
                                 }
@@ -352,7 +358,9 @@ public class ProfilFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), InfoActivity.class);
-                    intent.putExtra("From","Profil");
+                    intent.putExtra("MoisDate",false);
+                    intent.putExtra("TotalDate",true);
+                    intent.putExtra("SemaineDate",false);
                     startActivity(intent);
                 }
             });
@@ -373,11 +381,13 @@ public class ProfilFragment extends Fragment {
                 public void onClick(View v) {
 
                     Map<String, Object> User = new HashMap<>();
-                    User.put("obj_co2","0");
-                    User.put("eco_co2","0");
-                    User.put("conso_co2","0");
-                    User.put("kilometre","0");
-                    User.put("conso_mois","0");
+                    User.put("obj_co2","0.0");
+                    User.put("eco_co2","0.0");
+                    User.put("eco_mois","0.0");
+                    User.put("conso_co2","0.0");
+                    User.put("conso_mois","0.0");
+                    User.put("kilometre","0.0");
+                    User.put("kilometre_mois","0.0");
 
 
                     db.collection("users").document(uid)
@@ -405,7 +415,6 @@ public class ProfilFragment extends Fragment {
                                     if (task.isSuccessful()) {
                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                             document.getReference().delete();
-                                            Log.d("suc","sucesssupp");
                                         }
                                     } else {
 
@@ -471,13 +480,11 @@ public class ProfilFragment extends Fragment {
                                 }
                                 ImageButton qm = root.findViewById(R.id.QM);
                                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Defis",MODE_PRIVATE);
-                                String stringmoyenneQuizz = sharedPreferences.getString("moyenneQuizz","50");
                                 String stringmoyenneQuizzSave = sharedPreferences.getString("moyenneQuizzSave", String.valueOf(moyenneQuizz[0]));
 
-                                double doubledmoyenneQuizz = Double.parseDouble(stringmoyenneQuizz);
                                 double doubledmoyenneQuizzSave = Double.parseDouble(stringmoyenneQuizzSave);
 
-                                if (moyenneQuizz[0]-doubledmoyenneQuizzSave >= doubledmoyenneQuizz){
+                                if (moyenneQuizz[0]-doubledmoyenneQuizzSave >= 50){
                                     qm.clearColorFilter();
                                 }
                             }
@@ -555,7 +562,7 @@ public class ProfilFragment extends Fragment {
                                    double doublePlanteVSave = Double.parseDouble(stringplanteSave);
                                    double doublePlante = Double.parseDouble(stringplante);
 
-                                   if (ecoCO2[0]-doublePlanteVSave < doublePlante){
+                                   if (ecoCO2[0]-doublePlanteVSave >+ doublePlante){
                                        planteV.clearColorFilter();
                                    }
 
@@ -591,7 +598,7 @@ public class ProfilFragment extends Fragment {
                                                         if (intConsoMois>0){
                                                             double comparatifmois = (finalIntConsoUser*100/intConsoMois)-100;
                                                             TextView prevMonth = root.findViewById(R.id.totMois);
-                                                            prevMonth.setText(comparatifmois+"%");
+                                                            prevMonth.setText(Math.round(comparatifmois)+"%");
                                                         }else {
                                                             TextView prevMonth = root.findViewById(R.id.totMois);
                                                             prevMonth.setText(0+"%");
@@ -690,10 +697,13 @@ public class ProfilFragment extends Fragment {
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getString(R.string.launchdef),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
-                        intent.putExtra("title","TEST1");
-                        intent.putExtra("texte","TEST1");
+                        String titleplantv = getString(R.string.plantV);
+                        String txtplantv = getString(R.string.notifdefis);
+
+                        intent.putExtra("title",titleplantv);
+                        intent.putExtra("texte",txtplantv);
 
                         cancelAlarmIfExists(getContext(),0,intent);
 
@@ -738,7 +748,7 @@ public class ProfilFragment extends Fragment {
 
                 titleBadges.setText(getString(R.string.plantV));
                 descBadges.setText(getString(R.string.plantVDesc));
-                statueBadges.setText(currentPlanteV+" < "+stringplanteV);
+                statueBadges.setText(currentPlanteV+" >+ "+stringplanteV+" Kg/CO2");
                 imgBadges.setImageResource(R.drawable.ic_plantev);
                 bottomSheetDialog.show();
             }
@@ -810,11 +820,13 @@ public class ProfilFragment extends Fragment {
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getString(R.string.launchdef),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
-                        intent.putExtra("title","TEST2");
-                        intent.putExtra("texte","TEST2");
+                        String titleqm = getString(R.string.QM);
+                        String txtdefis = getString(R.string.notifdefis);
 
+                        intent.putExtra("title",titleqm);
+                        intent.putExtra("texte",txtdefis);
                         cancelAlarmIfExists(getContext(),1,intent);
 
                         Date now = new Date();
@@ -855,7 +867,7 @@ public class ProfilFragment extends Fragment {
                 double doublemoyenneQuizzSave = Double.parseDouble(stringmoyenneQuizzSave);
                 double currentmoyenneQuizz = moyenneQuizz[0]-doublemoyenneQuizzSave;
 
-                statueBadges.setText(getString(R.string.QMSTATUE)+" "+currentmoyenneQuizz+"/"+stringmoyenneQuizz);
+                statueBadges.setText(getString(R.string.QMSTATUE)+" "+currentmoyenneQuizz+"/50");
                 descBadges.setText(getString(R.string.QMDESC));
                 imgBadges.setImageResource(R.drawable.ic_lepers);
                 bottomSheetDialog.show();
@@ -928,10 +940,14 @@ public class ProfilFragment extends Fragment {
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getString(R.string.launchdef),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
-                        intent.putExtra("title","TEST3");
-                        intent.putExtra("texte","TEST3");
+
+                        String titleVOITC= getString(R.string.VOITC);
+                        String txtdefis = getString(R.string.notifdefis);
+
+                        intent.putExtra("title",titleVOITC);
+                        intent.putExtra("texte",txtdefis);
 
                         cancelAlarmIfExists(getContext(),2,intent);
 
@@ -972,8 +988,10 @@ public class ProfilFragment extends Fragment {
                 double currentvoitconso = voitconso[0]-doublevoitconsoSave;
 
                 titleBadges.setText(getString(R.string.VOITC));
-                statueBadges.setText(Math.round(currentvoitconso)+" < "+stringvoitconso+" kg/CO2");
-                descBadges.setText(getString(R.string.VOITCDESC));
+                statueBadges.setText(Math.round(currentvoitconso/1000)+" < "+stringvoitconso+" kg/CO2");
+                String intermediaire = getString(R.string.VOITCDESC);
+                String finaledesc = intermediaire.replace("XZ",stringvoitconso+" kg/CO2");
+                descBadges.setText(finaledesc);
                 imgBadges.setImageResource(R.drawable.ic_voit);
 
                 bottomSheetDialog.show();
@@ -1044,10 +1062,13 @@ public class ProfilFragment extends Fragment {
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getString(R.string.launchdef),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
-                        intent.putExtra("title","TEST4");
-                        intent.putExtra("texte","TEST4");
+                        String titlebonneH= getString(R.string.bonneH);
+                        String txtdefis = getString(R.string.notifdefis);
+
+                        intent.putExtra("title",titlebonneH);
+                        intent.putExtra("texte",txtdefis);
 
                         cancelAlarmIfExists(getContext(),3,intent);
 
@@ -1087,8 +1108,10 @@ public class ProfilFragment extends Fragment {
                 double currentbonneH = bonneH[0]-doublebonneHSave;
 
                 titleBadges.setText(getString(R.string.bonneH));
-                statueBadges.setText(currentbonneH+"/"+bonneH[0]);
-                descBadges.setText(getString(R.string.bonneHDESC));
+                statueBadges.setText(currentbonneH+"/"+stringbonneH);
+                String intermediaire = getString(R.string.bonneHDESC);
+                String finaledesc = intermediaire.replace("XZ",stringbonneH);
+                descBadges.setText(finaledesc);
                 imgBadges.setImageResource(R.drawable.ic_bonneh);
 
                 bottomSheetDialog.show();
@@ -1160,10 +1183,13 @@ public class ProfilFragment extends Fragment {
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getString(R.string.launchdef),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
-                        intent.putExtra("title","TEST5");
-                        intent.putExtra("texte","TEST5");
+                        String titleavc= getString(R.string.bonneH);
+                        String txtdefis = getString(R.string.notifdefis);
+
+                        intent.putExtra("title",titleavc);
+                        intent.putExtra("texte",txtdefis);
 
                         cancelAlarmIfExists(getContext(),4,intent);
 
@@ -1205,8 +1231,10 @@ public class ProfilFragment extends Fragment {
                 double currentavconso = avconso[0]-doubledavconsoSave;
 
                 titleBadges.setText(getString(R.string.avc));
-                statueBadges.setText(Math.round(currentavconso)+" <"+stringdavconso+" kg/CO2");
-                descBadges.setText(getString(R.string.avcDESC));
+                statueBadges.setText(Math.round(currentavconso/1000)+" <"+stringdavconso+" kg/CO2");
+                String intermediaire = getString(R.string.bonneHDESC);
+                String finaledesc = intermediaire.replace("XZ",stringdavconso+" kg/CO2");
+                descBadges.setText(finaledesc);
                 imgBadges.setImageResource(R.drawable.ic_pilote);
 
                 bottomSheetDialog.show();
@@ -1275,10 +1303,13 @@ public class ProfilFragment extends Fragment {
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getString(R.string.launchdef),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
-                        intent.putExtra("title","TEST6");
-                        intent.putExtra("texte","TEST6");
+                        String titleglobeT= getString(R.string.globeT);
+                        String txtdefis = getString(R.string.notifdefis);
+
+                        intent.putExtra("title",titleglobeT);
+                        intent.putExtra("texte",txtdefis);
 
                         cancelAlarmIfExists(getContext(),5,intent);
 
@@ -1323,7 +1354,9 @@ public class ProfilFragment extends Fragment {
                 double currentglobT = intkilometreUser[0]-DoubleglobeTSave;
 
                 statueBadges.setText(Math.round(currentglobT)+" > "+stringglobeT+ " km");
-                descBadges.setText(getString(R.string.globeTDESC));
+                String intermediaire = getString(R.string.globeTDESC);
+                String finaledesc = intermediaire.replace("XZ",stringglobeT+" Km");
+                descBadges.setText(finaledesc);
                 imgBadges.setImageResource(R.drawable.ic_globet);
                 bottomSheetDialog.show();
             }
@@ -1394,10 +1427,13 @@ public class ProfilFragment extends Fragment {
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getString(R.string.launchdef),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
-                        intent.putExtra("title","TEST7");
-                        intent.putExtra("texte","TEST7");
+                        String titlemotoc= getString(R.string.globeT);
+                        String txtdefis = getString(R.string.notifdefis);
+
+                        intent.putExtra("title",titlemotoc);
+                        intent.putExtra("texte",txtdefis);
 
                         cancelAlarmIfExists(getContext(),6,intent);
 
@@ -1435,12 +1471,14 @@ public class ProfilFragment extends Fragment {
                 String stringdeuxRconso = sharedPreferences.getString("deuxRconso","100");
                 String stringdeuxRconsoSave = sharedPreferences.getString("deuxRconsoSave", String.valueOf(deuxRconso[0]));
 
-                double doubledeuxRconsoSave = Double.parseDouble(stringdeuxRconsoSave)*1000;
+                double doubledeuxRconsoSave = Double.parseDouble(stringdeuxRconsoSave);
                 double currentdeuxRconso = deuxRconso[0]-doubledeuxRconsoSave;
 
                 titleBadges.setText(getString(R.string.motoc));
-                statueBadges.setText(Math.round(currentdeuxRconso)+" <"+stringdeuxRconso+" kg/CO2");
-                descBadges.setText(getString(R.string.motocDESC));
+                statueBadges.setText(Math.round(currentdeuxRconso/1000)+" <"+stringdeuxRconso+" kg/CO2");
+                String intermediaire = getString(R.string.motocDESC);
+                String finaledesc = intermediaire.replace("XZ",stringdeuxRconso+" Kg/CO2");
+                descBadges.setText(finaledesc);
                 imgBadges.setImageResource(R.drawable.ic_moto);
 
                 bottomSheetDialog.show();
@@ -1511,10 +1549,13 @@ public class ProfilFragment extends Fragment {
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getString(R.string.launchdef),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
-                        intent.putExtra("title","TEST8");
-                        intent.putExtra("texte","TEST8");
+                        String titlecovoit= getString(R.string.globeT);
+                        String txtdefis = getString(R.string.notifdefis);
+
+                        intent.putExtra("title",titlecovoit);
+                        intent.putExtra("texte",txtdefis);
 
                         cancelAlarmIfExists(getContext(),7,intent);
 
@@ -1558,7 +1599,9 @@ public class ProfilFragment extends Fragment {
 
                 titleBadges.setText(getString(R.string.covoit));
                 statueBadges.setText(Math.round(currentcovoit)+"/"+stringcovoit+" km");
-                descBadges.setText(getString(R.string.covoitDESC));
+                String intermediaire = getString(R.string.covoitDESC);
+                String finaledesc = intermediaire.replace("XZ",stringcovoit+" Km");
+                descBadges.setText(finaledesc);
                 imgBadges.setImageResource(R.drawable.ic_covoit_1);
                 bottomSheetDialog.show();
 
@@ -1629,10 +1672,13 @@ public class ProfilFragment extends Fragment {
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getString(R.string.launchdef),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
-                        intent.putExtra("title","TEST9");
-                        intent.putExtra("texte","TEST9");
+                        String titlerosap= getString(R.string.rosap);
+                        String txtdefis = getString(R.string.notifdefis);
+
+                        intent.putExtra("title",titlerosap);
+                        intent.putExtra("texte",txtdefis);
 
                         cancelAlarmIfExists(getContext(),8,intent);
 
@@ -1675,7 +1721,9 @@ public class ProfilFragment extends Fragment {
 
                 titleBadges.setText(getString(R.string.rosap));
                 statueBadges.setText(Math.round(currentbustdist)+"/"+stringbusdist+" km");
-                descBadges.setText(getString(R.string.rosapDESC));
+                String intermediaire = getString(R.string.rosapDESC);
+                String finaledesc = intermediaire.replace("XZ",stringbusdist+" Km");
+                descBadges.setText(finaledesc);
                 imgBadges.setImageResource(R.drawable.ic_imperial);
                 bottomSheetDialog.show();
             }
@@ -1742,14 +1790,16 @@ public class ProfilFragment extends Fragment {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 Button savedef = bottomSheetDialog.findViewById(R.id.btnsavedef);
-                EditText ndef = bottomSheetDialog.findViewById(R.id.textDefis);
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getString(R.string.launchdef),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
-                        intent.putExtra("title","TEST10");
-                        intent.putExtra("texte","TEST10");
+                        String titleinterR= getString(R.string.interR);
+                        String txtdefis = getString(R.string.notifdefis);
+
+                        intent.putExtra("title",titleinterR);
+                        intent.putExtra("texte",txtdefis);
 
                         cancelAlarmIfExists(getContext(),9,intent);
 
@@ -1793,7 +1843,9 @@ public class ProfilFragment extends Fragment {
 
                 titleBadges.setText(getString(R.string.interR));
                 statueBadges.setText(Math.round(currentraildist)+"/"+stringraildist+" km");
-                descBadges.setText(getString(R.string.interRDESC));
+                String intermediaire = getString(R.string.interRDESC);
+                String finaledesc = intermediaire.replace("XZ",stringraildist+" Km");
+                descBadges.setText(finaledesc);
                 imgBadges.setImageResource(R.drawable.ic_harry);
 
                 bottomSheetDialog.show();
@@ -1865,10 +1917,13 @@ public class ProfilFragment extends Fragment {
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getString(R.string.launchdef),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
-                        intent.putExtra("title","TEST11");
-                        intent.putExtra("texte","TEST11");
+                        String titlemarcheB= getString(R.string.marcheB);
+                        String txtdefis = getString(R.string.notifdefis);
+
+                        intent.putExtra("title",titlemarcheB);
+                        intent.putExtra("texte",txtdefis);
 
                         cancelAlarmIfExists(getContext(),10,intent);
 
@@ -1912,7 +1967,10 @@ public class ProfilFragment extends Fragment {
 
                 titleBadges.setText(getString(R.string.marcheB));
                 statueBadges.setText(Math.round(currentmarchedist)+"/"+stringmarchedist+" km");
-                descBadges.setText(getString(R.string.marcheBDESC));
+
+                String intermediaire = getString(R.string.marcheBDESC);
+                String finaledesc = intermediaire.replace("XZ",stringmarchedist+" Km");
+                descBadges.setText(finaledesc);
                 imgBadges.setImageResource(R.drawable.ic_gump_1);
                 bottomSheetDialog.show();
             }
@@ -1985,10 +2043,13 @@ public class ProfilFragment extends Fragment {
                 savedef.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(),"Reminder Set",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),getString(R.string.launchdef),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), ReminderBroadcast.class);
-                        intent.putExtra("title","TEST12");
-                        intent.putExtra("texte","TEST12");
+                        String titlemaillotJ= getString(R.string.maillotJ);
+                        String txtdefis = getString(R.string.notifdefis);
+
+                        intent.putExtra("title",titlemaillotJ);
+                        intent.putExtra("texte",txtdefis);
 
                         cancelAlarmIfExists(getContext(),11,intent);
 
@@ -2032,7 +2093,9 @@ public class ProfilFragment extends Fragment {
 
                 titleBadges.setText(getString(R.string.maillotJ));
                 statueBadges.setText(Math.round(currentvelodist)+"/"+stringvelodist+" km");
-                descBadges.setText(getString(R.string.maillotJDESC));
+                String intermediaire = getString(R.string.maillotJDESC);
+                String finaledesc = intermediaire.replace("XZ",stringvelodist+" Km");
+                descBadges.setText(finaledesc);
                 imgBadges.setImageResource(R.drawable.ic_maillotj);
                 bottomSheetDialog.show();
 
